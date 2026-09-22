@@ -28,7 +28,11 @@ followed</text><line x1="62" y1="308" x2="530" y2="308" stroke="var(--rule)" str
    var a=r.querySelectorAll('a'); if(!a.length) return;
    if(e.key==='ArrowDown'){ e.preventDefault(); sel=Math.min(sel+1,a.length-1); }
    else if(e.key==='ArrowUp'){ e.preventDefault(); sel=Math.max(sel-1,0); }
-   else if(e.key==='Enter'&&sel>=0){ e.preventDefault(); location.href=a[sel].href; return; }
+   // Enter goes to the FIRST result when nothing is highlighted. Requiring an
+   // arrow-key press first meant typing a name and hitting return did nothing
+   // at all, which reads as a broken search rather than an unused shortcut.
+   else if(e.key==='Enter'){ e.preventDefault();
+     location.href=a[sel>=0?sel:0].href; return; }
    else if(e.key==='Escape'){ r.hidden=true; q.blur(); return; }
    else return;
    a.forEach(function(el,i){ el.className = i===sel?'on':''; });
