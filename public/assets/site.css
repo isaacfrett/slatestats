@@ -17,6 +17,56 @@
   --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C}
 *{box-sizing:border-box}
 html,body{margin:0}
+/* ---- site header -------------------------------------------------------
+   Every page had breadcrumbs up and one cross-link sideways, and nothing
+   else. A visitor arriving on a study from search had exactly one way out.
+   This is the spine. */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+  background:var(--surface);border-bottom:1px solid var(--rule)}
+.hdr-in{max-width:1000px;margin:0 auto;padding:0 16px;display:flex;
+  align-items:center;gap:18px;height:54px}
+.brand{font-family:Archivo,sans-serif;font-weight:800;font-size:17px;
+  letter-spacing:-.02em;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand span{color:var(--green)}
+.nav{display:flex;gap:2px;margin-left:2px;flex:1;min-width:0;overflow-x:auto;
+  scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{font-size:13.5px;font-weight:500;color:var(--ink-2);text-decoration:none;
+  padding:7px 10px;border-radius:7px;white-space:nowrap}
+.nav a:hover{background:var(--sunk);color:var(--ink)}
+.nav a[aria-current]{color:var(--ink);font-weight:600;background:var(--sunk)}
+.srch{position:relative;flex:0 0 auto}
+.srch input{font:inherit;font-size:13.5px;width:168px;padding:7px 11px;
+  border:1px solid var(--rule);border-radius:8px;background:var(--sunk);
+  color:var(--ink)}
+.srch input:focus{outline:2px solid var(--navy);outline-offset:-1px;width:230px}
+.srch input::placeholder{color:var(--ink-3)}
+.res{position:absolute;right:0;top:40px;width:330px;max-height:60vh;
+  overflow-y:auto;background:var(--surface);border:1px solid var(--rule);
+  border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:5px}
+.res a{display:block;padding:8px 10px;border-radius:7px;text-decoration:none;
+  color:var(--ink);font-size:13.5px}
+.res a:hover,.res a.on{background:var(--sunk)}
+.res a b{font-weight:600}
+.res a i{display:block;font-style:normal;font-size:11.5px;color:var(--ink-3);
+  margin-top:1px}
+.res .none{padding:12px 10px;font-size:13px;color:var(--ink-3)}
+@media (max-width:640px){
+  .srch input{width:118px} .srch input:focus{width:150px}
+  .res{width:min(330px,calc(100vw - 32px))}
+  .hdr-in{gap:10px} .brand{font-size:15px}
+}
+/* ---- site footer ---- */
+.foot{margin-top:56px;border-top:1px solid var(--rule);background:var(--surface)}
+.foot-in{max-width:1000px;margin:0 auto;padding:26px 16px 34px;display:flex;
+  flex-wrap:wrap;gap:26px 44px}
+.foot-col h4{font-family:Archivo,sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 9px}
+.foot-col a{display:block;font-size:13.5px;color:var(--ink-2);
+  text-decoration:none;padding:3px 0}
+.foot-col a:hover{color:var(--ink)}
+.foot-note{max-width:1000px;margin:0 auto;padding:0 16px 30px;font-size:12px;
+  color:var(--ink-3);line-height:1.7;max-width:62ch}
 body{background:var(--ground);color:var(--ink);
   font-family:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
   line-height:1.6;-webkit-font-smoothing:antialiased}
