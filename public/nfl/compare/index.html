@@ -1,0 +1,189 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Compare Two Players — Start A or B? — Slate Stats</title><meta name="description" content="Pick two players and see how often each finishes with more receptions, with both distributions drawn so you can see the overlap."><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><link rel="stylesheet" href="/assets/site.css"></head><body><header class="hdr"><div class="hdr-in"><a class="brand" href="/">Slate<span>Stats</span></a><nav class="nav"><a href="/nfl/">NFL</a><a href="/nfl/players/">Players</a><a href="/nfl/compare/" aria-current=page>Compare</a><a href="/nfl/injury-impact/">Injury impact</a><a href="/nfl/teams/">Teams</a><a href="/nfl/trending/">Trending</a><a href="/nfl/studies/">Studies</a></nav><div class="srch"><input id="q" type="search" placeholder="Search players" autocomplete="off" aria-label="Search players, teams and studies"><div id="res" class="res" hidden></div></div></div></header><style>
+.cmp{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cmp .slot{background:var(--surface);border:1px solid var(--rule);
+  border-radius:10px;padding:13px 14px;min-height:96px}
+.cmp .slot label{display:block;font-family:"IBM Plex Mono",monospace;
+  font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:7px}
+.cmp input{font:inherit;font-size:15px;font-weight:600;width:100%;
+  padding:9px 11px;border:1px solid var(--rule);border-radius:8px;
+  background:var(--sunk);color:var(--ink)}
+.cmp .who{font-family:Archivo,sans-serif;font-weight:800;font-size:19px;
+  line-height:1.15;margin-top:2px}
+.cmp .sub{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.cmp .drop{position:relative}
+.cmp .res{top:44px;left:0;right:0;width:auto}
+.verdict-box{margin-top:18px;background:var(--surface);border:1px solid var(--rule);
+  border-radius:10px;padding:18px}
+.split{display:flex;height:34px;border-radius:7px;overflow:hidden;margin-top:12px}
+.split div{display:flex;align-items:center;justify-content:center;
+  font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;color:#fff}
+.split .a{background:var(--navy)}
+.split .b{background:var(--green)}
+.cmp-rows{margin-top:16px}
+.cmp-row{display:grid;grid-template-columns:1fr 128px 1fr;align-items:center;
+  gap:10px;padding:9px 0;border-bottom:1px solid var(--rule-2)}
+.cmp-row:last-child{border-bottom:0}
+.cmp-row .lab{text-align:center;font-family:"IBM Plex Mono",monospace;
+  font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3)}
+.cmp-row .v{font-family:"IBM Plex Mono",monospace;font-size:16px;font-weight:600}
+.cmp-row .v.l{text-align:right} .cmp-row .v.r{text-align:left}
+.cmp-row .v.win{color:var(--green)}
+@media (max-width:560px){ .cmp{grid-template-columns:1fr}
+  .cmp-row{grid-template-columns:1fr 94px 1fr} }
+</style><div class="wrap"><p class="crumb"><a href="/">Slate Stats</a> &rsaquo; <a href="/nfl/">NFL</a> &rsaquo; Compare</p><h1>Start A or B?</h1><p class="summary">Most tools answer this with a ranking, which implies a certainty the data does not contain. This one gives you the <b>split</b> &mdash; how often each player actually finishes ahead &mdash; and draws both distributions so you can see how much of the decision is real.</p><div class="cmp"><div class="slot" id="slot-a"><label>Player A</label><div class="drop"><input placeholder="Search a player" data-side="a" autocomplete="off"><div class="res" hidden></div></div></div><div class="slot" id="slot-b"><label>Player B</label><div class="drop"><input placeholder="Search a player" data-side="b" autocomplete="off"><div class="res" hidden></div></div></div></div><div id="out"></div><p class="meta">Receptions distribution is a negative binomial with PHI=1.45, checked against 49,202 projection/line pairs: predicted vs realised agrees to +0.001 overall and within 0.012 in every decile &middot; projections as-of-week with no lookahead</p></div><script>
+(function(){
+ var D=null,A=null,B=null;
+ var el=function(i){return document.getElementById(i);};
+ fetch('/data/compare.json').then(function(r){return r.json();}).then(function(j){
+   D=j; var q=new URLSearchParams(location.search);
+   if(q.get('a')&&j.players[q.get('a')]) pick('a',q.get('a'));
+   if(q.get('b')&&j.players[q.get('b')]) pick('b',q.get('b'));
+   if(!A&&!B){ var k=Object.keys(j.players); pick('a',k[0]); }
+ });
+ function nb(mean,phi,k){            // P(X = k), negative binomial
+   if(mean<=0) return k===0?1:0;
+   var r=mean/(phi-1), p=1/phi, t=Math.pow(p,r);
+   for(var i=0;i<k;i++) t*= (r+i)/(i+1)*(1-p);
+   return t;
+ }
+ function pmf(mean,phi,n){ var o=[],s=0;
+   for(var k=0;k<=n;k++){ var v=nb(mean,phi,k); o.push(v); s+=v; }
+   return o.map(function(v){return v/s;});
+ }
+ function beats(ma,mb,phi){          // P(A > B), P(tie)
+   var a=pmf(ma,phi,24), b=pmf(mb,phi,24), w=0,t=0;
+   for(var i=0;i<a.length;i++){ for(var j=0;j<b.length;j++){
+     if(i>j) w+=a[i]*b[j]; else if(i===j) t+=a[i]*b[j]; } }
+   return [w,t];
+ }
+ function pick(side,slug){
+   var p=D.players[slug]; if(!p) return;
+   if(side==='a'){A=[slug,p];} else {B=[slug,p];}
+   var s=el('slot-'+side);
+   s.innerHTML='<label>'+(side==='a'?'Player A':'Player B')+'</label>'+
+     '<div class="who">'+p.n+'</div><div class="sub">'+p.r+' \u00b7 '+p.t+
+     ' \u00b7 '+p.snap+'% of snaps</div>'+
+     '<div class="drop"><input placeholder="Change" data-side="'+side+'" '+
+     'style="margin-top:9px" autocomplete="off"><div class="res" hidden></div></div>';
+   wire(s.querySelector('input'));
+   render();
+ }
+ function wire(inp){
+   if(!inp) return;
+   var box=inp.parentNode.querySelector('.res');
+   inp.addEventListener('input',function(){
+     var q=inp.value.trim().toLowerCase();
+     if(q.length<2){box.hidden=true;return;}
+     var hits=Object.keys(D.players).filter(function(k){
+       return D.players[k].n.toLowerCase().indexOf(q)>=0; }).slice(0,8);
+     box.innerHTML=hits.map(function(k){ var p=D.players[k];
+       return '<a href="#" data-k="'+k+'"><b>'+p.n+'</b><i>'+p.r+' \u00b7 '+p.t+'</i></a>';
+     }).join('')||'<div class="none">No match.</div>';
+     box.hidden=false;
+     box.querySelectorAll('a').forEach(function(a){
+       a.onclick=function(e){e.preventDefault();box.hidden=true;
+         pick(inp.dataset.side,a.dataset.k);};});
+   });
+ }
+ function render(){
+   var out=el('out'); if(!A||!B){ out.innerHTML=
+     '<p class="empty">Pick a second player to compare.</p>'; return; }
+   var a=A[1],b=B[1],phi=D.phi;
+   var ra=a.proj.receptions||0, rb=b.proj.receptions||0;
+   var r=beats(ra,rb,phi), pa=r[0], tie=r[1], pb=1-pa-tie;
+   var na=Math.round(pa*100), nb_=Math.round(pb*100), nt=100-na-nb_;
+   out.innerHTML =
+    '<div class="verdict-box"><h2 style="margin-top:0">Who catches more?</h2>'+
+    '<p>Over a full week of outcomes, <b>'+a.n+'</b> finishes with more '+
+    'receptions <b>'+na+'%</b> of the time, <b>'+b.n+'</b> <b>'+nb_+'%</b>'+
+    (nt>0?', and they tie '+nt+'%':'')+'.</p>'+
+    '<div class="split"><div class="a" style="width:'+Math.max(na,8)+'%">'+na+'%</div>'+
+    '<div class="b" style="width:'+Math.max(100-na,8)+'%">'+(100-na)+'%</div></div>'+
+    '<p style="font-size:13.5px;color:var(--ink-2)">'+
+    (Math.abs(na-50)<8
+      ? '<b>This is a coin flip.</b> Anyone telling you one of these is the clear start is reading a ranking, not a distribution.'
+      : 'The gap is real but the distributions overlap heavily \u2014 the loser wins this matchup roughly '+Math.min(na,100-na)+' weeks in 10.')+
+    '</p></div>'+ dist(a,b,phi) + rows(a,b);
+ }
+ function dist(a,b,phi){
+   var W=640,H=250,L=44,R=16,T=18,B2=44,N=13;
+   var pa=pmf(a.proj.receptions||0,phi,N), pb=pmf(b.proj.receptions||0,phi,N);
+   var mx=Math.max.apply(null,pa.concat(pb))*1.12;
+   var x=function(k){return L+(k/N)*(W-L-R);}, y=function(v){return H-B2-(v/mx)*(H-T-B2);};
+   var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Distribution of likely receptions for both players">';
+   for(var g=0;g<=4;g++){ var v=mx*g/4;
+     s+='<line x1="'+L+'" y1="'+y(v).toFixed(1)+'" x2="'+(W-R)+'" y2="'+y(v).toFixed(1)+'" stroke="var(--rule-2)"/>'; }
+   [[pa,'var(--navy)'],[pb,'var(--green)']].forEach(function(pair){
+     var pts=pair[0].map(function(v,k){return x(k).toFixed(1)+','+y(v).toFixed(1);}).join(' ');
+     s+='<polyline points="'+pts+'" fill="none" stroke="'+pair[1]+'" stroke-width="2.6" stroke-linejoin="round"/>';
+     pair[0].forEach(function(v,k){ s+='<circle cx="'+x(k).toFixed(1)+'" cy="'+y(v).toFixed(1)+'" r="2.6" fill="'+pair[1]+'"/>'; });
+   });
+   for(var k=0;k<=N;k+=2) s+='<text x="'+x(k).toFixed(1)+'" y="'+(H-B2+18)+'" text-anchor="middle" font-size="11" fill="var(--ink-3)" font-family="IBM Plex Mono, monospace">'+k+'</text>';
+   s+='<line x1="'+L+'" y1="'+(H-B2)+'" x2="'+(W-R)+'" y2="'+(H-B2)+'" stroke="var(--rule)" stroke-width="1.5"/>';
+   s+='<text x="'+((L+W-R)/2)+'" y="'+(H-10)+'" text-anchor="middle" font-size="12.5" fill="var(--ink-2)" font-family="IBM Plex Sans, sans-serif">Receptions</text></svg>';
+   return '<figure>'+s+'<div class="key"><span><i style="background:var(--navy)"></i>'+a.n+
+     '</span><span><i style="background:var(--green)"></i>'+b.n+'</span></div>'+
+     '<figcaption><b>This is the honest picture.</b> Not two numbers, but two '+
+     'distributions \u2014 and how much they overlap. Where the curves sit on top '+
+     'of each other is where the decision genuinely does not matter.</figcaption></figure>';
+ }
+ function rows(a,b){
+   var M=[['receptions','Receptions',1],['reception_yds','Receiving yards',0],
+          ['rush_attempts','Rush attempts',1],['rush_yds','Rushing yards',0],
+          ['anytime_td','Anytime TD %',0]];
+   var o='<div class="verdict-box cmp-rows"><h2 style="margin-top:0">Side by side</h2>';
+   o+=row('Snap share',a.snap+'%',b.snap+'%',a.snap,b.snap);
+   o+=row('Target share',a.share+'%',b.share+'%',a.share,b.share);
+   M.forEach(function(m){
+     var va=a.proj[m[0]], vb=b.proj[m[0]];
+     if(va==null&&vb==null) return;
+     o+=row(m[1], va==null?'\u2014':va.toFixed(m[2]),
+                   vb==null?'\u2014':vb.toFixed(m[2]), va||0, vb||0);
+   });
+   return o+'</div>';
+ }
+ function row(lab,sa,sb,na,nb_){
+   return '<div class="cmp-row"><div class="v l'+(na>nb_?' win':'')+'">'+sa+'</div>'+
+     '<div class="lab">'+lab+'</div>'+
+     '<div class="v r'+(nb_>na?' win':'')+'">'+sb+'</div></div>';
+ }
+})();
+</script><footer class="foot"><div class="foot-in"><div class="foot-col"><h4>Tools</h4><a href="/nfl/injury-impact/">Injury impact</a><a href="/nfl/compare/">Compare two players</a><a href="/nfl/teams/">Team rooms</a><a href="/nfl/trending/">Trending usage</a><a href="/nfl/players/">Player stats</a></div><div class="foot-col"><h4>Studies</h4><a href="/nfl/studies/defense-vs-tight-ends/">Defense vs tight ends</a><a href="/nfl/studies/year-3-breakout/">The year 3 breakout</a><a href="/nfl/studies/do-underdogs-throw-more/">Do underdogs throw more</a><a href="/nfl/studies/">All studies</a></div><div class="foot-col"><h4>About</h4><a href="/">Home</a><a href="mailto:hello@slatestats.com">hello@slatestats.com</a></div></div><p class="foot-note">Every figure carries its sample size and, where one applies, its test statistic &mdash; including the findings that went against what we expected. Projections shown are for week 3. Projections are as-of-week with no lookahead.</p></footer><script>
+(function(){
+ var q=document.getElementById('q'),r=document.getElementById('res'),IX=null,sel=-1;
+ function load(){ if(IX) return Promise.resolve(IX);
+   return fetch('/data/search.json').then(function(x){return x.json();})
+     .then(function(j){IX=j;return j;}); }
+ function draw(items){
+   if(!items.length){ r.innerHTML='<div class="none">Nothing matches that.</div>';
+     r.hidden=false; return; }
+   r.innerHTML=items.map(function(it,i){
+     return '<a href="'+it.u+'"'+(i===sel?' class="on"':'')+'><b>'+it.n+'</b><i>'+it.s+'</i></a>';
+   }).join(''); r.hidden=false;
+ }
+ function run(){
+   var s=q.value.trim().toLowerCase();
+   if(s.length<2){ r.hidden=true; return; }
+   load().then(function(j){
+     var hit=j.filter(function(it){return it.k.indexOf(s)>=0;});
+     hit.sort(function(a,b){ return a.k.indexOf(s)-b.k.indexOf(s); });
+     sel=-1; draw(hit.slice(0,10));
+   });
+ }
+ q.addEventListener('input',run);
+ q.addEventListener('focus',function(){ if(q.value.trim().length>=2) run(); });
+ q.addEventListener('keydown',function(e){
+   var a=r.querySelectorAll('a'); if(!a.length) return;
+   if(e.key==='ArrowDown'){ e.preventDefault(); sel=Math.min(sel+1,a.length-1); }
+   else if(e.key==='ArrowUp'){ e.preventDefault(); sel=Math.max(sel-1,0); }
+   else if(e.key==='Enter'&&sel>=0){ e.preventDefault(); location.href=a[sel].href; return; }
+   else if(e.key==='Escape'){ r.hidden=true; q.blur(); return; }
+   else return;
+   a.forEach(function(el,i){ el.className = i===sel?'on':''; });
+ });
+ document.addEventListener('click',function(e){
+   if(!e.target.closest('.srch')) r.hidden=true; });
+})();
+</script></body></html>
