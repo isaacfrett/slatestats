@@ -28,6 +28,24 @@ html,body{margin:0}
 .brand{font-family:Archivo,sans-serif;font-weight:800;font-size:17px;
   letter-spacing:-.02em;color:var(--ink);text-decoration:none;white-space:nowrap}
 .brand span{color:var(--green)}
+/* The league, not a tool. Becomes a switcher when there is a second one. */
+.league{display:inline-flex;align-items:center;gap:5px;flex:none;
+  margin-left:2px;padding:3px 9px;border:1px solid var(--rule);
+  border-radius:99px;background:var(--sunk);color:var(--ink-2);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  letter-spacing:.06em;text-decoration:none}
+.league:hover{border-color:var(--navy);color:var(--ink)}
+/* Injury designation on a trending row. A snap-share drop caused by a player
+   limping off is not a role change, and a prose warning asking the reader to
+   go and check is a warning nobody acts on -- so it goes on the row. */
+.pill{display:inline-block;margin-left:7px;padding:1px 6px;border-radius:5px;
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;
+  letter-spacing:.05em;vertical-align:1px;cursor:help}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.flat{background:var(--flat-soft);color:var(--ink-2)}
+.filt{display:inline-flex;align-items:center;gap:7px;margin:0 0 11px;
+  font-size:13.5px;color:var(--ink-2);cursor:pointer;user-select:none}
+.filt input{width:15px;height:15px;accent-color:var(--navy);cursor:pointer}
 .nav{display:flex;gap:2px;margin-left:2px;flex:1;min-width:0;overflow-x:auto;
   scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}

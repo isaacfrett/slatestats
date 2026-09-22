@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Compare Two Players — Start A or B? — Slate Stats</title><meta name="description" content="Pick two players and see how often each finishes with more receptions, with both distributions drawn so you can see the overlap."><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><link rel="stylesheet" href="/assets/site.css"></head><body><header class="hdr"><div class="hdr-in"><a class="brand" href="/">Slate<span>Stats</span></a><nav class="nav"><a href="/nfl/">NFL</a><a href="/nfl/players/">Players</a><a href="/nfl/compare/" aria-current=page>Compare</a><a href="/nfl/injury-impact/">Injury impact</a><a href="/nfl/teams/">Teams</a><a href="/nfl/trending/">Trending</a><a href="/nfl/studies/">Studies</a></nav><div class="srch"><input id="q" type="search" placeholder="Search players" autocomplete="off" aria-label="Search players, teams and studies"><div id="res" class="res" hidden></div></div></div></header><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Compare Two Players — Start A or B? — Slate Stats</title><meta name="description" content="Pick two players and see how often each finishes with more receptions, with both distributions drawn so you can see the overlap."><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><link rel="stylesheet" href="/assets/site.css"></head><body><header class="hdr"><div class="hdr-in"><a class="brand" href="/">Slate<span>Stats</span></a><a class="league" href="/nfl/" title="NFL — more leagues coming">NFL</a><nav class="nav"><a href="/nfl/players/">Players</a><a href="/nfl/compare/" aria-current=page>Compare</a><a href="/nfl/injury-impact/">Injury impact</a><a href="/nfl/teams/">Teams</a><a href="/nfl/trending/">Trending</a><a href="/nfl/studies/">Studies</a></nav><div class="srch"><input id="q" type="search" placeholder="Search players" autocomplete="off" aria-label="Search players, teams and studies"><div id="res" class="res" hidden></div></div></div></header><style>
 .cmp{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .cmp .slot{background:var(--surface);border:1px solid var(--rule);
   border-radius:10px;padding:13px 14px;min-height:96px}
@@ -13,6 +13,13 @@
 .cmp .sub{font-size:12.5px;color:var(--ink-3);margin-top:3px}
 .cmp .drop{position:relative}
 .cmp .res{top:44px;left:0;right:0;width:auto}
+.cmp .res a.on{background:var(--sunk)}
+.cmp .slot{position:relative}
+.cmp .clr{position:absolute;top:9px;right:9px;width:26px;height:26px;
+  padding:0;line-height:1;font-size:19px;cursor:pointer;border-radius:7px;
+  border:1px solid var(--rule);background:var(--sunk);color:var(--ink-3)}
+.cmp .clr:hover{color:var(--warn);border-color:var(--warn)}
+.cmp .clr:focus-visible{outline:2px solid var(--navy);outline-offset:1px}
 .verdict-box{margin-top:18px;background:var(--surface);border:1px solid var(--rule);
   border-radius:10px;padding:18px}
 .split{display:flex;height:34px;border-radius:7px;overflow:hidden;margin-top:12px}
@@ -32,15 +39,18 @@
 .cmp-row .v.win{color:var(--green)}
 @media (max-width:560px){ .cmp{grid-template-columns:1fr}
   .cmp-row{grid-template-columns:1fr 94px 1fr} }
-</style><div class="wrap"><p class="crumb"><a href="/">Slate Stats</a> &rsaquo; <a href="/nfl/">NFL</a> &rsaquo; Compare</p><h1>Start A or B?</h1><p class="summary">Most tools answer this with a ranking, which implies a certainty the data does not contain. This one gives you the <b>split</b> &mdash; how often each player actually finishes ahead &mdash; and draws both distributions so you can see how much of the decision is real.</p><div class="cmp"><div class="slot" id="slot-a"><label>Player A</label><div class="drop"><input placeholder="Search a player" data-side="a" autocomplete="off"><div class="res" hidden></div></div></div><div class="slot" id="slot-b"><label>Player B</label><div class="drop"><input placeholder="Search a player" data-side="b" autocomplete="off"><div class="res" hidden></div></div></div></div><div id="out"></div><p class="meta">Receptions distribution is a negative binomial with PHI=1.45, checked against 49,202 projection/line pairs: predicted vs realised agrees to +0.001 overall and within 0.012 in every decile &middot; projections as-of-week with no lookahead</p></div><script>
+</style><div class="wrap"><p class="crumb"><a href="/">Slate Stats</a> &rsaquo; <a href="/nfl/">NFL</a> &rsaquo; Compare</p><h1>Start A or B?</h1><p class="summary">Most tools answer this with a ranking, which implies a certainty the data does not contain. This one gives you the <b>split</b> &mdash; how often each player actually finishes ahead &mdash; and draws both distributions so you can see how much of the decision is real.</p><div class="cmp"><div class="slot" id="slot-a"></div><div class="slot" id="slot-b"></div></div><noscript><p class="empty">This tool compares two distributions in your browser, so it needs JavaScript. Every player&rsquo;s numbers are also on his own page under <a href="/nfl/players/">Players</a>.</p></noscript><div id="out"></div><p class="meta">Receptions distribution is a negative binomial with PHI=1.45, checked against 49,202 projection/line pairs: predicted vs realised agrees to +0.001 overall and within 0.012 in every decile &middot; projections as-of-week with no lookahead</p></div><script>
 (function(){
  var D=null,A=null,B=null;
  var el=function(i){return document.getElementById(i);};
  fetch('/data/compare.json').then(function(r){return r.json();}).then(function(j){
    D=j; var q=new URLSearchParams(location.search);
-   if(q.get('a')&&j.players[q.get('a')]) pick('a',q.get('a'));
-   if(q.get('b')&&j.players[q.get('b')]) pick('b',q.get('b'));
-   if(!A&&!B){ var k=Object.keys(j.players); pick('a',k[0]); }
+   var qa=q.get('a'), qb=q.get('b');
+   if(qa&&j.players[qa]) A=[qa,j.players[qa]];
+   if(qb&&j.players[qb]&&qb!==qa) B=[qb,j.players[qb]];
+   // Draw BOTH slots whatever the state. Wiring used to happen only inside
+   // pick(), so an untouched slot shipped with a dead input.
+   slot('a'); slot('b'); render();
  });
  function nb(mean,phi,k){            // P(X = k), negative binomial
    if(mean<=0) return k===0?1:0;
@@ -58,38 +68,98 @@
      if(i>j) w+=a[i]*b[j]; else if(i===j) t+=a[i]*b[j]; } }
    return [w,t];
  }
+ // ONE slot template, filled or empty, always re-wired after it draws.
+ // The bug this replaces: the empty slot markup lived in the Python template
+ // and the filled one lived here, and only the filled one ever called wire().
+ // So player B -- which starts empty and is never picked for you -- had an
+ // input with no listener on it, and typing in it did nothing at all. Two
+ // copies of the same markup, one of them wired. Same shape as the three leg
+ // renderers that drifted apart on this site before.
+ function slot(side){
+   var st=(side==='a'?A:B), s=el('slot-'+side);
+   var lab='<label>'+(side==='a'?'Player A':'Player B')+'</label>';
+   if(st){
+     var p=st[1];
+     s.innerHTML=lab+
+       '<button class="clr" data-side="'+side+'" aria-label="Remove '+p.n+
+       '" title="Remove">&times;</button>'+
+       '<div class="who">'+p.n+'</div><div class="sub">'+p.r+' \u00b7 '+p.t+
+       ' \u00b7 '+p.snap+'% of snaps</div>'+
+       '<div class="drop"><input placeholder="Change" data-side="'+side+'" '+
+       'style="margin-top:9px" autocomplete="off"><div class="res" hidden></div></div>';
+     s.querySelector('.clr').onclick=function(){ clear(side); };
+   } else {
+     s.innerHTML=lab+
+       '<div class="drop"><input placeholder="Search a player" data-side="'+
+       side+'" autocomplete="off"><div class="res" hidden></div></div>';
+   }
+   wire(s.querySelector('input'));
+ }
  function pick(side,slug){
    var p=D.players[slug]; if(!p) return;
    if(side==='a'){A=[slug,p];} else {B=[slug,p];}
-   var s=el('slot-'+side);
-   s.innerHTML='<label>'+(side==='a'?'Player A':'Player B')+'</label>'+
-     '<div class="who">'+p.n+'</div><div class="sub">'+p.r+' \u00b7 '+p.t+
-     ' \u00b7 '+p.snap+'% of snaps</div>'+
-     '<div class="drop"><input placeholder="Change" data-side="'+side+'" '+
-     'style="margin-top:9px" autocomplete="off"><div class="res" hidden></div></div>';
-   wire(s.querySelector('input'));
-   render();
+   slot(side); render(); sync();
+ }
+ function clear(side){
+   if(side==='a'){A=null;} else {B=null;}
+   slot(side); render(); sync();
+   var inp=el('slot-'+side).querySelector('input'); if(inp) inp.focus();
+ }
+ // Keep the URL in step so a comparison can be linked and shared.
+ function sync(){
+   var q=[]; if(A) q.push('a='+encodeURIComponent(A[0]));
+   if(B) q.push('b='+encodeURIComponent(B[0]));
+   history.replaceState(null,'',q.length?'?'+q.join('&'):location.pathname);
  }
  function wire(inp){
    if(!inp) return;
-   var box=inp.parentNode.querySelector('.res');
+   var box=inp.parentNode.querySelector('.res'), sel=-1;
+   function hide(){ box.hidden=true; sel=-1; }
+   function mark(){
+     var a=box.querySelectorAll('a');
+     for(var i=0;i<a.length;i++) a[i].className=(i===sel?'on':'');
+   }
    inp.addEventListener('input',function(){
      var q=inp.value.trim().toLowerCase();
-     if(q.length<2){box.hidden=true;return;}
+     if(q.length<2){hide();return;}
+     var other=(inp.dataset.side==='a'?B:A);
      var hits=Object.keys(D.players).filter(function(k){
-       return D.players[k].n.toLowerCase().indexOf(q)>=0; }).slice(0,8);
+       // Offering the player already in the other slot invites a comparison
+       // of someone against himself, which renders a 50/50 split and reads
+       // as a broken tool rather than a refused input.
+       if(other&&other[0]===k) return false;
+       return D.players[k].n.toLowerCase().indexOf(q)>=0; })
+       .sort(function(x,y){
+         return D.players[x].n.toLowerCase().indexOf(q)
+              - D.players[y].n.toLowerCase().indexOf(q); }).slice(0,8);
      box.innerHTML=hits.map(function(k){ var p=D.players[k];
        return '<a href="#" data-k="'+k+'"><b>'+p.n+'</b><i>'+p.r+' \u00b7 '+p.t+'</i></a>';
      }).join('')||'<div class="none">No match.</div>';
-     box.hidden=false;
+     box.hidden=false; sel=-1;
      box.querySelectorAll('a').forEach(function(a){
-       a.onclick=function(e){e.preventDefault();box.hidden=true;
+       a.onclick=function(e){e.preventDefault();hide();
          pick(inp.dataset.side,a.dataset.k);};});
    });
+   inp.addEventListener('keydown',function(e){
+     var a=box.querySelectorAll('a');
+     if(box.hidden||!a.length){ if(e.key==='Escape') inp.blur(); return; }
+     if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,a.length-1);mark();}
+     else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(sel-1,0);mark();}
+     // Enter takes the FIRST result when nothing is highlighted. Requiring an
+     // arrow-key press first is what made the header search read as broken.
+     else if(e.key==='Enter'){e.preventDefault();hide();
+       pick(inp.dataset.side,a[sel>=0?sel:0].dataset.k);}
+     else if(e.key==='Escape'){hide();}
+   });
+   inp.addEventListener('blur',function(){ setTimeout(hide,160); });
  }
  function render(){
-   var out=el('out'); if(!A||!B){ out.innerHTML=
-     '<p class="empty">Pick a second player to compare.</p>'; return; }
+   var out=el('out');
+   if(!A&&!B){ out.innerHTML='<p class="empty">Search a player in each box '+
+     'above to see how often one finishes with more receptions than the '+
+     'other.</p>'; return; }
+   if(!A||!B){ out.innerHTML='<p class="empty">Now pick '+(A?'player B':
+     'player A')+' to compare.</p>'; return; }
    var a=A[1],b=B[1],phi=D.phi;
    var ra=a.proj.receptions||0, rb=b.proj.receptions||0;
    var r=beats(ra,rb,phi), pa=r[0], tie=r[1], pb=1-pa-tie;
