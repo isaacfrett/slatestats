@@ -1,0 +1,38 @@
+# Is the site still being rebuilt, and is it still being served?
+#
+# WHY THIS RUNS ON GITHUB AND NOT ON THE BUILD BOX. The Droplet already logs
+# failures and can POST to a webhook when a run fails. What it cannot do is
+# notice its own death: if it is off, wedged, out of disk or has lost its
+# cron, no failure hook fires and the site keeps serving whatever it last
+# published. A stale site looks exactly like a working one -- that is how this
+# project shipped a week of frozen code while every run logged OK.
+#
+# So the check lives somewhere the Droplet cannot take down with it, and it
+# alerts on SILENCE rather than on error. A failed run emails the repository
+# owner, which needs no third-party monitor and no new account.
+#
+# Each entry sits a couple of hours after a deploy window, so a SINGLE missed
+# window is caught rather than only a sustained outage.
+#   deploys (UTC): Tue 10:00 | Wed-Fri 22:00 | Sun 15:00
+name: site freshness
+
+on:
+  schedule:
+    - cron: "0 12 * * 2"        # after Tuesday's new-board build
+    - cron: "30 23 * * 3,4,5"   # after the Wed/Thu/Fri injury-report builds
+    - cron: "0 17 * * 0"        # after Sunday's inactives build
+  workflow_dispatch:            # runnable by hand after a fix
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The check is a FILE, not a heredoc inside this block scalar. A
+      # heredoc here gets its terminator indented by the YAML block, and bash
+      # needs that terminator at column 0 -- it would have failed on the first
+      # scheduled run, which is the worst place to discover it.
+      - run: python3 .github/freshness_check.py
