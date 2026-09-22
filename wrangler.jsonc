@@ -1,0 +1,16 @@
+{
+  // Static site. No Worker code: `assets` alone serves the directory, and
+  // Cloudflare handles routing, caching and HTTPS.
+  //
+  // The site lives under public/ rather than at the repo root so that this
+  // config file is never itself served as a page.
+  "name": "slatestats",
+  "compatibility_date": "2026-09-22",
+  "assets": {
+    "directory": "./public",
+    // Directory-style URLs: /nfl/players/puka-nacua/ serves that folder's
+    // index.html. Without this the trailing-slash routes 404.
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
