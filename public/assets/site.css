@@ -28,6 +28,11 @@ html,body{margin:0}
 .brand{font-family:Archivo,sans-serif;font-weight:800;font-size:17px;
   letter-spacing:-.02em;color:var(--ink);text-decoration:none;white-space:nowrap}
 .brand span{color:var(--green)}
+/* The mark is the site's argument in miniature: a right-skewed distribution
+   with the mode picked out. It inherits currentColor so it follows the theme
+   instead of carrying a second palette. */
+.brand{display:inline-flex;align-items:center;gap:8px;color:var(--navy)}
+.brand .mk{width:22px;height:22px;flex:none}
 /* The league, not a tool. Becomes a switcher when there is a second one. */
 .league{display:inline-flex;align-items:center;gap:5px;flex:none;
   margin-left:2px;padding:3px 9px;border:1px solid var(--rule);
