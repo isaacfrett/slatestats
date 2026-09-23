@@ -37,6 +37,10 @@
   border-top:1px solid var(--rule-2);color:var(--ink-3);font-size:11.5px;
   line-height:1.6;text-align:center}
 .foot-legal a{color:var(--ink-2)}
+/* A column header that says when we last looked. Normal case and lighter
+   than the header it sits under: it is a footnote, not a second heading. */
+th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
+  letter-spacing:0;font-size:10.5px;color:var(--ink-3)}
 .chat-legal{margin:14px auto 0;max-width:70ch;color:var(--ink-3);
   font-size:11px;line-height:1.55;text-align:center}
 .chat-legal a{color:var(--ink-3);text-decoration:underline}
