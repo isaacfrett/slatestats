@@ -225,7 +225,8 @@ body{margin:0;background:var(--ground);color:var(--ink);
  fetch(API+'/api/me',{credentials:'include'})
   .then(function(x){return x.json();}).then(function(j){
    if(j.signed_in){
-     el.innerHTML='<div class="who">'+esc(j.email)+'</div>'
+     el.innerHTML='<a class="who" href="/nfl/account/">'
+       +esc(j.name||j.email)+'</a>'
        +'<span class="tier">'+esc(j.tier_label)+'</span><br>'
        +'<a class="out" href="'+API+'/auth/signout">Sign out</a>';
    } else {
