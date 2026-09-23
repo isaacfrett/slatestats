@@ -22,8 +22,8 @@
  text-transform:uppercase;color:var(--ink-3);padding:0 10px;margin-bottom:5px}
 .acct{margin-top:auto;padding-top:14px;border-top:1px solid var(--rule);
  font-size:12.5px;color:var(--ink-3)}
-.acct .who{display:block;color:var(--ink-2);font-weight:600;font-size:13px;
- text-decoration:none}
+.acct .who{display:flex;align-items:center;gap:6px;color:var(--ink-2);
+ font-weight:600;font-size:13px;text-decoration:none}
 .acct .who:hover{color:var(--navy);text-decoration:underline}
 .acct .tier{display:inline-block;margin-top:3px;padding:1px 7px;
  border-radius:999px;background:var(--green-soft);color:var(--green);

@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Slate Stats — Ask anything about NFL fantasy</title><meta name="description" content="Ask any question about NFL players, matchups, injuries and fantasy. Every answer arrives with the sample size behind it and a chart drawn from the same data."><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><link rel="icon" href="/assets/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/icon.svg"><meta property="og:site_name" content="Slate Stats"><meta property="og:title" content="Slate Stats — Ask anything about NFL fantasy"><meta property="og:description" content="Ask any question about NFL players, matchups, injuries and fantasy. Every answer arrives with the sample size behind it and a chart drawn from the same data."><meta property="og:image" content="https://slatestats.com/assets/og.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://slatestats.com/assets/og.png"><link rel="stylesheet" href="/assets/site.css"><script>window.SLATE_API="https://api.slatestats.com"</script><link rel="canonical" href="https://slatestats.com/"><meta property="og:url" content="https://slatestats.com/"><meta property="og:type" content="website"></head><body><div class="app"><aside class="side"><a class="brand" href="/"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="34" width="8" height="18" rx="2" fill="currentColor" opacity=".5"/><rect x="17" y="12" width="8" height="40" rx="2" fill="var(--green)"/><rect x="28" y="22" width="8" height="30" rx="2" fill="currentColor" opacity=".8"/><rect x="39" y="32" width="8" height="20" rx="2" fill="currentColor" opacity=".6"/><rect x="50" y="40" width="8" height="12" rx="2" fill="currentColor" opacity=".4"/></svg>Slate<span>Stats</span></a><div class="srch"><input id="q" type="search" placeholder="Search players" autocomplete="off" aria-label="Search players, teams and studies"><div id="res" class="res" hidden></div></div><div><div class="lab">NFL</div><nav><a href="/" aria-current=page>Ask</a><a href="/nfl/my-team/">My team</a><a href="/nfl/rankings/">Rankings</a><a href="/nfl/cheat-sheet/">Cheat sheet</a><a href="/nfl/waivers/">Waivers</a><a href="/nfl/streaks/">Streaks</a><a href="/nfl/injury-impact/">Injury impact</a><a href="/nfl/compare/">Compare</a><a href="/nfl/teams/">Teams</a></nav></div><div class="acct" id="acct" hidden></div><div class="foot"><a href="/nfl/studies/">Studies</a><a href="/nfl/faq/">Fantasy questions</a><a href="/nfl/players/">All players</a><a href="mailto:hello@slatestats.com">hello@slatestats.com</a></div></aside><div class="main"><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Slate Stats — Ask anything about NFL fantasy</title><meta name="description" content="Ask any question about NFL players, matchups, injuries and fantasy. Every answer arrives with the sample size behind it and a chart drawn from the same data."><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><link rel="icon" href="/assets/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/icon.svg"><meta property="og:site_name" content="Slate Stats"><meta property="og:title" content="Slate Stats — Ask anything about NFL fantasy"><meta property="og:description" content="Ask any question about NFL players, matchups, injuries and fantasy. Every answer arrives with the sample size behind it and a chart drawn from the same data."><meta property="og:image" content="https://slatestats.com/assets/og.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://slatestats.com/assets/og.png"><link rel="stylesheet" href="/assets/site.css"><script>window.SLATE_API=""</script><link rel="canonical" href="https://slatestats.com/"><meta property="og:url" content="https://slatestats.com/"><meta property="og:type" content="website"></head><body><div class="app"><aside class="side"><a class="brand" href="/"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="34" width="8" height="18" rx="2" fill="currentColor" opacity=".5"/><rect x="17" y="12" width="8" height="40" rx="2" fill="var(--green)"/><rect x="28" y="22" width="8" height="30" rx="2" fill="currentColor" opacity=".8"/><rect x="39" y="32" width="8" height="20" rx="2" fill="currentColor" opacity=".6"/><rect x="50" y="40" width="8" height="12" rx="2" fill="currentColor" opacity=".4"/></svg>Slate<span>Stats</span></a><div class="srch"><input id="q" type="search" placeholder="Search players" autocomplete="off" aria-label="Search players, teams and studies"><div id="res" class="res" hidden></div></div><div><div class="lab">NFL</div><nav><a href="/" aria-current=page>Ask</a><a href="/nfl/my-team/">My team</a><a href="/nfl/rankings/">Rankings</a><a href="/nfl/cheat-sheet/">Cheat sheet</a><a href="/nfl/waivers/">Waivers</a><a href="/nfl/streaks/">Streaks</a><a href="/nfl/injury-impact/">Injury impact</a><a href="/nfl/compare/">Compare</a><a href="/nfl/teams/">Teams</a></nav></div><div class="acct" id="acct" hidden></div><div class="foot"><a href="/nfl/studies/">Studies</a><a href="/nfl/faq/">Fantasy questions</a><a href="/nfl/players/">All players</a><a href="mailto:hello@slatestats.com">hello@slatestats.com</a></div></aside><div class="main"><style>
 /* The conversation only. The shell (.app/.side/.main) lives in the shared
    stylesheet because every page uses it now. */
 .chat{display:flex;flex-direction:column;flex:1;min-height:0}
@@ -35,6 +35,15 @@ body{margin:0;background:var(--ground);color:var(--ink);
 .eg button:hover{border-color:var(--navy);color:var(--ink)}
 #fresh{margin-top:10px;font-size:11.5px;color:var(--ink-3);text-align:center;
  line-height:1.5}
+#popular{max-width:620px;margin:26px auto 0;text-align:center}
+#popular .plab{font:600 11px Archivo,sans-serif;letter-spacing:.09em;
+ text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+#popular .pq{display:inline-block;margin:0 5px 7px 0;padding:8px 13px;
+ border:1px solid var(--rule);border-radius:999px;background:var(--surface);
+ color:var(--ink-2);font:inherit;font-size:13.5px;cursor:pointer;
+ text-align:left}
+#popular .pq:hover{border-color:var(--navy);color:var(--ink)}
+.chat:not(.empty) #popular{display:none}
 
 .turn{margin:0 0 26px}
 .you{font-weight:600;font-size:17px;margin:0 0 12px;color:var(--ink)}
@@ -66,7 +75,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
  .composer{padding:11px 15px 16px}
  .hello{font-size:24px}
 }
-</style><div class="chat empty" id="main"><div class="thread" id="thread"><div class="inner" id="inner"><h1 class="hello">What do you want to know?</h1></div></div><div class="composer"><div class="cwrap"><div class="cbox"><textarea id="ask" rows="1" placeholder="Ask about a player, a matchup, an injury, a line…" aria-label="Ask a question"></textarea><button id="send" aria-label="Send">↑</button></div><div class="eg"><button data-q="Who benefits if Puka Nacua sits?">If Nacua sits</button><button data-q="Should I start Bijan Robinson or Kenneth Walker?">Bijan or Walker</button><button data-q="Is any defense actually weak against tight ends?">Weak vs tight ends?</button><button data-q="What are the best bets this week?">Best bets</button><button data-q="Who are the top waiver adds this week?">Top waiver adds</button></div><div id="fresh" hidden></div></div></div></div><script>
+</style><div class="chat empty" id="main"><div class="thread" id="thread"><div class="inner" id="inner"><h1 class="hello">What do you want to know?</h1><div id="popular" hidden></div></div></div><div class="composer"><div class="cwrap"><div class="cbox"><textarea id="ask" rows="1" placeholder="Ask about a player, a matchup, an injury, a line…" aria-label="Ask a question"></textarea><button id="send" aria-label="Send">↑</button></div><div class="eg"><button data-q="Who benefits if Puka Nacua sits?">If Nacua sits</button><button data-q="Should I start Bijan Robinson or Kenneth Walker?">Bijan or Walker</button><button data-q="Is any defense actually weak against tight ends?">Weak vs tight ends?</button><button data-q="What are the best bets this week?">Best bets</button><button data-q="Who are the top waiver adds this week?">Top waiver adds</button></div><div id="fresh" hidden></div></div></div></div><script>
 (function(){
  // WHERE THE ASSISTANT LIVES. On a laptop it is this same origin; in
  // production the pages are static files on a CDN and the assistant is a
@@ -78,8 +87,9 @@ body{margin:0;background:var(--ground);color:var(--ink);
      thread=document.getElementById('thread'), main=document.getElementById('main'),
      inner=document.getElementById('inner'), busy=false, ctx=null;
  if(!box) return;
- function esc(t){ return String(t==null?'':t).replace(/[&<>]/g,function(c){
-   return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
+ function esc(t){ return String(t==null?'':t)
+   .replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;',
+     '>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
  function paras(t){ return esc(t).split(/\n\n+/)
    .map(function(p){ return '<p>'+p.replace(/\n/g,'<br>')+'</p>'; }).join(''); }
  function grow(){ box.style.height='auto';
@@ -195,7 +205,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
  });
  send.onclick=function(){ ask(box.value.trim()); };
  document.addEventListener('click',function(e){
-   var b=e.target.closest('.eg button, .sugg button');
+   var b=e.target.closest('.eg button, .sugg button, .pq');
    if(b) ask(b.dataset.q||b.textContent);
  });
  // DATA AGE, SHOWN WITHOUT BEING ASKED. Someone deciding whether to ask
@@ -209,6 +219,18 @@ body{margin:0;background:var(--ground);color:var(--ink);
    if(el && s){ el.innerHTML='Data: '+s; el.hidden=false; }
  }).catch(function(){});
 
+ // WHAT OTHER PEOPLE ARE ASKING. Only the question is reused; clicking one
+ // runs it like any other, so nothing here can serve a stale answer.
+ fetch(API+'/api/popular').then(function(x){return x.json();})
+  .then(function(j){
+   var el=document.getElementById('popular');
+   if(!el || !j.questions || j.questions.length < 3) return;
+   el.innerHTML='<div class="plab">What people are asking</div>'
+     + j.questions.map(function(p){
+         return '<button class="pq">'+esc(p.q)+'</button>'; }).join('');
+   el.hidden=false;
+  }).catch(function(){});
+
  box.focus();
 })();
 </script><script>
@@ -218,15 +240,26 @@ body{margin:0;background:var(--ground);color:var(--ink);
  // to sign in at all.
  var API=(window.SLATE_API||'').replace(/\/$/,'');
  var el=document.getElementById('acct'); if(!el) return;
- function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(c){
-   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+ function esc(t){ return String(t==null?'':t)
+   .replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;',
+     '>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
  // The API is a different origin, so the cookie only travels when the
  // request asks for it. Without this everyone looks signed out forever.
  fetch(API+'/api/me',{credentials:'include'})
   .then(function(x){return x.json();}).then(function(j){
    if(j.signed_in){
+     // NO IDENTITY IN THE SIDEBAR. It showed the part of the address
+     // before the @, which is not a name and is PII on a panel that gets
+     // read over shoulders. A name would be fine, but we cannot promise
+     // one for every provider -- Apple lets people hide even that -- and a
+     // field that is a name for some users and an address fragment for
+     // others is not a field worth having. The icon says "you are signed
+     // in"; the account page, which you open deliberately, says who.
      el.innerHTML='<a class="who" href="/nfl/account/">'
-       +esc(j.name||j.email)+'</a>'
+       +'<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">'
+       +'<circle cx="12" cy="8" r="3.6" fill="currentColor"/>'
+       +'<path d="M4.5 20c0-4 3.4-6.2 7.5-6.2s7.5 2.2 7.5 6.2" '
+       +'fill="currentColor"/></svg> Account</a>'
        +'<span class="tier">'+esc(j.tier_label)+'</span><br>'
        +'<a class="out" href="'+API+'/auth/signout">Sign out</a>';
    } else {
