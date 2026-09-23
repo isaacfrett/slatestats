@@ -1,0 +1,358 @@
+
+/* --- the shell: navigation down the left, on every page ------------------
+   A sticky top bar carrying its own search field above a page that also
+   searches is two navigations competing. Down the left it is out of the way
+   and the content column gets the width. Under 860px it becomes a strip. */
+*{box-sizing:border-box}
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+.side{border-right:1px solid var(--rule);background:var(--sunk);
+ padding:20px 16px;display:flex;flex-direction:column;gap:18px;
+ position:sticky;top:0;height:100vh;overflow-y:auto}
+.side .brand{display:flex;align-items:center;gap:8px;font:800 18px Archivo,
+ sans-serif;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+.side .brand span{color:var(--green)}
+.side .mk{width:22px;height:22px;color:var(--ink-3)}
+.side nav{display:flex;flex-direction:column;gap:1px}
+.side nav a{padding:7px 10px;border-radius:7px;color:var(--ink-2);
+ text-decoration:none;font-size:14px}
+.side nav a:hover{background:var(--ground);color:var(--ink)}
+.side nav a[aria-current]{background:var(--ground);color:var(--ink);
+ font-weight:600}
+.side .lab{font:600 11px Archivo,sans-serif;letter-spacing:.09em;
+ text-transform:uppercase;color:var(--ink-3);padding:0 10px;margin-bottom:5px}
+.acct{margin-top:auto;padding-top:14px;border-top:1px solid var(--rule);
+ font-size:12.5px;color:var(--ink-3)}
+.acct .who{display:flex;align-items:center;gap:6px;color:var(--ink-2);
+ font-weight:600;font-size:13px;text-decoration:none}
+.acct .who:hover{color:var(--navy);text-decoration:underline}
+.acct .tier{display:inline-block;margin-top:3px;padding:1px 7px;
+ border-radius:999px;background:var(--green-soft);color:var(--green);
+ font-size:11px;font-weight:700}
+.acct a.signin{display:block;padding:8px 11px;border-radius:8px;
+ background:var(--navy);color:#fff;text-decoration:none;font-weight:600;
+ text-align:center;font-size:13px}
+.acct a.out{color:var(--ink-3);text-decoration:none;font-size:11.5px;
+ display:inline-block;margin-top:5px}
+.acct a.out:hover{color:var(--ink-2);text-decoration:underline}
+.side .foot{margin-top:14px;font-size:12px;color:var(--ink-3)}
+.side .foot a{color:var(--ink-3);text-decoration:none;display:block;
+ padding:3px 10px}
+.side .foot a:hover{color:var(--ink-2)}
+.side .srch{position:relative}
+.side .srch input{width:100%;font:inherit;font-size:13.5px;padding:7px 10px;
+ border:1px solid var(--rule);border-radius:8px;background:var(--surface);
+ color:var(--ink)}
+.side .srch .res{position:absolute;left:0;right:0;top:100%;z-index:40;
+ margin-top:4px;background:var(--surface);border:1px solid var(--rule);
+ border-radius:9px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.main{display:flex;flex-direction:column;min-height:100vh;min-width:0}
+@media(max-width:860px){
+ .app{grid-template-columns:1fr}
+ .side{position:static;height:auto;flex-direction:row;align-items:center;
+  gap:12px;padding:10px 14px;overflow-x:auto;border-right:0;
+  border-bottom:1px solid var(--rule)}
+ .side nav{flex-direction:row;gap:2px}
+ .side nav a{white-space:nowrap;padding:6px 9px}
+ .side .lab,.side .foot{display:none}
+ .side .srch{min-width:150px}
+}
+
+:root{--ground:#EEF2F5;--surface:#FFFFFF;--sunk:#F4F7F9;
+  --ink:#0C1C2C;--ink-2:#46596B;--ink-3:#7B8C9B;
+  --rule:#D2DCE3;--rule-2:#E4EBF0;
+  --navy:#12405E;--green:#2F8B27;--green-soft:#E3F2DE;
+  --warn:#A8443A;--warn-soft:#F7E8E6;--flat:#8D97A3;--flat-soft:#EDF0F3}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#061320;--surface:#0D2132;--sunk:#0A1B29;
+  --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#6E8598;
+  --rule:#1C3547;--rule-2:#142636;
+  --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
+  --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C}}
+:root[data-theme="dark"]{--ground:#061320;--surface:#0D2132;--sunk:#0A1B29;
+  --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#6E8598;
+  --rule:#1C3547;--rule-2:#142636;
+  --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
+  --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C}
+*{box-sizing:border-box}
+html,body{margin:0}
+/* ---- site header -------------------------------------------------------
+   Every page had breadcrumbs up and one cross-link sideways, and nothing
+   else. A visitor arriving on a study from search had exactly one way out.
+   This is the spine. */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+  background:var(--surface);border-bottom:1px solid var(--rule)}
+.hdr-in{max-width:1000px;margin:0 auto;padding:0 16px;display:flex;
+  align-items:center;gap:18px;height:54px}
+.brand{font-family:Archivo,sans-serif;font-weight:800;font-size:17px;
+  letter-spacing:-.02em;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand span{color:var(--green)}
+/* The mark is the site's argument in miniature: a right-skewed distribution
+   with the mode picked out. It inherits currentColor so it follows the theme
+   instead of carrying a second palette. */
+/* GAP ON THE MARK, NOT ON THE FLEX CONTAINER. A flex gap separates every
+   child, and the wordmark is a bare text node plus a <span> -- so `gap:8px`
+   rendered the brand as "Slate Stats" while the logo says "SlateStats". */
+.brand{display:inline-flex;align-items:center;color:var(--navy)}
+.brand .mk{width:22px;height:22px;flex:none;margin-right:8px}
+/* The league, not a tool. Becomes a switcher when there is a second one. */
+.league{display:inline-flex;align-items:center;gap:5px;flex:none;
+  margin-left:2px;padding:3px 9px;border:1px solid var(--rule);
+  border-radius:99px;background:var(--sunk);color:var(--ink-2);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  letter-spacing:.06em;text-decoration:none}
+.league:hover{border-color:var(--navy);color:var(--ink)}
+/* Injury designation on a trending row. A snap-share drop caused by a player
+   limping off is not a role change, and a prose warning asking the reader to
+   go and check is a warning nobody acts on -- so it goes on the row. */
+.pill{display:inline-block;margin-left:7px;padding:1px 6px;border-radius:5px;
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;
+  letter-spacing:.05em;vertical-align:1px;cursor:help}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.flat{background:var(--flat-soft);color:var(--ink-2)}
+.filt{display:inline-flex;align-items:center;gap:7px;margin:0 0 11px;
+  font-size:13.5px;color:var(--ink-2);cursor:pointer;user-select:none}
+.filt input{width:15px;height:15px;accent-color:var(--navy);cursor:pointer}
+/* Data pages are not reading pages. Declared in the SHARED stylesheet
+   because three page types use it now -- it was defined inside HOME_CSS,
+   which only the landing page loads, so the class silently did nothing
+   anywhere else. */
+.wrap.wide{max-width:1120px}
+.fmt{display:flex;align-items:center;gap:7px;margin:16px 0 4px;flex-wrap:wrap}
+.fmt span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-right:3px}
+.fmt button{font:inherit;font-size:13px;padding:6px 13px;cursor:pointer;
+  border:1px solid var(--rule);border-radius:99px;background:var(--surface);
+  color:var(--ink-2)}
+.fmt button:hover{border-color:var(--navy);color:var(--ink)}
+.fmt button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+/* ONE STICKY ROW: positions, horizon, scoring. Switching a position should
+   never cost a scroll back to the top, which is what a non-sticky control
+   row costs on a 400-row table. */
+.bar{position:sticky;top:52px;z-index:40;display:flex;align-items:center;
+  gap:10px;flex-wrap:wrap;margin:16px 0 4px;padding:9px 0;
+  background:var(--ground);border-bottom:1px solid var(--rule)}
+.bar .pos{display:flex;gap:3px;flex:1;min-width:0;overflow-x:auto;
+  scrollbar-width:none}
+.bar .pos::-webkit-scrollbar{display:none}
+.bar .pos button{font:inherit;font-size:13.5px;font-weight:600;padding:6px 13px;
+  cursor:pointer;border:1px solid var(--rule);border-radius:8px;
+  background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.bar .pos button:hover{border-color:var(--navy);color:var(--ink)}
+.bar .pos button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.bar .sel{display:flex;gap:7px;flex:none}
+.bar select:disabled{opacity:.42;cursor:not-allowed}
+#hint{margin:9px 0 0;font-size:13px;color:var(--ink-3);line-height:1.5}
+#hint b{color:var(--ink-2)}
+/* The waiver score shows its weighting rather than asking for trust. */
+td .sub{display:block;font-size:12px;color:var(--ink-3);line-height:1.45;
+  margin-top:2px;max-width:66ch}
+td.wt{font-family:"IBM Plex Mono",monospace;font-weight:600;text-align:right;
+  white-space:nowrap;color:var(--green)}
+td.wt.neg{color:var(--warn)}
+/* Two orders of the same pool, so the disagreement is visible at a glance. */
+.versus{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.versus .half{background:var(--surface);border:1px solid var(--rule);
+  border-radius:11px;padding:14px 16px}
+.versus h3{margin:0 0 2px;font-family:Archivo,sans-serif;font-size:14px;
+  font-weight:700}
+.versus .cap{margin:0 0 10px;font-size:12px;color:var(--ink-3)}
+ol.vs{list-style:none;margin:0;padding:0;counter-reset:none}
+ol.vs li{display:flex;align-items:baseline;gap:8px;padding:6px 0;
+  border-bottom:1px solid var(--rule-2);font-size:13.5px}
+ol.vs li:last-child{border-bottom:0}
+ol.vs .n{font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  color:var(--ink-3);min-width:17px}
+ol.vs a{color:var(--ink);text-decoration:none;font-weight:500}
+ol.vs a:hover{color:var(--navy)}
+ol.vs i{font-style:normal;font-family:"IBM Plex Mono",monospace;
+  font-size:10.5px;font-weight:600}
+ol.vs i.up{color:var(--green)} ol.vs i.dn{color:var(--warn)}
+ol.vs b{margin-left:auto;font-family:"IBM Plex Mono",monospace;
+  font-size:12.5px;font-weight:600;white-space:nowrap}
+@media (max-width:760px){ .versus{grid-template-columns:1fr} }
+.bar select{font:inherit;font-size:13px;padding:6px 9px;border-radius:8px;
+  border:1px solid var(--rule);background:var(--surface);color:var(--ink);
+  cursor:pointer}
+@media (max-width:640px){ .bar{top:48px} .bar .sel{width:100%} 
+  .bar select{flex:1} }
+/* Cheat-sheet tiers. A flat list of 40 names is something you scroll; six
+   labelled bands is something you decide from. */
+.tier{margin-top:14px;background:var(--surface);border:1px solid var(--rule);
+  border-radius:11px;padding:13px 15px}
+.tier h3{margin:0 0 8px;font-family:Archivo,sans-serif;font-size:13.5px;
+  font-weight:700;display:flex;align-items:baseline;gap:8px}
+.tier h3 span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  font-weight:600;color:var(--ink-3);letter-spacing:.05em}
+.tier ul{list-style:none;margin:0;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:0 18px}
+.tier li{display:flex;align-items:baseline;gap:7px;padding:6px 0;
+  border-bottom:1px solid var(--rule-2);font-size:13.5px}
+.tier li:last-child{border-bottom:0}
+.tier li a{color:var(--ink);text-decoration:none;font-weight:500}
+.tier li a:hover{color:var(--navy)}
+.tier li .t{font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  color:var(--ink-3)}
+.tier li i{font-style:normal;font-family:"IBM Plex Mono",monospace;
+  font-size:10.5px}
+.tier li i.up{color:var(--green)} .tier li i.dn{color:var(--warn)}
+.tier li b{margin-left:auto;font-family:"IBM Plex Mono",monospace;
+  font-size:13px;font-weight:600}
+.tier li.more{color:var(--ink-3);font-size:12.5px;grid-column:1/-1}
+/* A player who cannot play is not a footnote. */
+.flag.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.flag.warn b{color:var(--warn)}
+ul.lede{margin:12px 0 0;padding:0;list-style:none}
+ul.lede li{padding:9px 0;border-bottom:1px solid var(--rule-2);font-size:14.5px}
+ul.lede li:last-child{border-bottom:0}
+th.sortable{cursor:pointer;user-select:none;white-space:nowrap}
+th.sortable:hover{color:var(--ink)}
+th.sortable::after{content:"";opacity:.35;margin-left:5px}
+th.sortable.up::after{content:"\2191";opacity:1;color:var(--navy)}
+th.sortable.dn::after{content:"\2193";opacity:1;color:var(--navy)}
+.nav{display:flex;gap:2px;margin-left:2px;flex:1;min-width:0;overflow-x:auto;
+  scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+/* On a phone the row still scrolls, and a hidden scrollbar gives no hint.
+   A fade at the right edge says there is more without adding chrome. */
+.nav-wrap{position:relative;flex:1;min-width:0;display:flex}
+.nav-wrap::after{content:"";position:absolute;right:0;top:0;bottom:0;width:26px;
+  pointer-events:none;background:linear-gradient(to right,transparent,var(--surface))}
+@media (min-width:1080px){ .nav-wrap::after{display:none} }
+.nav a{font-size:13.5px;font-weight:500;color:var(--ink-2);text-decoration:none;
+  padding:7px 10px;border-radius:7px;white-space:nowrap}
+.nav a:hover{background:var(--sunk);color:var(--ink)}
+.nav a[aria-current]{color:var(--ink);font-weight:600;background:var(--sunk)}
+.srch{position:relative;flex:0 0 auto}
+.srch input{font:inherit;font-size:13.5px;width:168px;padding:7px 11px;
+  border:1px solid var(--rule);border-radius:8px;background:var(--sunk);
+  color:var(--ink)}
+.srch input:focus{outline:2px solid var(--navy);outline-offset:-1px;width:230px}
+.srch input::placeholder{color:var(--ink-3)}
+.res{position:absolute;right:0;top:40px;width:330px;max-height:60vh;
+  overflow-y:auto;background:var(--surface);border:1px solid var(--rule);
+  border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:5px}
+.res a{display:block;padding:8px 10px;border-radius:7px;text-decoration:none;
+  color:var(--ink);font-size:13.5px}
+.res a:hover,.res a.on{background:var(--sunk)}
+.res a b{font-weight:600}
+.res a i{display:block;font-style:normal;font-size:11.5px;color:var(--ink-3);
+  margin-top:1px}
+.res .none{padding:12px 10px;font-size:13px;color:var(--ink-3)}
+@media (max-width:640px){
+  .srch input{width:118px} .srch input:focus{width:150px}
+  .res{width:min(330px,calc(100vw - 32px))}
+  .hdr-in{gap:10px} .brand{font-size:15px}
+}
+/* ---- site footer ---- */
+.foot{margin-top:56px;border-top:1px solid var(--rule);background:var(--surface)}
+.foot-in{max-width:1000px;margin:0 auto;padding:26px 16px 34px;display:flex;
+  flex-wrap:wrap;gap:26px 44px}
+.foot-col h4{font-family:Archivo,sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 9px}
+.foot-col a{display:block;font-size:13.5px;color:var(--ink-2);
+  text-decoration:none;padding:3px 0}
+.foot-col a:hover{color:var(--ink)}
+.foot-note{max-width:1000px;margin:0 auto;padding:0 16px 30px;font-size:12px;
+  color:var(--ink-3);line-height:1.7;max-width:62ch}
+body{background:var(--ground);color:var(--ink);
+  font-family:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:26px 60px}
+h1,h2,h3{font-family:Archivo,ui-sans-serif,system-ui,sans-serif;margin:0;
+  text-wrap:balance;letter-spacing:-.02em}
+h1{font-weight:800;font-size:clamp(28px,6.2vw,42px);line-height:1.04}
+h2{font-weight:700;font-size:clamp(17px,3.2vw,21px);margin-top:34px}
+h3{font-weight:700;font-size:12.5px;color:var(--ink-2)}
+p{margin:13px 0 0}
+a{color:var(--navy)}
+.crumb{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin:0}
+.crumb a{color:inherit;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+.num{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+/* identity */
+.hero{display:flex;gap:16px;align-items:center;margin-top:12px}
+.shot{position:relative;flex:0 0 auto;width:74px;height:74px;border-radius:50%;
+  overflow:hidden;background:var(--sunk);border:1px solid var(--rule);
+  display:grid;place-items:center}
+/* the image COVERS the initials rather than sitting beside them, so a slow,
+   blocked or 404 image degrades to initials instead of a blank hole */
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  display:block;background:var(--sunk)}
+.shot .ini{font-family:Archivo;font-weight:800;font-size:25px;color:var(--ink-3)}
+.ident{margin-top:6px;font-size:15px;color:var(--ink-2)}
+.ident b{color:var(--ink)}
+.role{display:inline-block;margin-left:7px;font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;font-weight:600;letter-spacing:.05em;padding:3px 9px;border-radius:99px;
+  background:var(--green-soft);color:var(--green)}
+/* the one-line answer, so nothing needs digging for */
+.summary{margin-top:20px;font-size:17px;line-height:1.55;text-wrap:pretty;
+  border-left:3px solid var(--green);padding-left:15px}
+.summary b{font-weight:600}
+/* big numbers */
+.proj{margin-top:18px;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.proj div{background:var(--surface);padding:13px 15px}
+.proj .k{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
+  font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+.proj .v{font-family:Archivo;font-weight:800;font-size:25px;margin-top:2px;
+  font-variant-numeric:tabular-nums}
+.proj .c{font-size:11.5px;color:var(--ink-3);margin-top:1px}
+.flag{margin-top:15px;background:var(--surface);border:1px solid var(--rule);
+  border-left:3px solid var(--warn);border-radius:8px;padding:12px 15px;
+  font-size:14px;color:var(--ink-2)}
+.flag b{color:var(--ink)}
+/* tables that read as shapes, not digits */
+.tbl{margin-top:16px;overflow-x:auto;background:var(--surface);
+  border:1px solid var(--rule);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:9px 13px;text-align:right;white-space:nowrap}
+/* TABLES MUST FIT, not scroll. A horizontal scrollbar on a data table means
+   the columns on the right are effectively invisible -- nobody discovers
+   them. So the least important columns drop out as the viewport narrows,
+   and the header and cell both carry .opt so the two never misalign. */
+@media (max-width:1150px){ th,td{padding:8px 10px} }
+@media (max-width:1000px){ .opt:nth-last-child(2){display:none} }
+@media (max-width:860px){ .opt{display:none} }
+@media (max-width:560px){ th,td{padding:7px 8px;font-size:12.5px}
+  .tbl table{font-size:12.5px} }
+th:first-child,td:first-child{text-align:left}
+thead th{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10px;
+  font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1px solid var(--rule)}
+tbody tr{border-bottom:1px solid var(--rule-2)}
+tbody tr:last-child{border-bottom:0}
+tbody td{font-family:"IBM Plex Mono",ui-monospace,monospace}
+tbody td:first-child{font-family:inherit;font-weight:500}
+tr.hi td{background:var(--sunk);font-weight:600}
+.mini{display:inline-block;width:46px;height:7px;border-radius:3px;
+  background:var(--rule-2);vertical-align:middle;margin-right:7px;overflow:hidden}
+.mini i{display:block;height:100%;border-radius:3px;background:var(--navy)}
+.mini.g i{background:var(--green)}
+/* deltas */
+.d{display:inline-block;min-width:52px;text-align:right;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:600;
+  padding:2px 8px;border-radius:5px;background:var(--flat-soft);color:var(--flat)}
+.d.up{background:var(--green-soft);color:var(--green)}
+.d.out{background:transparent;color:var(--warn)}
+figure{margin:16px 0 0;background:var(--surface);border:1px solid var(--rule);
+  border-radius:10px;padding:16px 16px 12px}
+figcaption{margin-top:11px;font-size:12.5px;color:var(--ink-3);line-height:1.6}
+figcaption b{color:var(--ink-2)}
+svg{display:block;width:100%;height:auto}
+.key{display:flex;gap:16px;margin-top:9px;font-size:12.5px;color:var(--ink-2)}
+.key i{display:inline-block;width:16px;height:3px;border-radius:2px;
+  vertical-align:middle;margin-right:6px;font-style:normal}
+.cta{margin-top:18px;display:block;background:var(--surface);border:1px solid var(--rule);
+  border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--ink)}
+.cta:hover{border-color:var(--navy)}
+.cta b{display:block;font-size:15.5px;font-weight:600}
+.cta span{display:block;font-size:13px;color:var(--ink-3);margin-top:2px}
+.meta{margin-top:24px;padding-top:15px;border-top:1px solid var(--rule);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;
+  color:var(--ink-3);line-height:1.8}
+.empty{margin-top:16px;background:var(--sunk);border:1px dashed var(--rule);
+  border-radius:10px;padding:16px;font-size:14px;color:var(--ink-3)}
+@media (max-width:520px){ .hero{gap:13px} .shot{width:58px;height:58px}
+  .shot .ini{font-size:20px} }
