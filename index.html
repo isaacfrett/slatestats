@@ -14,7 +14,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
 .chat.is-empty .cwrap{max-width:720px}
 .hello{font:800 30px/1.2 Archivo,sans-serif;letter-spacing:-.02em;
  text-align:center;margin:0 0 22px}
-.chat:not(.empty) .hello,.chat:not(.empty) .eg{display:none}
+.chat:not(.is-empty) .hello,.chat:not(.is-empty) .eg{display:none}
 
 .composer{border-top:1px solid var(--rule);background:var(--ground);
  padding:14px 24px 20px;position:sticky;bottom:0}
@@ -43,7 +43,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
  color:var(--ink-2);font:inherit;font-size:13.5px;cursor:pointer;
  text-align:left}
 #popular .pq:hover{border-color:var(--navy);color:var(--ink)}
-.chat:not(.empty) #popular{display:none}
+.chat:not(.is-empty) #popular{display:none}
 
 .turn{margin:0 0 26px}
 .you{font-weight:600;font-size:17px;margin:0 0 12px;color:var(--ink)}
