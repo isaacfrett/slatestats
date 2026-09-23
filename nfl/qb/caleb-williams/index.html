@@ -60,12 +60,18 @@
      // field that is a name for some users and an address fragment for
      // others is not a field worth having. The icon says "you are signed
      // in"; the account page, which you open deliberately, says who.
-     el.innerHTML='<a class="who" href="/nfl/account/">'
-       +'<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">'
+     // ICON ONLY. The word "Account" next to a person icon is the icon
+     // said twice, and this rail is the quiet edge of the page. The link
+     // still carries a title and an aria-label, because an icon with no
+     // accessible name is a button that screen readers cannot announce.
+     el.innerHTML='<div class="whorow">'
+       +'<a class="who" href="/nfl/account/" title="Your account" '
+       +'aria-label="Your account">'
+       +'<svg viewBox="0 0 24 24" aria-hidden="true">'
        +'<circle cx="12" cy="8" r="3.6" fill="currentColor"/>'
        +'<path d="M4.5 20c0-4 3.4-6.2 7.5-6.2s7.5 2.2 7.5 6.2" '
-       +'fill="currentColor"/></svg> Account</a>'
-       +'<span class="tier">'+esc(j.tier_label)+'</span><br>'
+       +'fill="currentColor"/></svg></a>'
+       +'<span class="tier">'+esc(j.tier_label)+'</span></div>'
        +'<a class="out" href="'+API+'/auth/signout">Sign out</a>';
    } else {
      el.innerHTML='<a class="signin" href="'+API+'/auth/google/start">'
