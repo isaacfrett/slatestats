@@ -179,7 +179,12 @@ body{margin:0;background:var(--ground);color:var(--ink);
        +esc(j.connect.label)+'<span>'+esc(j.connect.note)+'</span></a>';
      // SERVER-RENDERED SVG, drawn by code from the same tool result the
      // words came from. Never anything a model wrote.
-     if(j.visual) html += '<div class="fig">'+j.visual+'</div>';
+     // A LIST, because one chart was always the wrong number for a player:
+     // the data carries a six-game log across six stats and four seasons,
+     // and the answer used to draw a single distribution.
+     var figs = j.visuals || (j.visual ? [j.visual] : []);
+     for(var fi=0; fi<figs.length; fi++)
+       html += '<div class="fig">'+figs[fi]+'</div>';
      if(j.unverified && j.unverified.length)
        html += '<div class="warn">Some figures here could not be traced to a '
          +'measurement: '+esc(j.unverified.join(', '))+'.</div>';
