@@ -22,6 +22,19 @@
  text-transform:uppercase;color:var(--ink-3);padding:0 10px;margin-bottom:5px}
 .acct{margin-top:auto;padding-top:14px;border-top:1px solid var(--rule);
  font-size:12.5px;color:var(--ink-3)}
+/* THE GLOBAL `svg{width:100%}` WINS OVER width="15" ON THE ELEMENT, because
+   a stylesheet beats a presentation attribute. Without this the account icon
+   fills the sidebar -- which is exactly how it shipped, and it was invisible
+   for as long as the deploy was publishing to a path nobody served. */
+.acct .who svg{width:15px;height:15px;flex:none}
+.foot-legal{margin:14px auto 0;max-width:72ch;padding-top:12px;
+  border-top:1px solid var(--rule-2);color:var(--ink-3);font-size:11.5px;
+  line-height:1.6;text-align:center}
+.foot-legal a{color:var(--ink-2)}
+.chat-legal{margin:14px auto 0;max-width:70ch;color:var(--ink-3);
+  font-size:11px;line-height:1.55;text-align:center}
+.chat-legal a{color:var(--ink-3);text-decoration:underline}
+.chat-legal a:hover{color:var(--ink-2)}
 .acct .who{display:flex;align-items:center;gap:6px;color:var(--ink-2);
  font-weight:600;font-size:13px;text-decoration:none}
 .acct .who:hover{color:var(--navy);text-decoration:underline}
