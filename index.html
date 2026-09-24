@@ -170,6 +170,18 @@ body{margin:0;background:var(--ground);color:var(--ink);
    box.classList.toggle('tall', box.scrollHeight>180); }
  function bottom(){ thread.scrollTop=thread.scrollHeight; }
 
+ // THE CONVERSATION, NOT THE PERSON. Generated on page load, held in a
+ // variable, and gone on refresh: it is not a cookie, not stored, and
+ // cannot join two visits. It exists so a SEQUENCE of turns reads as a
+ // conversation -- the difference between "that answer ended the session"
+ // and "they kept going", which is the only cheap measure of whether an
+ // answer was any use to somebody who did not click a thumb.
+ var THREAD = Math.random().toString(36).slice(2,10), SEQ = 0;
+ // Set by the chip handler for exactly one call. A question typed and the
+ // same question clicked are different facts, and the text cannot tell
+ // them apart.
+ var FROM_SUGG = false;
+
  // ONE LISTENER FOR THE WHOLE THREAD. Binding per answer leaks a handler
  // for every turn, and a long session is exactly when somebody bothers to
  // rate something.
@@ -238,9 +250,11 @@ body{margin:0;background:var(--ground);color:var(--ink);
    if(!q||busy) return;
    busy=true; send.disabled=true; main.classList.remove('is-empty');
    box.value=''; grow();
+   var wasSugg = FROM_SUGG; FROM_SUGG = false;
    var slot=turn(q);
    fetch(API+'/api/ask',{method:'POST',credentials:'include',headers:{'content-type':'application/json'},
-     body:JSON.stringify({q:q, context:ctx})})
+     body:JSON.stringify({q:q, context:ctx, thread:THREAD, seq:(++SEQ),
+       from_suggestion:wasSugg})})
    .then(function(x){ return x.json(); })
    .then(function(j){
      busy=false; send.disabled=false;
@@ -331,7 +345,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
  send.onclick=function(){ ask(box.value.trim()); };
  document.addEventListener('click',function(e){
    var b=e.target.closest('.eg button, .sugg button, .pq');
-   if(b) ask(b.dataset.q||b.textContent);
+   if(b){ FROM_SUGG = true; ask(b.dataset.q||b.textContent); }
  });
  // DATA AGE, SHOWN WITHOUT BEING ASKED. Someone deciding whether to ask
  // about a line needs to know the line is two days old, and they will not
