@@ -1,8 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Slate Stats">
-  <rect width="64" height="64" rx="14" fill="#08182A"/>
-  <rect x="6"  y="34" width="8" height="18" rx="2" fill="#57A9D6" opacity=".55"/>
-  <rect x="17" y="12" width="8" height="40" rx="2" fill="#6ECB3F"/>
-  <rect x="28" y="22" width="8" height="30" rx="2" fill="#57A9D6" opacity=".85"/>
-  <rect x="39" y="32" width="8" height="20" rx="2" fill="#57A9D6" opacity=".65"/>
-  <rect x="50" y="40" width="8" height="12" rx="2" fill="#57A9D6" opacity=".45"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SlateStats"><rect width="64" height="64" rx="14" fill="#061320"/><rect x="10.88" y="35.32" width="5.58" height="18.88" rx="1.45" fill="#9FB3C2" opacity="0.38"/><rect x="20.05" y="9.25" width="5.58" height="44.96" rx="1.45" fill="#57A9D6"/><rect x="29.21" y="21.84" width="5.58" height="32.37" rx="1.45" fill="#9FB3C2" opacity="0.38"/><rect x="38.38" y="31.73" width="5.58" height="22.48" rx="1.45" fill="#9FB3C2" opacity="0.38"/><rect x="47.54" y="40.72" width="5.58" height="13.49" rx="1.45" fill="#9FB3C2" opacity="0.38"/></svg>
