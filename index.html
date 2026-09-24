@@ -323,7 +323,13 @@ body{margin:0;background:var(--ground);color:var(--ink);
   .then(function(j){
    var el=document.getElementById('popular');
  if(!el || !j.questions || j.questions.length < 3){ noPopular(); return; }
-   el.innerHTML='<div class="plab">What people are asking</div>'
+   // THE HEADING FOLLOWS THE EVIDENCE. "What people are asking" over a
+   // list the log cannot attribute to a visitor is a false claim about
+   // our own data, and on a new site the honest answer is usually the
+   // second one. `from_visitors` is only true when every question here
+   // was asked by a browser at least twice.
+   var lab = j.from_visitors ? 'What people are asking' : 'Try one of these';
+   el.innerHTML='<div class="plab">'+esc(lab)+'</div>'
      + j.questions.map(function(p){
          return '<button class="pq">'+esc(p.q)+'</button>'; }).join('');
    el.hidden=false;
