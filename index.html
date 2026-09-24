@@ -1,4 +1,22 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Slate Stats — Ask anything about NFL fantasy</title><meta name="description" content="Ask any question about NFL players, matchups, injuries and fantasy. Every answer arrives with the sample size behind it and a chart drawn from the same data."><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><link rel="icon" href="/assets/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/icon.svg"><meta property="og:site_name" content="Slate Stats"><meta property="og:title" content="Slate Stats — Ask anything about NFL fantasy"><meta property="og:description" content="Ask any question about NFL players, matchups, injuries and fantasy. Every answer arrives with the sample size behind it and a chart drawn from the same data."><meta property="og:image" content="https://slatestats.com/assets/og.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://slatestats.com/assets/og.png"><link rel="stylesheet" href="/assets/site.css"><script>window.SLATE_API="https://api.slatestats.com"</script><link rel="canonical" href="https://slatestats.com/"><meta property="og:url" content="https://slatestats.com/"><meta property="og:type" content="website"></head><body><div class="app"><aside class="side"><a class="brand" href="/"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="34" width="8" height="18" rx="2" fill="currentColor" opacity=".5"/><rect x="17" y="12" width="8" height="40" rx="2" fill="var(--green)"/><rect x="28" y="22" width="8" height="30" rx="2" fill="currentColor" opacity=".8"/><rect x="39" y="32" width="8" height="20" rx="2" fill="currentColor" opacity=".6"/><rect x="50" y="40" width="8" height="12" rx="2" fill="currentColor" opacity=".4"/></svg>Slate<span>Stats</span></a><div class="srch"><input id="q" type="search" placeholder="Search players" autocomplete="off" aria-label="Search players, teams and studies"><div id="res" class="res" hidden></div></div><div><div class="lab">NFL</div><nav><a href="/" aria-current=page>Ask</a><a href="/nfl/my-team/">My team</a><a href="/nfl/rankings/">Rankings</a><a href="/nfl/cheat-sheet/">Cheat sheet</a><a href="/nfl/waivers/">Waivers</a><a href="/nfl/streaks/">Streaks</a><a href="/nfl/injury-impact/">Injury impact</a><a href="/nfl/compare/">Compare</a><a href="/nfl/teams/">Teams</a></nav></div><div class="acct" id="acct" hidden></div><div class="foot"><a href="/nfl/studies/">Studies</a><a href="/nfl/faq/">Fantasy questions</a><a href="/nfl/players/">All players</a><a href="mailto:hello@slatestats.com">hello@slatestats.com</a></div></aside><div class="main"><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Slate Stats — Ask anything about NFL fantasy</title><meta name="description" content="Ask any question about NFL players, matchups, injuries and fantasy. Every answer arrives with the sample size behind it and a chart drawn from the same data."><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><link rel="icon" href="/assets/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/icon.svg"><meta property="og:site_name" content="Slate Stats"><meta property="og:title" content="Slate Stats — Ask anything about NFL fantasy"><meta property="og:description" content="Ask any question about NFL players, matchups, injuries and fantasy. Every answer arrives with the sample size behind it and a chart drawn from the same data."><meta property="og:image" content="https://slatestats.com/assets/og.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://slatestats.com/assets/og.png"><link rel="stylesheet" href="/assets/site.css"><script>window.SLATE_API="https://api.slatestats.com"</script><link rel="canonical" href="https://slatestats.com/"><meta property="og:url" content="https://slatestats.com/"><meta property="og:type" content="website"></head><body><div class="app"><aside class="side"><a class="brand" href="/"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="34" width="8" height="18" rx="2" fill="currentColor" opacity=".5"/><rect x="17" y="12" width="8" height="40" rx="2" fill="var(--green)"/><rect x="28" y="22" width="8" height="30" rx="2" fill="currentColor" opacity=".8"/><rect x="39" y="32" width="8" height="20" rx="2" fill="currentColor" opacity=".6"/><rect x="50" y="40" width="8" height="12" rx="2" fill="currentColor" opacity=".4"/></svg>Slate<span>Stats</span></a><button class="menu" id="menu" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu"><svg viewBox="0 0 20 20" aria-hidden="true" width="22" height="22"><rect x="2" y="4.5" width="16" height="2" rx="1" fill="currentColor"/><rect x="2" y="9" width="16" height="2" rx="1" fill="currentColor"/><rect x="2" y="13.5" width="16" height="2" rx="1" fill="currentColor"/></svg></button><div class="srch"><input id="q" type="search" placeholder="Search players" autocomplete="off" aria-label="Search players, teams and studies"><div id="res" class="res" hidden></div></div><div class="navbox"><div class="lab">NFL</div><nav id="nav"><a href="/" aria-current=page>Ask</a><a href="/nfl/my-team/">My team</a><a href="/nfl/rankings/">Rankings</a><a href="/nfl/cheat-sheet/">Cheat sheet</a><a href="/nfl/waivers/">Waivers</a><a href="/nfl/streaks/">Streaks</a><a href="/nfl/injury-impact/">Injury impact</a><a href="/nfl/compare/">Compare</a><a href="/nfl/teams/">Teams</a></nav></div><div class="acct" id="acct" hidden></div><div class="foot"><a href="/nfl/studies/">Studies</a><a href="/nfl/faq/">Fantasy questions</a><a href="/nfl/players/">All players</a><a href="mailto:hello@slatestats.com">hello@slatestats.com</a></div></aside><script>
+(function(){
+ // The drawer. Plain class toggle rather than a framework, and the button
+ // carries aria-expanded so a screen reader is told what it did.
+ var b=document.getElementById('menu'), side=document.querySelector('.side');
+ if(!b||!side) return;
+ b.addEventListener('click',function(){
+   var open=side.classList.toggle('open');
+   b.setAttribute('aria-expanded',open?'true':'false');
+ });
+ // FOLLOWING A LINK MUST CLOSE IT. On a page that navigates this is moot,
+ // but the chat page answers in place and a drawer left open over the
+ // answer is the kind of thing only someone on a phone ever finds.
+ side.addEventListener('click',function(e){
+   if(e.target.closest('nav a')){ side.classList.remove('open');
+     b.setAttribute('aria-expanded','false'); }
+ });
+})();
+</script><div class="main"><style>
 /* The conversation only. The shell (.app/.side/.main) lives in the shared
    stylesheet because every page uses it now. */
 .chat{display:flex;flex-direction:column;flex:1;min-height:0}
@@ -93,6 +111,30 @@ body{margin:0;background:var(--ground);color:var(--ink);
  .thread{padding:18px 15px 8px}
  .composer{padding:11px 15px 16px}
  .hello{font-size:24px}
+ /* THE LANDING SCREEN WAS TALLER THAN THE SCREEN. `.main` carries
+    min-height:100vh and on mobile the rail sits ABOVE it rather than beside
+    it, so the shell came to 100vh + 62px and the ask page scrolled before
+    anyone had typed anything. Measured: 906px of content in an 844px
+    viewport.
+    `dvh` rather than `vh` because a phone browser's address bar makes `vh`
+    lie -- it reports the tallest the viewport ever gets, not the height you
+    can currently see. */
+ /* `auto 1fr` IS THE WHOLE FIX. A grid's rows stretch to fill the
+    container by default, so giving .app a 100dvh minimum handed the top bar
+    a share of the viewport: measured, the rail became 238px tall around a
+    41px row of content, and the chat lost that height. The bar takes its
+    content height; the chat takes the rest. */
+ .app{min-height:100dvh;grid-template-rows:auto 1fr}
+ .main{min-height:0}
+ /* The heading stays CENTRED. It looked stranded at the top once the
+    height was fixed, and centring was never the fault -- the overflow was.
+    A chat that opens with its question centred and the box at the bottom is
+    the shape people already know. */
+ /* The menu belongs at the RIGHT EDGE, not wedged between the wordmark and
+    the search box. `order` rather than moving it in the markup, so the DOM
+    order stays sensible for a screen reader and for desktop. */
+ .side .menu{order:3;margin-left:0}
+ .side .srch{order:2}
 }
 </style><div class="chat is-empty" id="main"><div class="thread" id="thread"><div class="inner" id="inner"><h1 class="hello">What do you want to know?</h1><div id="popular" hidden></div></div></div><div class="composer"><div class="cwrap"><div class="cbox"><textarea id="ask" rows="1" placeholder="Ask about a player, a matchup, an injury, a line…" aria-label="Ask a question"></textarea><button id="send" aria-label="Send">↑</button></div><div class="eg"><button data-q="Who benefits if Puka Nacua sits?">If Nacua sits</button><button data-q="Should I start Bijan Robinson or Kenneth Walker?">Bijan or Walker</button><button data-q="Is any defense actually weak against tight ends?">Weak vs tight ends?</button><button data-q="Who has the best matchup at running back?">Best RB matchup</button><button data-q="Who are the top waiver adds this week?">Top waiver adds</button></div><div id="fresh" hidden></div><p class="chat-legal">Slate Stats publishes statistical research and projections. It is not betting advice, it does not accept wagers, and no projection here is a prediction of any outcome. Sports betting is legal only in some jurisdictions and is restricted by age &mdash; 21 or older in most US states. If gambling stops being fun, call <a href="tel:1-800-426-2537">1-800-GAMBLER</a>. <a href="/legal/responsible-gambling/">Responsible gambling</a> &middot; <a href="/legal/privacy/">Privacy</a> &middot; <a href="/legal/terms/">Terms</a></p></div></div></div><script>
 (function(){

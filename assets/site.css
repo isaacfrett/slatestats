@@ -76,15 +76,36 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
  margin-top:4px;background:var(--surface);border:1px solid var(--rule);
  border-radius:9px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 .main{display:flex;flex-direction:column;min-height:100vh;min-width:0}
+/* The menu button is a MOBILE control; the desktop rail already shows every
+   section link, so it has no place there. */
+.menu{display:none;background:0;border:0;color:var(--ink-2);cursor:pointer;
+  padding:8px;border-radius:9px;margin-left:auto}
+.menu:hover,.menu[aria-expanded=true]{color:var(--ink);background:var(--sunk)}
+
 @media(max-width:860px){
  .app{grid-template-columns:1fr}
+ /* IT WRAPS, IT DOES NOT SCROLL. This was `overflow-x:auto` on a strip
+    holding the brand, the search box and nine section links: at 390px the
+    search collapsed to 118px and every link sat off-screen behind a
+    scrollbar nobody would think to drag. The links are a list now, opened
+    by the button, and the bar keeps only brand + search + menu. */
  .side{position:static;height:auto;flex-direction:row;align-items:center;
-  gap:12px;padding:10px 14px;overflow-x:auto;border-right:0;
+  gap:10px;padding:10px 14px;overflow:visible;flex-wrap:wrap;border-right:0;
   border-bottom:1px solid var(--rule)}
- .side nav{flex-direction:row;gap:2px}
- .side nav a{white-space:nowrap;padding:6px 9px}
- .side .lab,.side .foot{display:none}
- .side .srch{min-width:150px}
+ .menu{display:block}
+ .side .navbox{display:none;width:100%;order:9;
+  border-top:1px solid var(--rule-2);padding-top:6px;margin-top:2px}
+ .side.open .navbox{display:block}
+ .side nav{flex-direction:column;gap:1px}
+ /* 44px because that is a thumb. The old rule was 6px of padding. */
+ .side nav a{padding:11px 10px;min-height:44px;display:flex;
+  align-items:center;border-radius:9px}
+ .side .lab{display:none}
+ .side.open .lab{display:block;padding:4px 10px 2px}
+ .side .foot{display:none}
+ /* The search no longer competes with nine links for one row. */
+ .side .srch{flex:1;min-width:130px}
+ .side .srch input{width:100%}
 }
 
 :root{--ground:#EEF2F5;--surface:#FFFFFF;--sunk:#F4F7F9;
@@ -296,7 +317,25 @@ th.sortable.dn::after{content:"\2193";opacity:1;color:var(--navy)}
 body{background:var(--ground);color:var(--ink);
   font-family:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
   line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:26px 60px}
+/* `width:100%` IS LOAD-BEARING, and the reason is not obvious.
+   .main is a COLUMN flex container, so its cross axis is horizontal -- and
+   `margin:0 auto` therefore gives this element AUTO CROSS-AXIS MARGINS. Auto
+   margins absorb free space and disable stretch, so the item stopped filling
+   its parent and fell back to fit-content: at a 375px viewport .main measured
+   375px while .wrap measured 599.125px, and every child inherited the
+   stretched width -- h1, crumb, summary. Eight pages scrolled sideways on a
+   phone because of it.
+   Measured in the page: margins to 0 -> 375px, width:100% -> 375px,
+   align-self:stretch -> still 599px, because auto margins beat align-self.
+   width:100% is the one that keeps the centring the auto margins are there
+   for. */
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:26px 60px;
+      width:100%}
+/* And a wide table now scrolls INSIDE its own box rather than taking the page
+   with it. Columns are deliberately NOT dropped at narrow widths: this site's
+   whole claim is that every figure carries its sample, and hiding the sample
+   on a phone to make a table fit is exactly the wrong trade. */
+.tbl{overflow-x:auto;overscroll-behavior-x:contain}
 h1,h2,h3{font-family:Archivo,ui-sans-serif,system-ui,sans-serif;margin:0;
   text-wrap:balance;letter-spacing:-.02em}
 h1{font-weight:800;font-size:clamp(28px,6.2vw,42px);line-height:1.04}
@@ -354,6 +393,25 @@ th,td{padding:9px 13px;text-align:right;white-space:nowrap}
 @media (max-width:1150px){ th,td{padding:8px 10px} }
 @media (max-width:1000px){ .opt:nth-last-child(2){display:none} }
 @media (max-width:860px){ .opt{display:none} }
+/* iOS SAFARI ZOOMS THE WHOLE PAGE when a focused form control is under 16px,
+   and the player search sits in the header of every page at 13.5px while the
+   rankings selects were 13px. Tapping search therefore zoomed the layout and
+   the reader had to pinch back out -- on the one control the site most wants
+   people to use. 16px is the threshold, not a preference. */
+@media (max-width:640px){
+  /* Matched to the SAME selectors that set the small sizes. A media query
+     adds no specificity, so a bare `input` loses to `.side .srch input`
+     every time -- the first attempt at this rule changed nothing at all and
+     the measurement said so. */
+  input,select,textarea,
+  .srch input,.side .srch input,.bar select{font-size:16px}
+  /* And a thumb is about 44px. These were all 33px: the rankings filter
+     chips AND the example prompts under the ask box, which are the first
+     thing a new visitor taps. Matched by their real selectors -- the first
+     version of this rule missed `.eg button` entirely and the measurement
+     said so. */
+  .bar button,.bar a,.chip,.eg button,.askrow{min-height:40px}
+}
 @media (max-width:560px){ th,td{padding:7px 8px;font-size:12.5px}
   .tbl table{font-size:12.5px} }
 th:first-child,td:first-child{text-align:left}
