@@ -13,8 +13,13 @@
 /* ONE WORD. "Slate Stats" with a space read as two words in a row; the
    wordmark is SlateStats, and the colour change is what separates them. */
 .side .brand .wm{white-space:nowrap}
-.side .brand span{color:var(--green)}
-.side .mk{width:22px;height:22px;color:var(--ink-3)}
+/* THE SAME WORDMARK THE CARDS CARRY. Posts went out with "Stats" in
+   blue and the site rail had it in green, so the two halves of one
+   brand disagreed in the one place a reader compares them: arriving
+   here from a post. `--navy` resolves to the card's blue on dark and
+   to a deep navy on light, so it is one token rather than a copy. */
+.side .brand .wm>span{color:var(--navy)}
+.side .mk{width:22px;height:22px;color:var(--navy)}
 .side nav{display:flex;flex-direction:column;gap:1px}
 .side nav a{padding:7px 10px;border-radius:7px;color:var(--ink-2);
  text-decoration:none;font-size:14px}
@@ -178,7 +183,7 @@ html,body{margin:0}
   align-items:center;gap:18px;height:54px}
 .brand{font-family:Archivo,sans-serif;font-weight:800;font-size:17px;
   letter-spacing:-.02em;color:var(--ink);text-decoration:none;white-space:nowrap}
-.brand span{color:var(--green)}
+.brand .wm>span{color:var(--navy)}
 /* The mark is the site's argument in miniature: a right-skewed distribution
    with the mode picked out. It inherits currentColor so it follows the theme
    instead of carrying a second palette. */
