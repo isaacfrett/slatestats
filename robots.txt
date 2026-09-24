@@ -1,1 +1,6 @@
 Sitemap: https://slatestats.com/sitemap.xml
+
+# An index written for assistants rather than crawlers: what is worth
+# quoting from this site and the conditions that travel with a number.
+# https://llmstxt.org
+LLM-Index: https://slatestats.com/llms.txt
