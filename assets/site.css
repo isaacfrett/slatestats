@@ -10,6 +10,9 @@
  position:sticky;top:0;height:100vh;overflow-y:auto}
 .side .brand{display:flex;align-items:center;gap:8px;font:800 18px Archivo,
  sans-serif;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+/* ONE WORD. "Slate Stats" with a space read as two words in a row; the
+   wordmark is SlateStats, and the colour change is what separates them. */
+.side .brand .wm{white-space:nowrap}
 .side .brand span{color:var(--green)}
 .side .mk{width:22px;height:22px;color:var(--ink-3)}
 .side nav{display:flex;flex-direction:column;gap:1px}
@@ -110,9 +113,21 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
     lookup, and the header has no room for both. It stays on desktop, where
     the rail has a column to itself. */
  .side .srch{display:none}
- .side .acct{order:2;margin-left:auto;width:auto;display:block}
- .side .acct a.signin{padding:7px 12px;font-size:13px;white-space:nowrap}
+ /* THE THREE ITEMS ARE ALREADY CENTRED; the problem was WEIGHT. Measured,
+    the sign-in block was 49px tall beside a 22px wordmark and a 38px menu
+    button, so it dominated the row and made the header 70px. Matching its
+    height to the menu button is what makes the row read as one line. */
+ /* AND THE RAIL'S SEPARATOR COMES OFF. On desktop the account block sits
+    at the bottom of a vertical rail with a rule above it and 14px of space.
+    In a horizontal bar that rule is a stray line floating above the sign-in
+    button -- which is exactly what it looked like -- and the padding is the
+    other 15px that made this block 49px tall against a 34px menu. */
+ .side .acct{order:2;margin-left:auto;width:auto;display:flex;
+  align-items:center;padding:0;border-top:0;margin-top:0}
+ .side .acct a.signin{padding:0 13px;height:34px;display:flex;
+  align-items:center;font-size:13.5px;white-space:nowrap;border-radius:9px}
  .side .acct .out,.side .acct .tier{display:none}
+ .side .menu{padding:6px}
  .menu{display:block}
  .side .navbox{display:none;width:100%;order:9;
   border-top:1px solid var(--rule-2);padding-top:6px;margin-top:2px}
