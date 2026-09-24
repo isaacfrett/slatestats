@@ -474,6 +474,15 @@ svg{display:block;width:100%;height:auto}
 .key{display:flex;gap:16px;margin-top:9px;font-size:12.5px;color:var(--ink-2)}
 .key i{display:inline-block;width:16px;height:3px;border-radius:2px;
   vertical-align:middle;margin-right:6px;font-style:normal}
+/* A SWATCH, for a legend that keys a CELL colour rather than a line
+   series. `.key i` is a 16x3 rule, which reads as "this line" and not as
+   "this value". Wraps, because two legends and a phone width is how a row
+   of chips silently loses its last item. */
+.key{flex-wrap:wrap;gap:10px 18px}
+.key .k{display:inline-flex;align-items:center}
+.key i.sw{width:9px;height:9px;border-radius:2.5px}
+.key i.sw.up{background:var(--green)}
+.key i.sw.dn{background:var(--warn)}
 .cta{margin-top:18px;display:block;background:var(--surface);border:1px solid var(--rule);
   border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--ink)}
 .cta:hover{border-color:var(--navy)}
