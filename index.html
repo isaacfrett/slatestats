@@ -182,7 +182,19 @@ body{margin:0;background:var(--ground);color:var(--ink);
              +(today?'':'')+'.';
          }
        }
+       // THE SIGN-IN OFFER WAS IN THE PAYLOAD AND NEVER ON THE PAGE.
+       // Somebody who ran out was told to go read the rankings instead --
+       // which is the one moment they have just demonstrated they want to
+       // ask something, and the only moment an account is worth anything
+       // to them. It leads now; the other pages stay as the consolation.
+       var signin = j.sign_in_url
+         ? '<p class="upsell"><a class="btn" href="'+esc(j.sign_in_url)+'">'
+           +'Sign in for three a day</a></p>'
+           +'<p class="src">Free, no password \u2014 it uses your Google '
+           +'account, and it keeps a history you can re-run later.</p>'
+         : '';
        slot.innerHTML='<p>'+esc(j.error)+esc(when)+'</p>'
+         + signin
          +'<p class="src">Everything else on the site stays open \u2014 '
          +'rankings, injury impact, compare and the studies all work '
          +'without asking.</p>'

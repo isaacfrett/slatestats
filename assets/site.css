@@ -39,6 +39,11 @@
 .foot-legal a{color:var(--ink-2)}
 /* "Ask again" on a saved row. A link, not a button: it navigates, and
    dressing a navigation as a button is a small lie about what happens. */
+.upsell{margin:14px 0 6px}
+.upsell .btn{display:inline-block;padding:9px 15px;border-radius:9px;
+  background:var(--navy);color:var(--surface);text-decoration:none;
+  font-weight:600;font-size:14px}
+.upsell .btn:hover{filter:brightness(1.12)}
 .again{white-space:nowrap;font-size:12.5px;color:var(--navy);
   text-decoration:none;border-bottom:1px solid transparent}
 .again:hover{border-bottom-color:currentColor}
