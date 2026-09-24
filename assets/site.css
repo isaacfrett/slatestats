@@ -479,6 +479,11 @@ svg{display:block;width:100%;height:auto}
    "this value". Wraps, because two legends and a phone width is how a row
    of chips silently loses its last item. */
 .key{flex-wrap:wrap;gap:10px 18px}
+/* THE PROJECTED ROW IN A GAME LOG. It sits above played games and must
+   never read as one of them: a tinted band and a hairline under it say
+   "this has not happened" before any cell is read. */
+tr.pjr td{background:var(--sunk);border-bottom:1px solid var(--rule)}
+tr.pjr td:first-child{box-shadow:inset 2px 0 0 var(--green)}
 .key .k{display:inline-flex;align-items:center}
 .key i.sw{width:9px;height:9px;border-radius:2.5px}
 .key i.sw.up{background:var(--green)}
