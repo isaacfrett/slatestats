@@ -83,7 +83,17 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
 .menu:hover,.menu[aria-expanded=true]{color:var(--ink);background:var(--sunk)}
 
 @media(max-width:860px){
- .app{grid-template-columns:1fr}
+ /* `auto 1fr`, AND IT APPLIES TO EVERY PAGE. A grid stretches its rows to
+    fill, so a viewport-height minimum hands the top bar a share of it -- the
+    rail measured 238px tall around a 41px row of content. And `.main` keeps
+    min-height:100vh while the rail sits ABOVE it on mobile rather than
+    beside it, so every page came to 100vh + 62px and carried 62px of dead
+    space past the end.
+    `dvh` because a phone's address bar makes `vh` report the tallest the
+    viewport ever gets rather than what you can see. */
+ .app{grid-template-columns:1fr;grid-template-rows:auto 1fr;
+  min-height:100dvh}
+ .main{min-height:0}
  /* IT WRAPS, IT DOES NOT SCROLL. This was `overflow-x:auto` on a strip
     holding the brand, the search box and nine section links: at 390px the
     search collapsed to 118px and every link sat off-screen behind a

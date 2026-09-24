@@ -119,13 +119,9 @@ body{margin:0;background:var(--ground);color:var(--ink);
     `dvh` rather than `vh` because a phone browser's address bar makes `vh`
     lie -- it reports the tallest the viewport ever gets, not the height you
     can currently see. */
- /* `auto 1fr` IS THE WHOLE FIX. A grid's rows stretch to fill the
-    container by default, so giving .app a 100dvh minimum handed the top bar
-    a share of the viewport: measured, the rail became 238px tall around a
-    41px row of content, and the chat lost that height. The bar takes its
-    content height; the chat takes the rest. */
- .app{min-height:100dvh;grid-template-rows:auto 1fr}
- .main{min-height:0}
+ /* The .app/.main height rules that make this fit live in the SHARED
+    stylesheet, not here -- they apply to every page, and a second copy in
+    the chat-only CSS is the drift this repo keeps paying for. */
  /* The heading stays CENTRED. It looked stranded at the top once the
     height was fixed, and centring was never the fault -- the overflow was.
     A chat that opens with its question centred and the box at the bottom is
