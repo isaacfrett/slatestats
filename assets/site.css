@@ -81,18 +81,27 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
   --ink:#0C1C2C;--ink-2:#46596B;--ink-3:#7B8C9B;
   --rule:#D2DCE3;--rule-2:#E4EBF0;
   --navy:#12405E;--green:#2F8B27;--green-soft:#E3F2DE;
-  --warn:#A8443A;--warn-soft:#F7E8E6;--flat:#8D97A3;--flat-soft:#EDF0F3}
+  --warn:#A8443A;--warn-soft:#F7E8E6;--flat:#8D97A3;--flat-soft:#EDF0F3;
+  /* CHART TOKENS, separate from the document ones because they have the
+     opposite job: ink recedes, data carries. Measured rather than picked --
+     grid lines were at 1.13:1 against the panel in dark mode, which is
+     invisible, and the reference line sat at 5.78:1 against data at 6.70,
+     so somebody else's posted number was almost as loud as our measurement.
+     The ladder is now deliberate: subject > data > reference > grid. */
+  --c-grid:#D3DFE7;--c-ref:#B5705F}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ground:#061320;--surface:#0D2132;--sunk:#0A1B29;
   --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#6E8598;
   --rule:#1C3547;--rule-2:#142636;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
-  --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C}}
+  --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
+    --c-grid:#263F54;--c-ref:#96695B}}
 :root[data-theme="dark"]{--ground:#061320;--surface:#0D2132;--sunk:#0A1B29;
   --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#6E8598;
   --rule:#1C3547;--rule-2:#142636;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
-  --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C}
+  --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
+    --c-grid:#263F54;--c-ref:#96695B}
 *{box-sizing:border-box}
 html,body{margin:0}
 /* ---- site header -------------------------------------------------------
