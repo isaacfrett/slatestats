@@ -35,13 +35,25 @@
      if(!h.chats || !h.chats.length){
        el.innerHTML='<p class="say">Nothing yet. Ask something on the '
          +'<a href="/">front page</a> and it will appear here.</p>'; return; }
+     // A SAVED CHAT IS A QUESTION, NOT A PHOTOGRAPH. The answer shown is
+     // what we said THEN, and it is labelled with when. "Ask again" reopens
+     // the same question on today's data rather than replaying an old
+     // number as though it were current -- the same rule this site applies
+     // to cached prompts, which keep the question and never the answer.
      el.innerHTML='<div class="tbl"><table><thead><tr><th>When</th>'
-      +'<th>You asked</th><th>Answer</th></tr></thead><tbody>'
+      +'<th>You asked</th><th>What we said then</th><th></th></tr></thead><tbody>'
       +h.chats.map(function(c){
+        var q = encodeURIComponent(c.question||'');
+        var again = c.can_rerun
+          ? '<a class="again" href="/?q='+q+'">Ask again</a>'
+          : '<span class="c">saved before this was possible</span>';
         return '<tr><td>'+esc((c.asked_at||'').replace('T',' ').slice(0,16))
           +'</td><td>'+esc(c.question)+'</td><td>'
-          +esc((c.answer||'').split('\n')[0].slice(0,120))+'</td></tr>';
-      }).join('')+'</tbody></table></div>';
+          +esc((c.answer||'').split('\n')[0].slice(0,110))+'</td><td>'
+          +again+'</td></tr>';
+      }).join('')+'</tbody></table></div>'
+      +'<p class="say">Answers above are what we said at the time. '
+      +'<b>Ask again</b> runs the same question on today\'s numbers.</p>';
     });
   }).catch(function(){
     box.innerHTML='<p class="say">Could not reach the account service.</p>';

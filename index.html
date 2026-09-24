@@ -255,6 +255,21 @@ body{margin:0;background:var(--ground);color:var(--ink);
    el.hidden=false;
   }).catch(function(){});
 
+ // ARRIVED WITH A QUESTION. The account page links back here with ?q=,
+ // which is the whole re-run mechanism: no second endpoint, no replay path
+ // that could drift from the normal one, and the answer is current because
+ // it is the ordinary ask.
+ try{
+   var pre = new URLSearchParams(location.search).get('q');
+   if(pre){
+     // `send` is the button; `ask` is the handler both it and Enter call.
+     // Going through the SAME function is the point -- a separate replay
+     // path is a second implementation that drifts.
+     history.replaceState(null, '', location.pathname);
+     ask(pre);
+   }
+ }catch(e){}
+
  box.focus();
 })();
 </script><script>
