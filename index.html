@@ -53,6 +53,14 @@ body{margin:0;background:var(--ground);color:var(--ink);
 .eg button:hover{border-color:var(--navy);color:var(--ink)}
 #fresh{margin-top:10px;font-size:11.5px;color:var(--ink-3);text-align:center;
  line-height:1.5}
+/* ONE LIST OF PROMPTS, NOT TWO. The middle list is what people actually
+   asked; the row under the ask box was a static copy of the same idea, and
+   two sets of suggestions on one screen asks the reader to choose between
+   identical things. The static row is now a FALLBACK -- shown by the chat
+   script only when the popular list comes back empty, so a visitor is never
+   left with no prompt at all if the API is unreachable. */
+.eg{display:none}
+.chat.is-empty.no-popular .eg{display:flex}
 #popular{max-width:620px;margin:26px auto 0;text-align:center}
 #popular .plab{font:600 11px Archivo,sans-serif;letter-spacing:.09em;
  text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
@@ -130,9 +138,8 @@ body{margin:0;background:var(--ground);color:var(--ink);
     the search box. `order` rather than moving it in the markup, so the DOM
     order stays sensible for a screen reader and for desktop. */
  .side .menu{order:3;margin-left:0}
- .side .srch{order:2}
 }
-</style><div class="chat is-empty" id="main"><div class="thread" id="thread"><div class="inner" id="inner"><h1 class="hello">What do you want to know?</h1><div id="popular" hidden></div></div></div><div class="composer"><div class="cwrap"><div class="cbox"><textarea id="ask" rows="1" placeholder="Ask about a player, a matchup, an injury, a line…" aria-label="Ask a question"></textarea><button id="send" aria-label="Send">↑</button></div><div class="eg"><button data-q="Who benefits if Puka Nacua sits?">If Nacua sits</button><button data-q="Should I start Bijan Robinson or Kenneth Walker?">Bijan or Walker</button><button data-q="Is any defense actually weak against tight ends?">Weak vs tight ends?</button><button data-q="Who has the best matchup at running back?">Best RB matchup</button><button data-q="Who are the top waiver adds this week?">Top waiver adds</button></div><div id="fresh" hidden></div><p class="chat-legal">Slate Stats publishes statistical research and projections. It is not betting advice, it does not accept wagers, and no projection here is a prediction of any outcome. Sports betting is legal only in some jurisdictions and is restricted by age &mdash; 21 or older in most US states. If gambling stops being fun, call <a href="tel:1-800-426-2537">1-800-GAMBLER</a>. <a href="/legal/responsible-gambling/">Responsible gambling</a> &middot; <a href="/legal/privacy/">Privacy</a> &middot; <a href="/legal/terms/">Terms</a></p></div></div></div><script>
+</style><div class="chat is-empty" id="main"><div class="thread" id="thread"><div class="inner" id="inner"><h1 class="hello">What do you want to know?</h1><div id="popular" hidden></div></div></div><div class="composer"><div class="cwrap"><div class="cbox"><textarea id="ask" rows="1" placeholder="Ask about a player, matchup or injury" aria-label="Ask a question"></textarea><button id="send" aria-label="Send">↑</button></div><div class="eg"><button data-q="Who benefits if Puka Nacua sits?">If Nacua sits</button><button data-q="Should I start Bijan Robinson or Kenneth Walker?">Bijan or Walker</button><button data-q="Is any defense actually weak against tight ends?">Weak vs tight ends?</button><button data-q="Who has the best matchup at running back?">Best RB matchup</button><button data-q="Who are the top waiver adds this week?">Top waiver adds</button></div><div id="fresh" hidden></div><p class="chat-legal">Research and projections &mdash; not betting advice, and it does not accept wagers. 21 or older in most US states. If gambling stops being fun, call <a href="tel:1-800-426-2537">1-800-GAMBLER</a>. <a href="/legal/responsible-gambling/">Responsible gambling</a> &middot; <a href="/legal/privacy/">Privacy</a> &middot; <a href="/legal/terms/">Terms</a></p></div></div></div><script>
 (function(){
  // WHERE THE ASSISTANT LIVES. On a laptop it is this same origin; in
  // production the pages are static files on a CDN and the assistant is a
@@ -295,15 +302,22 @@ body{margin:0;background:var(--ground);color:var(--ink);
 
  // WHAT OTHER PEOPLE ARE ASKING. Only the question is reused; clicking one
  // runs it like any other, so nothing here can serve a stale answer.
+ // AND IF IT IS EMPTY OR UNREACHABLE, the static row under the ask box is
+ // shown instead. Two prompt lists at once asks the reader to choose
+ // between identical things; ZERO prompt lists is worse than either, so
+ // the fallback is a class on the chat rather than a second permanent row.
+ function noPopular(){
+   var c=document.querySelector('.chat'); if(c) c.classList.add('no-popular');
+ }
  fetch(API+'/api/popular').then(function(x){return x.json();})
   .then(function(j){
    var el=document.getElementById('popular');
-   if(!el || !j.questions || j.questions.length < 3) return;
+ if(!el || !j.questions || j.questions.length < 3){ noPopular(); return; }
    el.innerHTML='<div class="plab">What people are asking</div>'
      + j.questions.map(function(p){
          return '<button class="pq">'+esc(p.q)+'</button>'; }).join('');
    el.hidden=false;
-  }).catch(function(){});
+  }).catch(function(){ noPopular(); });
 
  // ARRIVED WITH A QUESTION. The account page links back here with ?q=,
  // which is the whole re-run mechanism: no second endpoint, no replay path

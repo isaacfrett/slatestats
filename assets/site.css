@@ -102,6 +102,17 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
  .side{position:static;height:auto;flex-direction:row;align-items:center;
   gap:10px;padding:10px 14px;overflow:visible;flex-wrap:wrap;border-right:0;
   border-bottom:1px solid var(--rule)}
+ /* ONE ROW. Brand, account, menu -- and nothing else competing for it. On a
+    real phone the sign-in button pushed search onto a second line and the
+    header became two tall rows before any content.
+    THE SEARCH BOX IS GONE ON MOBILE, deliberately. The ask box IS the
+    search: anything you would type into it is a better question than a
+    lookup, and the header has no room for both. It stays on desktop, where
+    the rail has a column to itself. */
+ .side .srch{display:none}
+ .side .acct{order:2;margin-left:auto;width:auto;display:block}
+ .side .acct a.signin{padding:7px 12px;font-size:13px;white-space:nowrap}
+ .side .acct .out,.side .acct .tier{display:none}
  .menu{display:block}
  .side .navbox{display:none;width:100%;order:9;
   border-top:1px solid var(--rule-2);padding-top:6px;margin-top:2px}
@@ -113,9 +124,6 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
  .side .lab{display:none}
  .side.open .lab{display:block;padding:4px 10px 2px}
  .side .foot{display:none}
- /* The search no longer competes with nine links for one row. */
- .side .srch{flex:1;min-width:130px}
- .side .srch input{width:100%}
 }
 
 :root{--ground:#EEF2F5;--surface:#FFFFFF;--sunk:#F4F7F9;
