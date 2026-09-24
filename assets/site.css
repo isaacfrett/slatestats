@@ -484,6 +484,15 @@ svg{display:block;width:100%;height:auto}
    "this value". Wraps, because two legends and a phone width is how a row
    of chips silently loses its last item. */
 .key{flex-wrap:wrap;gap:10px 18px}
+/* THE RATING ROW IS FURNITURE, NOT A CALL TO ACTION. It sits under the
+   sources line at the same weight, because an answer people did not want
+   to rate is the normal case and a loud widget would make skipping it feel
+   like a refusal. */
+.rate{display:flex;align-items:center;gap:8px;margin-top:8px;
+  font-size:12px;color:var(--ink-3)}
+.rate button{background:none;border:1px solid var(--rule);color:var(--ink-3);
+  border-radius:99px;padding:2px 10px;font:inherit;cursor:pointer}
+.rate button:hover{border-color:var(--navy);color:var(--ink-2)}
 /* THE PROJECTED ROW IN A GAME LOG. It sits above played games and must
    never read as one of them: a tinted band and a hairline under it say
    "this has not happened" before any cell is read. */

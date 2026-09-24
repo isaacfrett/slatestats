@@ -170,6 +170,29 @@ body{margin:0;background:var(--ground);color:var(--ink);
    box.classList.toggle('tall', box.scrollHeight>180); }
  function bottom(){ thread.scrollTop=thread.scrollHeight; }
 
+ // ONE LISTENER FOR THE WHOLE THREAD. Binding per answer leaks a handler
+ // for every turn, and a long session is exactly when somebody bothers to
+ // rate something.
+ //
+ // The verdict goes out and the row is replaced with a thank-you whether or
+ // not the call succeeds: a reader has said their piece either way, and a
+ // thumb that appears to fail invites a second click that would only
+ // overwrite the first.
+ thread.addEventListener('click', function(ev){
+   var b = ev.target.closest && ev.target.closest('.rate button');
+   if(!b) return;
+   var row = b.closest('.rate'); if(!row) return;
+   var v = b.classList.contains('up') ? 'up' : 'down';
+   try{
+     fetch(API+'/api/feedback', {method:'POST', credentials:'include',
+       headers:{'Content-Type':'application/json'},
+       body: JSON.stringify({turn_id: row.getAttribute('data-t'), verdict: v})
+     }).catch(function(){});
+   }catch(e){}
+   row.innerHTML = '<span>'+(v==='up' ? 'Thanks.'
+     : 'Thanks \u2014 that tells us where to look.')+'</span>';
+ });
+
  function turn(q){
    var d=document.createElement('div'); d.className='turn';
    d.innerHTML='<p class="you">'+esc(q)+'</p>'
@@ -283,6 +306,17 @@ body{margin:0;background:var(--ground);color:var(--ink);
      if(j.follow_ups && j.follow_ups.length)
        html += '<div class="sugg">'+j.follow_ups.map(function(f){
          return '<button>'+esc(f)+'</button>'; }).join('')+'</div>';
+     // WAS THIS ANY GOOD. Everything else logged about a turn describes
+     // whether the machinery worked; this is the only field that can tell a
+     // correct answer nobody wanted from one that landed. Quiet by design:
+     // it sits under the sources line, it is not a modal, and skipping it
+     // is the normal thing to do.
+     if(j.turn_id)
+       html += '<div class="rate" data-t="'+esc(j.turn_id)+'">'
+         +'<span>Useful?</span>'
+         +'<button class="up" aria-label="This answer was useful">Yes</button>'
+         +'<button class="dn" aria-label="This answer was not useful">No</button>'
+         +'</div>';
      slot.innerHTML=html; bottom();
    })
    .catch(function(){ busy=false; send.disabled=false; offline(slot,q); });
