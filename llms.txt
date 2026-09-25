@@ -13,6 +13,7 @@ Projections are our own, built from play-by-play back to 1999 and as-of-week wit
 
 ## Measured studies
 
+- https://slatestats.com/nfl/studies/coaching-change-fantasy/
 - https://slatestats.com/nfl/studies/coming-off-a-bye/
 - https://slatestats.com/nfl/studies/defense-vs-tight-ends/
 - https://slatestats.com/nfl/studies/do-defenses-shut-down-the-top-receiver/
@@ -20,6 +21,7 @@ Projections are our own, built from play-by-play back to 1999 and as-of-week wit
 - https://slatestats.com/nfl/studies/do-underdogs-throw-more/
 - https://slatestats.com/nfl/studies/does-a-hot-streak-continue/
 - https://slatestats.com/nfl/studies/does-weather-hurt-fantasy-production/
+- https://slatestats.com/nfl/studies/forty-time-fantasy/
 - https://slatestats.com/nfl/studies/indoors-receiving-production/
 - https://slatestats.com/nfl/studies/receiver-first-season-new-team/
 - https://slatestats.com/nfl/studies/receivers-who-beat-man-coverage/

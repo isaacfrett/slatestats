@@ -1,3 +1,6 @@
+User-agent: *
+Allow: /
+
 Sitemap: https://slatestats.com/sitemap.xml
 
 # An index written for assistants rather than crawlers: what is worth
