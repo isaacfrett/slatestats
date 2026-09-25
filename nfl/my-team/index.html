@@ -219,8 +219,16 @@
    });
    if(leagues.length===1) document.querySelector('.lg button').click();
   }catch(e){
-   msg('leagues','Could not reach Sleeper just now. That is their API, not '
-     +'your league \u2014 try again in a moment.', true);
+   // DO NOT BLAME THE OTHER SIDE FOR A FAULT THAT MIGHT BE OURS. This said
+   // "That is their API, not your league" while the real cause was our own
+   // Content-Security-Policy, which did not list Sleeper at all -- so the
+   // feature was dead for as long as that header has shipped and the page
+   // confidently pointed at somebody else. A fetch that never left the
+   // browser is indistinguishable here from one Sleeper refused, so the
+   // message stops asserting which.
+   msg('leagues','Could not reach Sleeper just now \u2014 try again in a '
+     +'moment. If it keeps failing, it may be us rather than them; '
+     +'<a href="/legal/contact/">tell us</a> and we will look.', true);
   }finally{ GO.disabled=false; }
  }
 
