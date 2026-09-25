@@ -254,6 +254,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
    var slot=turn(q);
    fetch(API+'/api/ask',{method:'POST',credentials:'include',headers:{'content-type':'application/json'},
      body:JSON.stringify({q:q, context:ctx, thread:THREAD, seq:(++SEQ),
+       w:(window.innerWidth||0),
        from_suggestion:wasSugg})})
    .then(function(x){ return x.json(); })
    .then(function(j){
