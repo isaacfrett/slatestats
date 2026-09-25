@@ -190,19 +190,49 @@ body{margin:0;background:var(--ground);color:var(--ink);
  // not the call succeeds: a reader has said their piece either way, and a
  // thumb that appears to fail invites a second click that would only
  // overwrite the first.
+ // WHAT WAS WRONG, IN ONE MORE TAP.
+ //
+ // A bare thumbs-down is close to unusable: wrong tool, wrong numbers, a
+ // chart that did not help and prose nobody can follow are FOUR different
+ // repairs, and the first four down-votes this site collected all carried
+ // an empty note. So a No opens four chips, and the words are the four
+ // things that can actually be fixed rather than a satisfaction scale.
+ //
+ // The vote is banked BEFORE the reason is asked. Most people will not
+ // answer the second question, and losing their No because of that would
+ // be trading the signal we have for one we might get.
+ var REASONS = [['topic','Wrong player or topic'],
+                ['numbers','Numbers look off'],
+                ['chart','Chart did not help'],
+                ['writing','Hard to follow']];
+
+ function sendVerdict(id, v, note){
+   try{
+     fetch(API+'/api/feedback', {method:'POST', credentials:'include',
+       headers:{'Content-Type':'application/json'},
+       body: JSON.stringify({turn_id:id, verdict:v, note:note||''})
+     }).catch(function(){});
+   }catch(e){}
+ }
+
  thread.addEventListener('click', function(ev){
    var b = ev.target.closest && ev.target.closest('.rate button');
    if(!b) return;
    var row = b.closest('.rate'); if(!row) return;
+   var id = row.getAttribute('data-t');
+
+   if(b.hasAttribute('data-why')){
+     sendVerdict(id, 'down', b.getAttribute('data-why'));
+     row.innerHTML = '<span>Thanks \u2014 that tells us where to look.</span>';
+     return;
+   }
    var v = b.classList.contains('up') ? 'up' : 'down';
-   try{
-     fetch(API+'/api/feedback', {method:'POST', credentials:'include',
-       headers:{'Content-Type':'application/json'},
-       body: JSON.stringify({turn_id: row.getAttribute('data-t'), verdict: v})
-     }).catch(function(){});
-   }catch(e){}
-   row.innerHTML = '<span>'+(v==='up' ? 'Thanks.'
-     : 'Thanks \u2014 that tells us where to look.')+'</span>';
+   sendVerdict(id, v, '');
+   if(v === 'up'){ row.innerHTML = '<span>Thanks.</span>'; return; }
+   row.innerHTML = '<span>What was off?</span>'
+     + REASONS.map(function(r){
+         return '<button data-why="'+r[0]+'">'+r[1]+'</button>'; }).join('')
+     + '<button data-why="">Skip</button>';
  });
 
  function turn(q){

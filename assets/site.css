@@ -495,7 +495,12 @@ svg{display:block;width:100%;height:auto}
    to rate is the normal case and a loud widget would make skipping it feel
    like a refusal. */
 .rate{display:flex;align-items:center;gap:8px;margin-top:8px;
-  font-size:12px;color:var(--ink-3)}
+  font-size:12px;color:var(--ink-3);
+  /* WRAPS, because the reason chips are four phrases rather than two
+     words and a phone column is ~358px. Without this the last one runs
+     off the right edge, which is where "Hard to follow" would have been
+     -- the chip most likely to be about the thing it could not show. */
+  flex-wrap:wrap;row-gap:6px}
 .rate button{background:none;border:1px solid var(--rule);color:var(--ink-3);
   border-radius:99px;padding:2px 10px;font:inherit;cursor:pointer}
 .rate button:hover{border-color:var(--navy);color:var(--ink-2)}
