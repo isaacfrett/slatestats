@@ -39,7 +39,7 @@
 .msg{margin-top:14px;padding:13px 15px;border-radius:10px;font-size:14px;
   background:var(--sunk);border:1px solid var(--rule);color:var(--ink-2)}
 .msg.bad{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
-</style><div class="wrap wide"><p class="crumb"><a href="/">Slate Stats</a> &rsaquo; <a href="/nfl/">NFL</a> &rsaquo; My team</p><h1>Start or sit, for your team</h1><p class="summary">Type your Sleeper username and pick a league. You get our projections for the players <b>you actually own</b>, ranked, with the ones on reserve or carrying a designation flagged &mdash; instead of looking each of them up.</p><div class="flag"><b>Nothing leaves your browser.</b> Your browser talks to Sleeper directly and joins the result against a file on this site. There is no account, no password, and no server here that could store a roster even if we wanted it to &mdash; this site is static files. Your username is a public read on Sleeper&rsquo;s own API.</div><div class="conn"><input id="user" type="text" autocomplete="off" placeholder="Your Sleeper username" aria-label="Sleeper username"><button id="go">Find my leagues</button></div><div id="leagues"></div><div id="team"></div><noscript><p class="empty">This tool runs in your browser, so it needs JavaScript. Every player&rsquo;s numbers are also on his own page under <a href="/nfl/players/">Players</a>.</p></noscript><p class="meta">Projections are ours, as-of-week with no lookahead &middot; rosters and scoring come from Sleeper&rsquo;s public API &middot; a player we do not project shows no number rather than a zero &middot; 2026 week 3</p></div><footer class="foot"><div class="foot-in"><div class="foot-col"><h4>Tools</h4><a href="/nfl/my-team/">My team</a><a href="/nfl/rankings/">Weekly rankings</a><a href="/nfl/cheat-sheet/">Cheat sheet</a><a href="/nfl/waivers/">Waiver wire</a><a href="/nfl/streaks/">Player streaks</a><a href="/nfl/injury-impact/">Injury impact</a><a href="/nfl/compare/">Compare two players</a><a href="/nfl/teams/">Team rooms</a><a href="/nfl/trending/">Trending usage</a><a href="/nfl/players/">Player stats</a></div><div class="foot-col"><h4>Reading</h4><a href="/nfl/studies/">All studies</a><a href="/nfl/faq/">Fantasy questions</a><a href="/nfl/studies/defense-vs-tight-ends/">Defense vs tight ends</a><a href="/nfl/studies/year-3-breakout/">The year 3 breakout</a><a href="/nfl/faq/how-injured-reserve-works/">How IR works</a><a href="/nfl/faq/what-is-snap-share/">What is snap share</a></div><div class="foot-col"><h4>About</h4><a href="/">Home</a><a href="/legal/sources/">Where the data comes from</a><a href="/legal/contact/">Contact</a></div><div class="foot-col"><h4>Legal</h4><a href="/legal/responsible-gambling/">Responsible gambling</a><a href="/legal/privacy/">Privacy</a><a href="/legal/terms/">Terms of use</a></div></div><p class="foot-note">Every figure carries its sample size and, where one applies, its test statistic &mdash; including the findings that went against what we expected. Projections shown are for week 3. Projections are as-of-week with no lookahead.</p><p class="foot-legal">Research and projections &mdash; not betting advice, and it does not accept wagers. 21 or older in most US states. If gambling stops being fun, call <a href="tel:1-800-426-2537">1-800-GAMBLER</a>.</p></footer></div></div><script>
+</style><div class="wrap wide"><p class="crumb"><a href="/">Slate Stats</a> &rsaquo; <a href="/nfl/">NFL</a> &rsaquo; My team</p><h1>Start or sit, for your team</h1><p class="summary">Type your Sleeper username and pick a league. You get our projections for the players <b>you actually own</b>, ranked, with the ones on reserve or carrying a designation flagged &mdash; instead of looking each of them up.</p><div class="flag"><b>Nothing leaves your browser.</b> Your browser talks to Sleeper directly and joins the result against a file on this site. There is no account, no password, and no server here that could store a roster even if we wanted it to &mdash; this site is static files. Your username is a public read on Sleeper&rsquo;s own API.</div><div class="conn"><input id="user" type="text" autocomplete="off" placeholder="Your Sleeper username" aria-label="Sleeper username"><button id="go">Find my leagues</button></div><div id="leagues"></div><div id="team"></div><h2 id="espn">Or an ESPN league</h2><p class="summary">Paste your ESPN league ID &mdash; it is the <code>leagueId=</code> number in the URL when you are looking at your league. Public leagues work straight away. <b>Private leagues work only in some browsers</b><a href="/nfl/my-team/espn-private/">*</a>.</p><div class="flag"><b>We never see your ESPN login.</b> For a private league your browser sends its own ESPN session directly to ESPN, the same way it does on espn.com. Nothing is pasted here, nothing is stored, and there is no server on this site that could hold it. Most tools ask you to copy your <code>espn_s2</code> and <code>SWID</code> cookies out of developer tools &mdash; you should not have to, and here you do not.</div><div class="conn"><input id="eid" type="text" inputmode="numeric" autocomplete="off" placeholder="ESPN league ID" aria-label="ESPN league ID"><button id="ego">Load league</button></div><div id="eleagues"></div><div id="eteam"></div><noscript><p class="empty">This tool runs in your browser, so it needs JavaScript. Every player&rsquo;s numbers are also on his own page under <a href="/nfl/players/">Players</a>.</p></noscript><p class="meta">Projections are ours, as-of-week with no lookahead &middot; rosters and scoring come from Sleeper&rsquo;s public API &middot; a player we do not project shows no number rather than a zero &middot; 2026 week 3</p></div><footer class="foot"><div class="foot-in"><div class="foot-col"><h4>Tools</h4><a href="/nfl/my-team/">My team</a><a href="/nfl/rankings/">Weekly rankings</a><a href="/nfl/cheat-sheet/">Cheat sheet</a><a href="/nfl/waivers/">Waiver wire</a><a href="/nfl/streaks/">Player streaks</a><a href="/nfl/injury-impact/">Injury impact</a><a href="/nfl/compare/">Compare two players</a><a href="/nfl/teams/">Team rooms</a><a href="/nfl/trending/">Trending usage</a><a href="/nfl/players/">Player stats</a></div><div class="foot-col"><h4>Reading</h4><a href="/nfl/studies/">All studies</a><a href="/nfl/faq/">Fantasy questions</a><a href="/nfl/studies/defense-vs-tight-ends/">Defense vs tight ends</a><a href="/nfl/studies/year-3-breakout/">The year 3 breakout</a><a href="/nfl/faq/how-injured-reserve-works/">How IR works</a><a href="/nfl/faq/what-is-snap-share/">What is snap share</a></div><div class="foot-col"><h4>About</h4><a href="/">Home</a><a href="/legal/sources/">Where the data comes from</a><a href="/legal/contact/">Contact</a></div><div class="foot-col"><h4>Legal</h4><a href="/legal/responsible-gambling/">Responsible gambling</a><a href="/legal/privacy/">Privacy</a><a href="/legal/terms/">Terms of use</a></div></div><p class="foot-note">Every figure carries its sample size and, where one applies, its test statistic &mdash; including the findings that went against what we expected. Projections shown are for week 3. Projections are as-of-week with no lookahead.</p><p class="foot-legal">Research and projections &mdash; not betting advice, and it does not accept wagers. 21 or older in most US states. If gambling stops being fun, call <a href="tel:1-800-426-2537">1-800-GAMBLER</a>.</p></footer></div></div><script>
 (function(){
  var q=document.getElementById('q'),r=document.getElementById('res'),IX=null,sel=-1;
  // The rail no longer carries a search box. This still runs wherever
@@ -280,5 +280,131 @@
 
  GO.addEventListener('click', findLeagues);
  U.addEventListener('keydown', function(e){ if(e.key==='Enter') findLeagues(); });
+})();
+</script><script>
+(function(){
+ var API='https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/';
+ var POS={1:'QB',2:'RB',3:'WR',4:'TE',5:'K',16:'DST'};
+ // Slot 20 is bench, 21 is IR, 23 is FLEX. Anything else is a starter.
+ var BENCH={20:1,21:1};
+ var D=null, L=null, fmt='ppr', SEASON=0;
+ var I=document.getElementById('eid'), GO=document.getElementById('ego');
+ if(!I) return;
+
+ function esc(t){ return String(t==null?'':t)
+   .replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;',
+     '>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+ function msg(el,t,bad){ document.getElementById(el).innerHTML=
+   '<div class="msg'+(bad?' bad':'')+'">'+t+'</div>'; }
+
+ async function data(){
+   if(!D) D=await fetch('/data/roster.json').then(function(r){return r.json();});
+   SEASON=D.season; return D;
+ }
+
+ // TRY WITHOUT CREDENTIALS FIRST. A public league needs none, and sending
+ // them when they are not needed is the kind of thing that should be a last
+ // resort rather than a default.
+ async function league(id){
+   var u=API+SEASON+'/segments/0/leagues/'+encodeURIComponent(id)
+        +'?view=mTeam&view=mRoster&view=mSettings';
+   var r=await fetch(u).catch(function(){return null;});
+   if(r && r.ok) return {d: await r.json(), priv:false};
+   var r2=await fetch(u,{credentials:'include'}).catch(function(){return null;});
+   if(r2 && r2.ok) return {d: await r2.json(), priv:true};
+   return null;
+ }
+
+ // The league's reception value, and whether our three formats can carry it.
+ function scoring(d){
+   var it=(((d.settings||{}).scoringSettings)||{}).scoringItems||[];
+   var rec=null, i;
+   for(i=0;i<it.length;i++){ if(it[i].statId===53){ rec=it[i]; break; } }
+   if(!rec) return {fmt:'ppr', note:''};
+   var ov=rec.pointsOverrides||{}, base=rec.points||0;
+   var wr=(ov['3']!=null?ov['3']:base);
+   var vals=[ov['2'],ov['3'],ov['4']].filter(function(x){return x!=null;});
+   var mixed=vals.length>1 && vals.some(function(x){return x!==vals[0];});
+   var f = wr>=0.75 ? 'ppr' : (wr>=0.25 ? 'half' : 'std');
+   return {fmt:f, val:wr, mixed:mixed,
+     note: mixed ? ('Your league scores receptions differently by position ('
+       +vals.join(', ')+'). We show the wide-receiver value, '+wr+
+       ' per catch, across the board.') : ''};
+ }
+
+ function render(team){
+   var rows=(((team||{}).roster)||{}).entries||[];
+   var start=[], bench=[], miss=0;
+   rows.forEach(function(e){
+     var pl=((e.playerPoolEntry||{}).player)||{};
+     var r=(D.espn||{})[String(pl.id)];
+     var o={n: pl.fullName||'?', p: POS[pl.defaultPositionId]||'',
+            slot: e.lineupSlotId, row:r};
+     if(!r) miss++;
+     (BENCH[e.lineupSlotId]?bench:start).push(o);
+   });
+   function tbl(list,title){
+     if(!list.length) return '';
+     list.sort(function(a,b){
+       return ((b.row||{})[fmt]||-1)-((a.row||{})[fmt]||-1);});
+     var h='<h2>'+title+'</h2><div class="tbl"><table><thead><tr>'
+       +'<th>Player</th><th>Pos</th><th class="r">Proj</th><th>Status</th>'
+       +'</tr></thead><tbody>';
+     list.forEach(function(x){
+       var r=x.row, v=r?r[fmt]:null;
+       h+='<tr><td>'+(r&&r.u?'<a href="'+esc(r.u)+'">'+esc(x.n)+'</a>'
+                            :esc(x.n))+'</td>'
+         +'<td>'+esc(x.p)+'</td>'
+         +'<td class="r">'+(v==null?'&mdash;':v.toFixed(1))+'</td>'
+         +'<td>'+(r&&r.out?'<b>out</b>':(r&&r.inj?esc(r.inj):''))+'</td></tr>';
+     });
+     return h+'</tbody></table></div>';
+   }
+   var h=tbl(start,'Starters')+tbl(bench,'Bench');
+   if(miss) h+='<p class="meta">'+miss+' player'+(miss===1?'':'s')+
+     ' on this roster we do not project — usually a defence, or '+
+     'somebody with too little playing time to model. No number beats a '+
+     'wrong one.</p>';
+   document.getElementById('eteam').innerHTML=h;
+ }
+
+ async function go(){
+   var id=(I.value||'').trim().replace(/[^0-9]/g,'');
+   if(!id){ msg('eleagues','Enter your ESPN league ID.',1); return; }
+   msg('eleagues','Looking…');
+   document.getElementById('eteam').innerHTML='';
+   await data();
+   var res=await league(id);
+   if(!res){
+     msg('eleagues','No league with that ID, or it is private and your '+
+       'browser did not send your ESPN session. '+
+       '<a href="/nfl/my-team/espn-private/">Why private leagues sometimes '+
+       'fail</a>.',1);
+     return;
+   }
+   L=res.d;
+   var sc=scoring(L);
+   fmt=sc.fmt;
+   var name=((L.settings||{}).name)||('League '+id);
+   var teams=L.teams||[];
+   var h='<p class="say"><b>'+esc(name)+'</b> — '+teams.length+
+     ' teams, scored as '+(fmt==='ppr'?'full PPR':fmt==='half'?'half PPR'
+       :'standard')+(res.priv?' · private league, read with your own '+
+       'ESPN session':'')+'.</p>';
+   if(sc.note) h+='<div class="msg">'+esc(sc.note)+'</div>';
+   h+='<div class="conn"><select id="eteamsel" aria-label="Your team">';
+   teams.forEach(function(t,i){
+     var nm=t.name||((t.location||'')+' '+(t.nickname||'')).trim()||('Team '+t.id);
+     h+='<option value="'+i+'">'+esc(nm)+'</option>';
+   });
+   h+='</select><button id="epick">Show my roster</button></div>';
+   msg('eleagues',h);
+   document.getElementById('eleagues').innerHTML=h;
+   document.getElementById('epick').onclick=function(){
+     render(teams[+document.getElementById('eteamsel').value]);
+   };
+ }
+ GO.onclick=go;
+ I.addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
 })();
 </script>
