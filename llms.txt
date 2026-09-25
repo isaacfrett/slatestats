@@ -25,6 +25,7 @@ Projections are our own, built from play-by-play back to 1999 and as-of-week wit
 - https://slatestats.com/nfl/studies/indoors-receiving-production/
 - https://slatestats.com/nfl/studies/receiver-first-season-new-team/
 - https://slatestats.com/nfl/studies/receivers-who-beat-man-coverage/
+- https://slatestats.com/nfl/studies/referee-fantasy-impact/
 - https://slatestats.com/nfl/studies/rookie-quarterback-receivers/
 - https://slatestats.com/nfl/studies/what-predicts-fantasy-production/
 - https://slatestats.com/nfl/studies/who-benefits-when-a-starter-sits/
