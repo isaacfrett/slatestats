@@ -1,8 +1,8 @@
 {
- "generated": "2026-09-24T23:58:05.892442+00:00",
+ "generated": "2026-09-25T00:08:49.148982+00:00",
  "season": 2026,
  "week": 3,
- "scenarios": 176,
+ "scenarios": 175,
  "markets": [
   "receptions",
   "reception_yds",
@@ -121,7 +121,6 @@
    "/nfl/players/juwan-johnson/",
    "/nfl/players/kalif-raymond/",
    "/nfl/players/kc-concepcion/",
-   "/nfl/players/keaton-mitchell/",
    "/nfl/players/keenan-allen/",
    "/nfl/players/kendrick-bourne/",
    "/nfl/players/kenneth-walker-iii/",
@@ -299,7 +298,6 @@
    "/nfl/injury-impact/juwan-johnson/",
    "/nfl/injury-impact/kalif-raymond/",
    "/nfl/injury-impact/kc-concepcion/",
-   "/nfl/injury-impact/keaton-mitchell/",
    "/nfl/injury-impact/keenan-allen/",
    "/nfl/injury-impact/kendrick-bourne/",
    "/nfl/injury-impact/kenneth-walker-iii/",
