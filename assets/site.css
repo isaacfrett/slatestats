@@ -165,6 +165,12 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
   --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
     --c-grid:#263F54;--c-ref:#96695B}}
+.thm{display:flex;gap:6px;justify-content:center;margin-top:14px}
+.thm button{font:inherit;font-size:12px;padding:4px 10px;
+ border:1px solid var(--rule);border-radius:999px;cursor:pointer;
+ background:transparent;color:var(--ink-3)}
+.thm button.on{background:var(--sunk);color:var(--ink);
+ border-color:var(--rule-2)}
 :root[data-theme="dark"]{--ground:#061320;--surface:#0D2132;--sunk:#0A1B29;
   --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#6E8598;
   --rule:#1C3547;--rule-2:#142636;
