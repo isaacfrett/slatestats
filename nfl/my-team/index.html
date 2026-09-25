@@ -85,8 +85,14 @@
 </script><script>
 (function(){
   var d=document, r=d.documentElement, K="slate-theme";
-  var f=d.querySelector(".foot")||d.querySelector("footer")||d.body;
-  if(!f||d.getElementById("thm"))return;
+  // `footer.foot`, NOT `.foot`. The nav rail also carries a
+  // `div.foot`, and it comes first in the document and is hidden at
+  // phone width -- so the control was appended into a hidden
+  // element and existed without ever being visible. Same collision
+  // as `.empty` being both a state and a component.
+  var f=d.querySelector("footer.foot")||d.querySelector("footer");
+  if(!f)return;
+  if(d.getElementById("thm"))return;
   var w=d.createElement("div"); w.id="thm"; w.className="thm";
   var cur="auto"; try{cur=localStorage.getItem(K)||"auto";}catch(e){}
   [["auto","Auto"],["light","Light"],["dark","Dark"]].forEach(function(o){
