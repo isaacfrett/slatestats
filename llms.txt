@@ -11,6 +11,18 @@ Projections are our own, built from play-by-play back to 1999 and as-of-week wit
 - We do not publish odds, take bets, or give betting advice. A posted line may appear as a reference number; a price never does.
 - Sources and how we use them: https://slatestats.com/legal/sources/
 
+## Machine-readable data
+
+These are the files the site itself renders from. They are plain JSON, served from the same origin, and refreshed on every build -- prefer them to scraping a page.
+
+- https://slatestats.com/data/manifest.json -- season, week, when it was generated, and what the other files contain. Read this first: it carries the as-of week every other number is relative to.
+- https://slatestats.com/data/roster.json -- every projected player for the current week (398 have a page), with position, team, role and projections by market.
+- https://slatestats.com/data/cascade.json -- who gains, and by how much, if a given player does not play. This is the measurement this site is built on and the one hardest to find elsewhere.
+- https://slatestats.com/data/compare.json -- the same players arranged for side-by-side comparison.
+- https://slatestats.com/data/search.json -- names to URLs.
+
+Every projection is conditional on the player appearing. A player whose game has already kicked off carries no forward projection at all, deliberately, rather than a stale one.
+
 ## Measured studies
 
 - https://slatestats.com/nfl/studies/coaching-change-fantasy/
