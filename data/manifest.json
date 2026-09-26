@@ -1,8 +1,8 @@
 {
- "generated": "2026-09-26T01:26:11.635962+00:00",
+ "generated": "2026-09-26T13:10:12.629434+00:00",
  "season": 2026,
  "week": 3,
- "scenarios": 176,
+ "scenarios": 175,
  "markets": [
   "receptions",
   "reception_yds",
@@ -28,7 +28,6 @@
    "/nfl/players/bhayshul-tuten/",
    "/nfl/players/bijan-robinson/",
    "/nfl/players/blake-whiteheart/",
-   "/nfl/players/brady-russell/",
    "/nfl/players/braelon-allen/",
    "/nfl/players/breece-hall/",
    "/nfl/players/brenton-strange/",
@@ -206,7 +205,6 @@
    "/nfl/injury-impact/bhayshul-tuten/",
    "/nfl/injury-impact/bijan-robinson/",
    "/nfl/injury-impact/blake-whiteheart/",
-   "/nfl/injury-impact/brady-russell/",
    "/nfl/injury-impact/braelon-allen/",
    "/nfl/injury-impact/breece-hall/",
    "/nfl/injury-impact/brenton-strange/",
