@@ -39,9 +39,11 @@ Every projection is conditional on the player appearing. A player whose game has
 - https://slatestats.com/nfl/studies/receivers-who-beat-man-coverage/
 - https://slatestats.com/nfl/studies/referee-fantasy-impact/
 - https://slatestats.com/nfl/studies/rookie-quarterback-receivers/
+- https://slatestats.com/nfl/studies/what-draft-capital-buys/
 - https://slatestats.com/nfl/studies/what-predicts-fantasy-production/
 - https://slatestats.com/nfl/studies/who-benefits-when-a-starter-sits/
 - https://slatestats.com/nfl/studies/year-3-breakout/
+- https://slatestats.com/nfl/studies/year-three-breakout/
 
 ## Fantasy questions, answered from data
 
