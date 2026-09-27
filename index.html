@@ -17,6 +17,11 @@
  });
 })();
 </script><div class="main"><style>
+/* A list in an answer reads as a list. Tight leading, a quiet marker, and
+   the same measure as the prose around it. */
+.bot ul,.bot ol{margin:6px 0 10px;padding-left:22px;max-width:64ch}
+.bot li{margin:3px 0;line-height:1.45}
+.bot li::marker{color:var(--ink-3)}
 /* The conversation only. The shell (.app/.side/.main) lives in the shared
    stylesheet because every page uses it now. */
 .chat{display:flex;flex-direction:column;flex:1;min-height:0}
@@ -160,8 +165,44 @@ body{margin:0;background:var(--ground);color:var(--ink);
  function esc(t){ return String(t==null?'':t)
    .replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;',
      '>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
- function paras(t){ return esc(t).split(/\n\n+/)
-   .map(function(p){ return '<p>'+p.replace(/\n/g,'<br>')+'</p>'; }).join(''); }
+ // LISTS, NOT ONE LONG PARAGRAPH. Answers that are lists were being run
+ // together with <br> -- five markets of long shots read as a wall, and a
+ // ranking read as a sentence with semicolons in it. A reader asked for
+ // list elements, and they are right: a list is a different kind of fact
+ // from a paragraph and should not be rendered as one.
+ //
+ // ESCAPED FIRST, ALWAYS. esc() runs over the whole string before a
+ // single tag is added here, so nothing a model or a template emits can
+ // introduce markup -- the list syntax is matched on already-safe text.
+ // This is the one place in the chat that turns text into elements, and
+ // it stays the only one.
+ var LI_UL = /^\s*[-\u2022]\s+(.*)$/;
+ var LI_OL = /^\s*\d+[.)]\s+(.*)$/;
+ function paras(t){
+   return esc(t).split(/\n\n+/).map(function(block){
+     var lines = block.split(/\n/), out = '', buf = [], kind = null;
+     function flush(){
+       if (!buf.length) return;
+       var tag = kind === 'ol' ? 'ol' : 'ul';
+       out += '<' + tag + '>' + buf.map(function(x){
+         return '<li>' + x + '</li>'; }).join('') + '</' + tag + '>';
+       buf = []; kind = null;
+     }
+     lines.forEach(function(ln){
+       var u = ln.match(LI_UL), o = ln.match(LI_OL);
+       if (u || o) {
+         var k = u ? 'ul' : 'ol';
+         if (kind && k !== kind) flush();
+         kind = k; buf.push((u || o)[1]);
+       } else {
+         flush();
+         if (ln.trim()) out += '<p>' + ln + '</p>';
+       }
+     });
+     flush();
+     return out;
+   }).join('');
+ }
  function grow(){ box.style.height='auto';
    var h=Math.min(box.scrollHeight,180);
    box.style.height=h+'px';
@@ -258,9 +299,27 @@ body{margin:0;background:var(--ground);color:var(--ink);
        .filter(function(w){return w.length>2;});
      var hits=j.filter(function(it){
        return k.some(function(w){ return it.k.indexOf(w)>=0; }); }).slice(0,6);
-     var html='<p>The live assistant is not running on this page yet, so I '
-       +'cannot answer that one here. These pages match what you typed, and '
-       +'every number on them carries its sample size:</p>';
+     // KEYED ON WHETHER AN API EXISTS, not on the failure. A server that
+     // answers with an error is a server that is RUNNING, so both the
+     // rejected fetch and the returned error mean "could not answer just
+     // now" wherever one is configured. Only a build with no API at all
+     // -- the plain static host -- gets the permanent sentence.
+     //
+     // TEMPORARY AND PERMANENT ARE DIFFERENT SENTENCES, and this said the
+     // permanent one for both. Measured on the box: the API is stopped for
+     // 30-100 seconds by every warehouse write, twelve times in three
+     // hours, because DuckDB allows one writer only and the API holds a
+     // read handle. During each of those a visitor was told the assistant
+     // "is not running on this page yet" -- which reads as a page that
+     // never had one, so they do not come back in a minute. They should.
+     var html = API
+       ? '<p>The assistant is offline for a minute while the data '
+         + 'refreshes. Try again shortly. In the meantime these pages '
+         + 'match what you typed, and every number on them carries its '
+         + 'sample size:</p>'
+       : '<p>The live assistant is not running on this page yet, so I '
+         + 'cannot answer that one here. These pages match what you typed, '
+         + 'and every number on them carries its sample size:</p>';
      html += hits.length
        ? '<div class="sugg">'+hits.map(function(it){
            return '<a class="hit" href="'+it.u+'">'+esc(it.n)
@@ -364,7 +423,8 @@ body{margin:0;background:var(--ground);color:var(--ink);
          +'</div>';
      slot.innerHTML=html; bottom();
    })
-   .catch(function(){ busy=false; send.disabled=false; offline(slot,q); });
+   .catch(function(){ busy=false; send.disabled=false;
+     offline(slot, q, 'unreachable'); });
  }
 
  box.addEventListener('input',grow);
