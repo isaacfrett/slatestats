@@ -11,7 +11,7 @@
 .side .brand{display:flex;align-items:center;gap:8px;font:800 18px Archivo,
  sans-serif;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
 /* ONE WORD. "Slate Stats" with a space read as two words in a row; the
-   wordmark is SlateStats, and the colour change is what separates them. */
+   wordmark is SlateStats, and the color change is what separates them. */
 .side .brand .wm{white-space:nowrap}
 /* THE SAME WORDMARK THE CARDS CARRY. Posts went out with "Stats" in
    blue and the site rail had it in green, so the two halves of one
@@ -118,7 +118,7 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
     lookup, and the header has no room for both. It stays on desktop, where
     the rail has a column to itself. */
  .side .srch{display:none}
- /* THE THREE ITEMS ARE ALREADY CENTRED; the problem was WEIGHT. Measured,
+ /* THE THREE ITEMS ARE ALREADY CENTERED; the problem was WEIGHT. Measured,
     the sign-in block was 49px tall beside a 22px wordmark and a 38px menu
     button, so it dominated the row and made the header 70px. Matching its
     height to the menu button is what makes the row read as one line. */
@@ -280,7 +280,7 @@ ol.vs b{margin-left:auto;font-family:"IBM Plex Mono",monospace;
 @media (max-width:640px){ .bar{top:48px} .bar .sel{width:100%} 
   .bar select{flex:1} }
 /* Cheat-sheet tiers. A flat list of 40 names is something you scroll; six
-   labelled bands is something you decide from. */
+   labeled bands is something you decide from. */
 .tier{margin-top:14px;background:var(--surface);border:1px solid var(--rule);
   border-radius:11px;padding:13px 15px}
 .tier h3{margin:0 0 8px;font-family:Archivo,sans-serif;font-size:13.5px;
@@ -371,7 +371,7 @@ body{background:var(--ground);color:var(--ink);
    phone because of it.
    Measured in the page: margins to 0 -> 375px, width:100% -> 375px,
    align-self:stretch -> still 599px, because auto margins beat align-self.
-   width:100% is the one that keeps the centring the auto margins are there
+   width:100% is the one that keeps the centering the auto margins are there
    for. */
 .wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:26px 60px;
       width:100%}
@@ -485,7 +485,7 @@ svg{display:block;width:100%;height:auto}
 .key{display:flex;gap:16px;margin-top:9px;font-size:12.5px;color:var(--ink-2)}
 .key i{display:inline-block;width:16px;height:3px;border-radius:2px;
   vertical-align:middle;margin-right:6px;font-style:normal}
-/* A SWATCH, for a legend that keys a CELL colour rather than a line
+/* A SWATCH, for a legend that keys a CELL color rather than a line
    series. `.key i` is a 16x3 rule, which reads as "this line" and not as
    "this value". Wraps, because two legends and a phone width is how a row
    of chips silently loses its last item. */
