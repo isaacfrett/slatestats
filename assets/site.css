@@ -84,33 +84,51 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
  margin-top:4px;background:var(--surface);border:1px solid var(--rule);
  border-radius:9px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 .main{display:flex;flex-direction:column;min-height:100vh;min-width:0}
-/* --- the front page's minimal rail -------------------------------------
-   Brand, then the toggle directly beneath it, and nothing else. The nav
-   opens as a panel BESIDE the rail rather than pushing the column: a
-   front page that jumps sideways when you open a menu has moved the
-   thing you were about to read. */
-.app.min{grid-template-columns:auto 1fr}
-.app.min .side{width:auto;align-items:flex-start;gap:12px;overflow:visible;
- padding:20px 18px}
-.app.min .menu{display:block;margin:0;padding:7px 8px}
+/* --- the front page's collapsible rail ----------------------------------
+   THE RAIL ITSELF COLLAPSES. The first cut kept a narrow stub showing the
+   wordmark and floated the nav over the page as a popover, which is a
+   different mechanism and not the one asked for: a panel hovering above
+   the content covers what you were reading and leaves a permanent stub
+   taking a column for nothing.
+
+   Here the rail has NO column when closed and a full one when open, so
+   the content genuinely gets the width back. The toggle is the only thing
+   that survives the collapse, and it does not move between the two
+   states -- it sits at the same coordinates either way, so the control
+   you just pressed is still under the cursor.
+
+   Deliberately NOT remembered between visits. The privacy policy tells a
+   reader this site stores nothing in their browser, and a preference in
+   localStorage would make that less true for the sake of a toggle. If it
+   should persist, that is one sentence in the policy first. */
 .drawer{display:contents}
-.app.min .drawer{position:absolute;left:calc(100% - 6px);top:64px;width:216px;
- background:var(--surface);border:1px solid var(--rule);border-radius:12px;
- padding:10px 8px;box-shadow:0 12px 32px rgba(0,0,0,.16);display:none;z-index:40}
-.app.min .side.open .drawer{display:block}
-.app.min .drawer .foot{margin-top:10px;padding-top:8px;
- border-top:1px solid var(--rule-2)}
-/* The account block must not set the rail's width -- a signed-in email is
-   far wider than the wordmark and would stretch the column it sits in. */
-.app.min .acct{width:100%;max-width:150px}
+.app.min{grid-template-columns:0 1fr}
+.app.min .side{width:0;padding:0;border-right:0;gap:0;overflow:hidden}
+/* FIXED, so the collapsed rail cannot clip it. `.side` is sticky, which
+   does not make a containing block for a fixed child, so this escapes the
+   overflow above rather than disappearing with everything else. */
+.app.min .menu{display:block;position:fixed;left:13px;top:13px;z-index:60;
+ width:34px;height:34px;padding:0;display:grid;place-items:center;
+ border-radius:9px}
+.app.min.open{grid-template-columns:232px 1fr}
+.app.min.open .side{width:auto;padding:16px 16px 20px;gap:18px;
+ overflow-y:auto;border-right:1px solid var(--rule)}
+/* The wordmark sits BESIDE the toggle, which is where it is in the
+   collapsed state too -- the toggle is the fixed point and everything
+   else appears around it. */
+.app.min.open .brand{margin-left:39px;min-height:34px}
+.app.min .acct{width:100%}
 @media (max-width:860px){
- /* Below 860 every page already uses the horizontal strip, and the two
-    treatments must not both apply: `position:absolute` against a static
-    bar would drop the panel over the answer. */
- .app.min{grid-template-columns:1fr}
- .app.min .side{width:auto;align-items:center;padding:10px 14px}
- /* The wrapper goes back to being invisible to layout, so the strip's
-    own rules (which hide .navbox until .open) are the only ones acting. */
+ /* Below 860 every page already uses the horizontal strip, and the
+    collapsible rail must not fight it: the strip IS the collapsed state
+    on a phone, with the same button opening the same list. Every desktop
+    override is undone here rather than left to specificity. */
+ .app.min,.app.min.open{grid-template-columns:1fr}
+ .app.min .side,.app.min.open .side{width:auto;align-items:center;
+  padding:10px 14px;overflow:visible;border-right:0;gap:10px}
+ .app.min .menu,.app.min.open .menu{position:static;width:auto;height:auto;
+  padding:6px}
+ .app.min.open .brand{margin-left:0}
  .app.min .drawer{display:contents;position:static}
 }
 
@@ -166,13 +184,13 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
  .menu{display:block}
  .side .navbox{display:none;width:100%;order:9;
   border-top:1px solid var(--rule-2);padding-top:6px;margin-top:2px}
- .side.open .navbox{display:block}
+ .app.open .side .navbox{display:block}
  .side nav{flex-direction:column;gap:1px}
  /* 44px because that is a thumb. The old rule was 6px of padding. */
  .side nav a{padding:11px 10px;min-height:44px;display:flex;
   align-items:center;border-radius:9px}
  .side .lab{display:none}
- .side.open .lab{display:block;padding:4px 10px 2px}
+ .app.open .side .lab{display:block;padding:4px 10px 2px}
  .side .foot{display:none}
 }
 
