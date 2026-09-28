@@ -207,10 +207,11 @@ body{margin:0;background:var(--ground);color:var(--ink);
     height was fixed, and centering was never the fault -- the overflow was.
     A chat that opens with its question centered and the box at the bottom is
     the shape people already know. */
- /* The menu belongs at the RIGHT EDGE, not wedged between the wordmark and
-    the search box. `order` rather than moving it in the markup, so the DOM
-    order stays sensible for a screen reader and for desktop. */
- .side .menu{order:3;margin-left:0}
+ /* THE HEADER ORDER LIVES IN THE SHARED STYLESHEET, not here. This block
+    set `order:3` on the toggle, and only the front page loads it -- so the
+    strip read "brand, account, toggle" on / and "brand, toggle, account"
+    everywhere else. Three lines above, this same file warns that chat-only
+    CSS is the drift this repo keeps paying for. It was, again. */
 }
 </style><div class="chat is-empty" id="main"><div class="thread" id="thread"><div class="inner" id="inner"><h1 class="hello">What do you want to know?</h1><div id="popular" hidden></div></div></div><div class="composer"><div class="cwrap"><div class="cbox"><textarea id="ask" rows="1" placeholder="Ask about a player, matchup or injury" aria-label="Ask a question"></textarea><button id="send" aria-label="Send">↑</button></div><div class="eg"><button data-q="Who benefits if Puka Nacua sits?">If Nacua sits</button><button data-q="Should I start Bijan Robinson or Kenneth Walker?">Bijan or Walker</button><button data-q="Is any defense actually weak against tight ends?">Weak vs tight ends?</button><button data-q="Who has the best matchup at running back?">Best RB matchup</button><button data-q="Who are the top waiver adds this week?">Top waiver adds</button></div><div id="fresh" hidden></div><p class="chat-legal">Research and projections &mdash; not betting advice. <a href="/legal/responsible-gambling/">Responsible gambling</a> &middot; <a href="/legal/privacy/">Privacy</a> &middot; <a href="/legal/terms/">Terms</a> &middot; <a href="/legal/sources/">Where the data comes from</a> &middot; <a href="/legal/contact/">Contact</a></p></div></div></div><script>
 (function(){

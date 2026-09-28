@@ -262,7 +262,16 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
     In a horizontal bar that rule is a stray line floating above the sign-in
     button -- which is exactly what it looked like -- and the padding is the
     other 15px that made this block 49px tall against a 34px menu. */
- .side .acct{order:2;margin-left:auto;width:auto;display:flex;
+ /* ONE HEADER ORDER FOR EVERY PAGE: wordmark, then the toggle and the
+    account together at the right, with the account last. Identity is the
+    conventional far-right slot and the toggle is navigation, so it sits
+    inboard of it.
+    ONE AUTO MARGIN, NOT TWO. Both `.menu` and `.acct` carried
+    `margin-left:auto`, so they SPLIT the free space -- the toggle landed
+    stranded in the middle at x=226 rather than beside the account. The
+    first of the right-hand group takes the space; the rest follow it. */
+ .side .menu{order:2;margin-left:auto}
+ .side .acct{order:3;margin-left:0;width:auto;display:flex;
   align-items:center;padding:0;border-top:0;margin-top:0}
  .side .acct a.signin{padding:0 13px;height:34px;display:flex;
   align-items:center;font-size:13.5px;white-space:nowrap;border-radius:9px}
