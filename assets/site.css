@@ -143,6 +143,10 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
    toggle is hidden. */
 .app.min.open .brand .mk,.app.min.peek .brand .mk{display:none}
 .app.min.open .brand .wm,.app.min.peek .brand .wm{margin-left:2px}
+/* DESKTOP ONLY. On the horizontal strip this forced the account block to
+   a full row, so the header stacked vertically -- wordmark, then account,
+   then the toggle on a third line. It exists to stop a signed-in address
+   stretching a 232px COLUMN; a row has no such problem. */
 .app.min .acct{width:100%}
 @media (max-width:860px){
  /* Below 860 every page already uses the horizontal strip, and the
@@ -156,6 +160,12 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
  .app.min .menu,.app.min.open .menu,.app.min.peek .menu{
   position:static;width:auto;height:auto;
   padding:6px}
+ .app.min .acct{width:auto}
+ /* AND AN EMPTY BLOCK TAKES NO PART. `.side .acct` sets display:flex,
+    which overrides the `hidden` attribute the shell ships with, so the
+    account block was a zero-height flex item on every signed-out page.
+    Harmless until something gave it a width. */
+ .side .acct[hidden]{display:none}
  .app.min.open .brand,.app.min.peek .brand{margin-left:0}
  /* THE MARK COMES BACK ON THE STRIP. Hiding it is only right where the
     toggle sits immediately left of the wordmark and the two read as one
