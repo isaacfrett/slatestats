@@ -239,14 +239,21 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
      invisible, and the reference line sat at 5.78:1 against data at 6.70,
      so somebody else's posted number was almost as loud as our measurement.
      The ladder is now deliberate: subject > data > reference > grid. */
-  --c-grid:#D3DFE7;--c-ref:#B5705F}
+  --c-grid:#D3DFE7;--c-ref:#B5705F;
+  /* CATEGORIES ARE NOT MEANINGS. Green is a measured gain and --warn is a
+     loss everywhere on this site, so spending either on "this series is WR"
+     makes one color say two things -- which this project already paid for
+     once, when a reader read two adjacent charts as contradicting. These
+     four carry no meaning at all and exist only to tell series apart. */
+  --c-cat1:#12405E;--c-cat2:#4E7C9B;--c-cat3:#8AA9BD;--c-cat4:#C2D2DD}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ground:#061320;--surface:#0D2132;--sunk:#0A1B29;
   --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#6E8598;
   --rule:#1C3547;--rule-2:#142636;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
   --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
-    --c-grid:#263F54;--c-ref:#96695B}}
+    --c-grid:#263F54;--c-ref:#96695B;
+    --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6}}
 .thm{display:flex;gap:6px;justify-content:center;margin-top:14px}
 .thm button{font:inherit;font-size:12px;padding:4px 10px;
  border:1px solid var(--rule);border-radius:999px;cursor:pointer;
@@ -258,7 +265,8 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
   --rule:#1C3547;--rule-2:#142636;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
   --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
-    --c-grid:#263F54;--c-ref:#96695B}
+    --c-grid:#263F54;--c-ref:#96695B;
+    --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6}
 *{box-sizing:border-box}
 html,body{margin:0}
 /* ---- site header -------------------------------------------------------
