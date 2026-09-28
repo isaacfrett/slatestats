@@ -104,12 +104,17 @@ body{margin:0;background:var(--ground);color:var(--ink);
    `color-mix` with a plain fallback above it, because a browser that does
    not understand the second declaration keeps the first and gets the solid
    blue it has today -- the wrong shade, never an invisible button. */
+/* THE ONLY NAVY BUTTON WITH TWO BACKGROUNDS, so it is the only one that
+   cannot take `--on-navy` for both. At rest the fill is half navy and half
+   the field, which is dark -- and the token, correct on the full navy
+   everywhere else, measured 1.13:1 here. White at rest, the token on
+   hover; both cleared 4.5:1 when measured in the browser. */
 #send{border:0;border-radius:9px;background:var(--navy);color:#fff;
  width:36px;height:36px;cursor:pointer;font-size:17px;flex:none;
- transition:background .13s ease}
+ transition:background .13s ease,color .13s ease}
 #send{background:color-mix(in srgb, var(--navy) 50%, var(--surface))}
 #send:hover:not(:disabled),#send:focus-visible:not(:disabled){
- background:var(--navy)}
+ background:var(--navy);color:var(--on-navy)}
 #send:disabled{opacity:.35;cursor:default}
 .eg{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:14px}
 .eg button{border:1px solid var(--rule);background:var(--surface);
@@ -169,7 +174,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
  background:var(--warn-soft);border:1px solid var(--warn);font-size:13px;
  color:var(--warn)}
 .bot .connect{display:inline-block;margin:12px 0 2px;padding:11px 15px;
- border-radius:9px;background:var(--navy);color:#fff;text-decoration:none;
+ border-radius:9px;background:var(--navy);color:var(--on-navy);text-decoration:none;
  font-weight:700;font-size:14.5px;line-height:1.3}
 .bot .connect span{display:block;font-weight:400;font-size:12.5px;opacity:.78}
 .dots{display:inline-block;color:var(--ink-3);font-size:14px}
@@ -346,6 +351,30 @@ body{margin:0;background:var(--ground);color:var(--ink);
    var row = b.closest('.rate'); if(!row) return;
    var id = row.getAttribute('data-t');
 
+   // SAVE IS NOT A VERDICT, so it returns before the thumb handling below
+   // rather than falling through it -- `b.classList.contains('up')` is
+   // false for every button that is not "Yes", which would have filed a
+   // save as a DOWN vote on the answer it was keeping.
+   if(b.classList.contains('keep')){
+     var cid = Number(b.getAttribute('data-c'));
+     var on  = b.getAttribute('aria-pressed') !== 'true';
+     b.disabled = true;
+     fetch(API+'/api/save',{method:'POST',credentials:'include',
+       headers:{'content-type':'application/json'},
+       body:JSON.stringify({chat_id:cid, saved:on})})
+      .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function(){
+        b.disabled=false;
+        b.setAttribute('aria-pressed', on?'true':'false');
+        b.textContent = on ? 'Saved' : 'Save';
+        b.setAttribute('aria-label', on
+          ? 'Saved to your account. Press to remove.'
+          : 'Save this question to your account');
+      })
+      .catch(function(){ b.disabled=false; });
+     return;
+   }
+
    if(b.hasAttribute('data-why')){
      sendVerdict(id, 'down', b.getAttribute('data-why'));
      row.innerHTML = '<span>Thanks \u2014 that tells us where to look.</span>';
@@ -504,6 +533,17 @@ body{margin:0;background:var(--ground);color:var(--ink);
          +'<span>Useful?</span>'
          +'<button class="up" aria-label="This answer was useful">Yes</button>'
          +'<button class="dn" aria-label="This answer was not useful">No</button>'
+         // KEEP IT, AND ONLY WHERE THERE IS SOMEWHERE TO KEEP IT. `chat_id`
+         // is null for an anonymous visitor, so the control is simply
+         // absent rather than present and refusing -- a button that exists
+         // to tell you it does not work is worse than no button.
+         //
+         // It sits beside the thumbs because they are the same kind of
+         // act: the two things a reader does ON PURPOSE to an answer. One
+         // says whether it was good, the other says it is worth coming
+         // back to.
+         +(j.chat_id ? '<button class="keep" data-c="'+j.chat_id+'" '
+           +'aria-label="Save this question to your account">Save</button>' : '')
          +'</div>';
      slot.innerHTML=html; bottom();
    })

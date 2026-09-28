@@ -82,7 +82,7 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
  background:var(--ground);color:var(--ink)}
 .acct button.who{background:0;border:0;cursor:pointer}
 .acct a.signin{display:block;padding:8px 11px;border-radius:8px;
- background:var(--navy);color:#fff;text-decoration:none;font-weight:600;
+ background:var(--navy);color:var(--on-navy);text-decoration:none;font-weight:600;
  text-align:center;font-size:13px}
 .acct a.out{color:var(--ink-3);text-decoration:none;font-size:11.5px;
  display:inline-block;margin-top:5px}
@@ -132,6 +132,19 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
 .app.min.open,.app.min.peek{grid-template-columns:232px 1fr}
 .app.min.open .side,.app.min.peek .side{width:auto;padding:16px 16px 20px;
  gap:18px;overflow-y:auto;border-right:1px solid var(--rule)}
+/* THE OPEN RAIL SITS OVER THE PAGE RATHER THAN REPLACING IT. Solid, it
+   reads as a second document beside the conversation; letting the field
+   through says the same panel is temporary. Blurred, because a
+   semi-transparent panel over moving text is a legibility problem rather
+   than a look -- and only where the blur is supported, so a browser
+   without it keeps the solid background instead of translucent text over
+   whatever is behind. */
+@supports (backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px)){
+ .app.min.open .side,.app.min.peek .side{
+  background:color-mix(in srgb, var(--sunk) 74%, transparent);
+  -webkit-backdrop-filter:blur(14px) saturate(1.1);
+  backdrop-filter:blur(14px) saturate(1.1)}
+}
 /* The wordmark sits BESIDE the toggle, which is where it is in the
    collapsed state too -- the toggle is the fixed point and everything
    else appears around it. */
@@ -187,7 +200,30 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
    section link, so it has no place there. */
 .menu{display:none;background:0;border:0;color:var(--ink-2);cursor:pointer;
   padding:8px;border-radius:9px;margin-left:auto}
-.menu:hover,.menu[aria-expanded=true]{color:var(--ink);background:var(--sunk)}
+/* THE BUTTON HOLDS THE STATE IT PUT THE PAGE IN.
+   Closed it is full size and the brightest thing in the corner; open it
+   sits pressed -- a little smaller, a little greyer -- so the control
+   says which of the two states you are in without a second glyph, and the
+   press is the same movement whether you are opening or closing.
+   `aria-expanded` is what drives it, so the look cannot drift from what a
+   screen reader is told. */
+.menu{transition:transform .12s ease,color .12s ease,background .12s ease}
+/* HOVER SAYS "THIS IS A BUTTON". Everything else in that corner is a
+   wordmark, so without a state change on hover the toggle reads as part
+   of the mark. A raised edge is the cheapest way to say pressable
+   without adding a border that would be there all the time. */
+.menu:hover{color:var(--ink);background:var(--sunk);
+  box-shadow:0 1px 7px rgba(0,0,0,.30),0 0 0 1px var(--rule-2)}
+.menu:active{transform:scale(.90);color:var(--ink-3);box-shadow:none}
+/* OPEN OUTRANKS HOVER. The pressed look has to survive the pointer
+   resting on the button -- which is exactly where the pointer is right
+   after you clicked it -- so this carries `:hover` too rather than
+   letting the plain hover rule undo it a frame later. */
+.menu[aria-expanded=true],.menu[aria-expanded=true]:hover{
+  color:var(--ink-3);transform:scale(.90);background:var(--sunk);
+  box-shadow:none}
+.menu[aria-expanded=true]:hover{color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){.menu{transition:none}}
 
 @media(max-width:860px){
  /* `auto 1fr`, AND IT APPLIES TO EVERY PAGE. A grid stretches its rows to
@@ -256,6 +292,12 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
      invisible, and the reference line sat at 5.78:1 against data at 6.70,
      so somebody else's posted number was almost as loud as our measurement.
      The ladder is now deliberate: subject > data > reference > grid. */
+  /* TEXT THAT SITS ON THE NAVY FILL. White is right on light mode's deep
+     #12405E and wrong on dark mode's #57A9D6, where it measures 2.61:1 --
+     below the 4.5:1 that normal text needs. Every button painted navy had
+     it: sign in, the send arrow, the format toggles, and the new Ask
+     again. One token so the pair cannot drift apart again. */
+  --on-navy:#FFFFFF;
   --c-grid:#D3DFE7;--c-ref:#B5705F;
   /* CATEGORIES ARE NOT MEANINGS. Green is a measured gain and --warn is a
      loss everywhere on this site, so spending either on "this series is WR"
@@ -269,7 +311,7 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
   --rule:#1C3547;--rule-2:#142636;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
   --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
-    --c-grid:#263F54;--c-ref:#96695B;
+    --c-grid:#263F54;--c-ref:#96695B;--on-navy:#07141F;
     --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6}}
 .thm{display:flex;gap:6px;justify-content:center;margin-top:14px}
 .thm button{font:inherit;font-size:12px;padding:4px 10px;
@@ -282,7 +324,7 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
   --rule:#1C3547;--rule-2:#142636;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
   --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
-    --c-grid:#263F54;--c-ref:#96695B;
+    --c-grid:#263F54;--c-ref:#96695B;--on-navy:#07141F;
     --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6}
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -335,7 +377,7 @@ html,body{margin:0}
   border:1px solid var(--rule);border-radius:99px;background:var(--surface);
   color:var(--ink-2)}
 .fmt button:hover{border-color:var(--navy);color:var(--ink)}
-.fmt button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.fmt button.on{background:var(--navy);border-color:var(--navy);color:var(--on-navy)}
 /* ONE STICKY ROW: positions, horizon, scoring. Switching a position should
    never cost a scroll back to the top, which is what a non-sticky control
    row costs on a 400-row table. */
@@ -349,7 +391,7 @@ html,body{margin:0}
   cursor:pointer;border:1px solid var(--rule);border-radius:8px;
   background:var(--surface);color:var(--ink-2);white-space:nowrap}
 .bar .pos button:hover{border-color:var(--navy);color:var(--ink)}
-.bar .pos button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.bar .pos button.on{background:var(--navy);border-color:var(--navy);color:var(--on-navy)}
 .bar .sel{display:flex;gap:7px;flex:none}
 .bar select:disabled{opacity:.42;cursor:not-allowed}
 #hint{margin:9px 0 0;font-size:13px;color:var(--ink-3);line-height:1.5}
@@ -520,14 +562,61 @@ a{color:var(--navy)}
 .summary b{font-weight:600}
 /* big numbers */
 .proj{margin-top:18px;display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:1px;
+  /* 124px LEFT A DEAD CELL. At 390px only two tiles fit, so a row of
+     three wrapped to 2 + 1 and the fourth cell was an empty box beside
+     "Plan" -- which reads as something missing rather than as a layout.
+     108px fits three across the narrowest phone this site is built for. */
+  grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:1px;
   background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
 .proj div{background:var(--surface);padding:13px 15px}
+/* TWO LINES OF ROOM WHETHER THE LABEL NEEDS THEM OR NOT. At phone width
+   "QUESTIONS TODAY" wraps and "SAVED" does not, so the big numbers under
+   them sat at different heights and the row read as three unrelated boxes
+   rather than one comparison. */
 .proj .k{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
-  font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+  font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  line-height:1.35;min-height:2.7em;display:flex;align-items:flex-start}
+.proj div{display:flex;flex-direction:column}
+.proj .c{margin-top:auto}
 .proj .v{font-family:Archivo;font-weight:800;font-size:25px;margin-top:2px;
   font-variant-numeric:tabular-nums}
 .proj .c{font-size:11.5px;color:var(--ink-3);margin-top:1px}
+/* --- saved chats on the account page ------------------------------------
+   A LIST, NOT A TABLE. This was four columns -- when, the question, what we
+   said, and a link -- which cannot work at 390px: the question column
+   collapsed to about nine characters and the answer to none. A saved item
+   is one thing with a few facts about it, which is a card, and a card
+   stacks at any width without a horizontal scrollbar nobody finds. */
+.saved{list-style:none;margin:14px 0 0;padding:0;display:flex;
+  flex-direction:column;gap:10px}
+.saved li{background:var(--surface);border:1px solid var(--rule);
+  border-radius:11px;padding:14px 16px}
+.saved .q{font:600 15.5px/1.45 Archivo,sans-serif;color:var(--ink);margin:0}
+.saved .a{margin:7px 0 0;font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+.saved .meta{margin-top:11px;padding-top:10px;
+  border-top:1px solid var(--rule-2);display:flex;flex-wrap:wrap;gap:8px 14px;
+  align-items:center;font-size:12px;color:var(--ink-3)}
+/* THE ACTIONS GO RIGHT ON A WIDE ROW AND WRAP TO THEIR OWN LINE ON A
+   NARROW ONE. `margin-left:auto` inside a wrapping flex row puts them at
+   the end of whichever line they land on, which is what you want in both
+   cases and is why this is not a media query. */
+.saved .act{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.saved .again{display:inline-block;padding:6px 12px;border-radius:8px;
+  background:var(--navy);color:var(--on-navy);text-decoration:none;font-size:12.5px;
+  font-weight:600}
+.saved .again:hover{filter:brightness(1.08)}
+.saved .drop{background:0;border:1px solid var(--rule);border-radius:8px;
+  padding:6px 11px;font:inherit;font-size:12.5px;color:var(--ink-3);
+  cursor:pointer}
+.saved .drop:hover{color:var(--ink-2);border-color:var(--ink-3)}
+.emptysave{margin-top:14px;background:var(--sunk);border:1px solid var(--rule-2);
+  border-radius:11px;padding:18px 18px;color:var(--ink-2);font-size:14px;
+  line-height:1.6}
+.emptysave b{color:var(--ink)}
+.acct-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;
+  margin-top:2px;color:var(--ink-3);font-size:13.5px}
+.acct-foot{margin-top:26px;padding-top:16px;
+  border-top:1px solid var(--rule-2)}
 .flag{margin-top:15px;background:var(--surface);border:1px solid var(--rule);
   border-left:3px solid var(--warn);border-radius:8px;padding:12px 15px;
   font-size:14px;color:var(--ink-2)}
@@ -611,6 +700,11 @@ svg{display:block;width:100%;height:auto}
 .rate button{background:none;border:1px solid var(--rule);color:var(--ink-3);
   border-radius:99px;padding:2px 10px;font:inherit;cursor:pointer}
 .rate button:hover{border-color:var(--navy);color:var(--ink-2)}
+/* SAVED IS A STATE, NOT A FLASH. The button stays pressed so a reader can
+   see, later in the thread, which answers they kept -- and press it again
+   to unkeep one without going to the account page. */
+.rate button.keep[aria-pressed=true]{border-color:var(--navy);
+  color:var(--navy);font-weight:600}
 /* THE PROJECTED ROW IN A GAME LOG. It sits above played games and must
    never read as one of them: a tinted band and a hairline under it say
    "this has not happened" before any cell is read. */
