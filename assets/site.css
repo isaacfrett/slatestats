@@ -117,6 +117,13 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
    collapsed state too -- the toggle is the fixed point and everything
    else appears around it. */
 .app.min.open .brand{margin-left:39px;min-height:34px}
+/* ONE MARK, NOT TWO. With the bars folded into the toggle, the wordmark's
+   own chart sat eight pixels away drawing the same thing -- which is the
+   redundancy that prompted folding them together in the first place. The
+   toggle carries the mark here; the wordmark keeps its own everywhere the
+   toggle is hidden. */
+.app.min.open .brand .mk{display:none}
+.app.min.open .brand .wm{margin-left:2px}
 .app.min .acct{width:100%}
 @media (max-width:860px){
  /* Below 860 every page already uses the horizontal strip, and the
@@ -129,6 +136,12 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
  .app.min .menu,.app.min.open .menu{position:static;width:auto;height:auto;
   padding:6px}
  .app.min.open .brand{margin-left:0}
+ /* THE MARK COMES BACK ON THE STRIP. Hiding it is only right where the
+    toggle sits immediately left of the wordmark and the two read as one
+    lockup. In the horizontal bar the toggle is on the far side of the
+    row, so removing the mark just leaves the brand bare. */
+ .app.min.open .brand .mk{display:block}
+ .app.min.open .brand .wm{margin-left:0}
  .app.min .drawer{display:contents;position:static}
 }
 
