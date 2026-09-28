@@ -84,6 +84,36 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
  margin-top:4px;background:var(--surface);border:1px solid var(--rule);
  border-radius:9px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 .main{display:flex;flex-direction:column;min-height:100vh;min-width:0}
+/* --- the front page's minimal rail -------------------------------------
+   Brand, then the toggle directly beneath it, and nothing else. The nav
+   opens as a panel BESIDE the rail rather than pushing the column: a
+   front page that jumps sideways when you open a menu has moved the
+   thing you were about to read. */
+.app.min{grid-template-columns:auto 1fr}
+.app.min .side{width:auto;align-items:flex-start;gap:12px;overflow:visible;
+ padding:20px 18px}
+.app.min .menu{display:block;margin:0;padding:7px 8px}
+.drawer{display:contents}
+.app.min .drawer{position:absolute;left:calc(100% - 6px);top:64px;width:216px;
+ background:var(--surface);border:1px solid var(--rule);border-radius:12px;
+ padding:10px 8px;box-shadow:0 12px 32px rgba(0,0,0,.16);display:none;z-index:40}
+.app.min .side.open .drawer{display:block}
+.app.min .drawer .foot{margin-top:10px;padding-top:8px;
+ border-top:1px solid var(--rule-2)}
+/* The account block must not set the rail's width -- a signed-in email is
+   far wider than the wordmark and would stretch the column it sits in. */
+.app.min .acct{width:100%;max-width:150px}
+@media (max-width:860px){
+ /* Below 860 every page already uses the horizontal strip, and the two
+    treatments must not both apply: `position:absolute` against a static
+    bar would drop the panel over the answer. */
+ .app.min{grid-template-columns:1fr}
+ .app.min .side{width:auto;align-items:center;padding:10px 14px}
+ /* The wrapper goes back to being invisible to layout, so the strip's
+    own rules (which hide .navbox until .open) are the only ones acting. */
+ .app.min .drawer{display:contents;position:static}
+}
+
 /* The menu button is a MOBILE control; the desktop rail already shows every
    section link, so it has no place there. */
 .menu{display:none;background:0;border:0;color:var(--ink-2);cursor:pointer;
