@@ -13,13 +13,29 @@
    var open=app.classList.toggle('open');
    b.setAttribute('aria-expanded',open?'true':'false');
  });
+ // HOVER PEEKS, CLICK PINS, CLICK AGAIN GOES BACK TO PEEKING.
+ //
+ // Two states rather than one: `open` is pinned and survives the pointer
+ // leaving; `peek` follows the pointer and nothing else. The rail shows
+ // for either, so unpinning while still hovering leaves it open under the
+ // cursor rather than snapping shut in your face.
+ //
+ // FINE POINTERS ONLY. On a touch screen a tap raises a synthetic hover
+ // that never ends, so the rail would open on the first tap and stay
+ // there with no way to dismiss it -- the control would have one state
+ // instead of three. Click alone works everywhere, which is also what
+ // keeps this reachable from a keyboard.
+ if(window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+   side.addEventListener('pointerenter',function(){ app.classList.add('peek'); });
+   side.addEventListener('pointerleave',function(){ app.classList.remove('peek'); });
+ }
  // FOLLOWING A LINK MUST CLOSE IT. On a page that navigates this is moot,
  // but the chat page answers in place and a drawer left open over the
  // answer is the kind of thing only someone on a phone ever finds.
  side.addEventListener('click',function(e){
    if(e.target.closest('nav a')){ close(); }
  });
- function close(){ app.classList.remove('open');
+ function close(){ app.classList.remove('open'); app.classList.remove('peek');
    b.setAttribute('aria-expanded','false'); }
  // ON THE FRONT PAGE THIS IS A POPOVER, and a popover that only closes by
  // pressing the same button is a trap -- the rest of the page is still
@@ -571,7 +587,6 @@ body{margin:0;background:var(--ground);color:var(--ink);
      '>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
  // The API is a different origin, so the cookie only travels when the
  // request asks for it. Without this everyone looks signed out forever.
- fetch(API+'/api/me',{credentials:'include'})
  function acctMenu(el){
    var b=el.querySelector('#acctbtn'), m=el.querySelector('#acctmenu');
    if(!b||!m) return;
@@ -603,6 +618,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
        .catch(function(){ out.disabled=false; });
    });
  }
+ fetch(API+'/api/me',{credentials:'include'})
   .then(function(x){return x.json();}).then(function(j){
    if(j.signed_in){
      // NO IDENTITY IN THE SIDEBAR. It showed the part of the address
