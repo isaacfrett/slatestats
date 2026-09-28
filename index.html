@@ -82,7 +82,10 @@ body{margin:0;background:var(--ground);color:var(--ink);
 #popular .pq:hover{border-color:var(--navy);color:var(--ink)}
 .chat:not(.is-empty) #popular{display:none}
 
-.turn{margin:0 0 34px;padding-top:26px;border-top:1px solid var(--rule-2)}
+.turn{margin:0 0 34px;padding-top:26px;border-top:1px solid var(--rule-2);
+ /* The header is sticky, so scrolling a turn to `block:start` would tuck
+    it underneath. 52px is the bar, plus a little air. */
+ scroll-margin-top:68px}
 /* The FIRST turn needs no rule above it: a divider at the very top of a
    thread separates the conversation from nothing. */
 .turn:first-child{padding-top:4px;border-top:0}
@@ -209,7 +212,34 @@ body{margin:0;background:var(--ground);color:var(--ink);
    // The scrollbar returns ONLY at the ceiling. Below it the box grows to
    // fit, so a track beside the send button is just noise on an empty box.
    box.classList.toggle('tall', box.scrollHeight>180); }
- function bottom(){ thread.scrollTop=thread.scrollHeight; }
+ // THE THREAD IS NOT THE SCROLL CONTAINER, so this used to do nothing.
+ //
+ // `.thread` is styled `flex:1;overflow-y:auto` and was meant to scroll
+ // inside a fixed-height shell, but `.app` is `min-height:100vh` rather
+ // than `height`, so the page grows with the content and the DOCUMENT
+ // scrolls instead. Measured live at phone width: thread.scrollHeight ===
+ // thread.clientHeight === 2466, every ancestor scrolls:false, and only
+ // <html> scrolls. Setting thread.scrollTop moved nothing, ever.
+ //
+ // A reader told us: "you need to auto scroll after i send a prompt so i
+ // can see your response". They were right, and the code that was
+ // supposed to do it had been a no-op the whole time -- which is why
+ // reading it looked fine.
+ //
+ // Not "fixed" by making the shell 100vh: a document-scrolling page is
+ // the safer shape on mobile, where a 100vh app shell fights the URL bar
+ // collapsing. The window is scrolled instead.
+ //
+ // TO THE TOP OF THE NEW TURN, not to the bottom of the page. An answer
+ // here runs to two thousand pixels; jumping to its end shows the reader
+ // the caveat and none of the finding. Pinning the question to the top is
+ // what every chat interface does and what the eye expects.
+ function bottom(){
+   var t=inner.lastElementChild;
+   if(!t){ window.scrollTo({top:document.documentElement.scrollHeight}); return; }
+   try{ t.scrollIntoView({block:'start',behavior:'smooth'}); }
+   catch(e){ t.scrollIntoView(true); }
+ }
 
  // THE CONVERSATION, NOT THE PERSON. Generated on page load, held in a
  // variable, and gone on refresh: it is not a cookie, not stored, and
