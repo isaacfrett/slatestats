@@ -166,6 +166,13 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
     account block was a zero-height flex item on every signed-out page.
     Harmless until something gave it a width. */
  .side .acct[hidden]{display:none}
+ /* THE ACCOUNT MENU OPENS DOWNWARD HERE, AND TO THE LEFT.
+    `bottom:calc(100% + 8px)` puts it ABOVE the row, which is right on the
+    desktop rail where the account block sits at the very bottom and wrong
+    in a top strip, where "above" is off the top of the screen. `left:0`
+    is the same mistake on the other axis: in the strip the account sits
+    at the right edge, so a 158px panel anchored left runs off the side. */
+ .acct .acctmenu{top:calc(100% + 8px);bottom:auto;left:auto;right:0}
  .app.min.open .brand,.app.min.peek .brand{margin-left:0}
  /* THE MARK COMES BACK ON THE STRIP. Hiding it is only right where the
     toggle sits immediately left of the wordmark and the two read as one
