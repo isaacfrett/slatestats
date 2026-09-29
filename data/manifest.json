@@ -1,8 +1,8 @@
 {
- "generated": "2026-09-29T20:01:51.810465+00:00",
+ "generated": "2026-09-29T20:38:36.908298+00:00",
  "season": 2026,
  "week": 4,
- "scenarios": 174,
+ "scenarios": 173,
  "markets": [
   "receptions",
   "reception_yds",
@@ -165,7 +165,6 @@
    "/nfl/players/samaje-perine/",
    "/nfl/players/saquon-barkley/",
    "/nfl/players/stefon-diggs/",
-   "/nfl/players/tank-bigsby/",
    "/nfl/players/ted-hurst-iii/",
    "/nfl/players/tee-higgins/",
    "/nfl/players/terrance-ferguson/",
@@ -341,7 +340,6 @@
    "/nfl/injury-impact/samaje-perine/",
    "/nfl/injury-impact/saquon-barkley/",
    "/nfl/injury-impact/stefon-diggs/",
-   "/nfl/injury-impact/tank-bigsby/",
    "/nfl/injury-impact/ted-hurst-iii/",
    "/nfl/injury-impact/tee-higgins/",
    "/nfl/injury-impact/terrance-ferguson/",
