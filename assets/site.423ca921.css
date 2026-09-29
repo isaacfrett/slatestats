@@ -59,7 +59,7 @@
 .acct .who svg{width:20px;height:20px;flex:none;display:block}
 .acct .who:hover{color:var(--ink);text-decoration:none}
 .foot-legal{margin:14px auto 0;max-width:72ch;padding-top:12px;
-  border-top:1px solid var(--rule-2);color:var(--ink-3);font-size:11.5px;
+  border-top:1px solid var(--rule-2);color:var(--ink-3);font-size:12px;
   line-height:1.6;text-align:center}
 .foot-legal a{color:var(--ink-2)}
 /* "Ask again" on a saved row. A link, not a button: it navigates, and
@@ -308,10 +308,26 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
 }
 
 :root{--ground:#EEF2F5;--surface:#FFFFFF;--sunk:#F4F7F9;
-  --ink:#0C1C2C;--ink-2:#46596B;--ink-3:#7B8C9B;
+  /* --ink-3 IS MUTED, NOT DECORATIVE. It carries table headers, captions
+     and sample-size notes -- small text, so WCAG AA wants 4.5:1. It was
+     #7B8C9B, which is 3.46 on white and 3.07 on --ground: a clear fail
+     everywhere it appeared. Dark mode was #6E8598 at 4.27 on --surface.
+     Both are now the lightest/darkest value that clears 4.5 on the worst
+     background each is used against, with a little headroom.
+     Lighthouse only caught the DARK one, because headless Chrome defaults
+     to dark -- light mode was worse and invisible to the audit. */
+  --ink:#0C1C2C;--ink-2:#46596B;--ink-3:#5E6E7D;
   --rule:#D2DCE3;--rule-2:#E4EBF0;
-  --navy:#12405E;--green:#2F8B27;--green-soft:#E3F2DE;
-  --warn:#A8443A;--warn-soft:#F7E8E6;--flat:#8D97A3;--flat-soft:#EDF0F3;
+  --navy:#12405E;--green:#297A22;--green-soft:#E3F2DE;
+  /* EVERY SEMANTIC PAIR CHECKED, not just the one the audit landed on.
+     These colors are used as text ON their own soft background, so WCAG
+     AA wants 4.5:1 for each PAIR. Measured: light green on green-soft was
+     3.72, light flat on flat-soft 2.59, dark flat on flat-soft 3.69 --
+     three failures, of which Lighthouse reported one, because it only
+     sees the elements a given page happens to render. Each is now the
+     smallest shift that clears 4.5 on its pill AND on the page
+     backgrounds the same token is used against. */
+  --warn:#A8443A;--warn-soft:#F7E8E6;--flat:#626D7A;--flat-soft:#EDF0F3;
   /* CHART TOKENS, separate from the document ones because they have the
      opposite job: ink recedes, data carries. Measured rather than picked --
      grid lines were at 1.13:1 against the panel in dark mode, which is
@@ -340,10 +356,10 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
   --c-alt:#6155A6}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ground:#061320;--surface:#0D2132;--sunk:#0A1B29;
-  --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#6E8598;
+  --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#758B9D;
   --rule:#1C3547;--rule-2:#142636;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
-  --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
+  --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#808A97;--flat-soft:#16212C;
     --c-grid:#263F54;--c-ref:#96695B;--on-navy:#07141F;
     --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6;
     --c-alt:#A79BEA}}
@@ -354,10 +370,10 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
 .thm button.on{background:var(--sunk);color:var(--ink);
  border-color:var(--rule-2)}
 :root[data-theme="dark"]{--ground:#061320;--surface:#0D2132;--sunk:#0A1B29;
-  --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#6E8598;
+  --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#758B9D;
   --rule:#1C3547;--rule-2:#142636;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
-  --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
+  --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#808A97;--flat-soft:#16212C;
     --c-grid:#263F54;--c-ref:#96695B;--on-navy:#07141F;
     --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6;
     --c-alt:#A79BEA}
@@ -535,7 +551,7 @@ th.sortable.dn::after{content:"\2193";opacity:1;color:var(--navy)}
 .foot{margin-top:56px;border-top:1px solid var(--rule);background:var(--surface)}
 .foot-in{max-width:1000px;margin:0 auto;padding:26px 16px 34px;display:flex;
   flex-wrap:wrap;gap:26px 44px}
-.foot-col h4{font-family:Archivo,sans-serif;font-size:11px;font-weight:700;
+.foot-col .fh{font-family:Archivo,sans-serif;font-size:11px;font-weight:700;
   letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 9px}
 .foot-col a{display:block;font-size:13.5px;color:var(--ink-2);
   text-decoration:none;padding:3px 0}
@@ -571,7 +587,7 @@ h2{font-weight:700;font-size:clamp(17px,3.2vw,21px);margin-top:34px}
 h3{font-weight:700;font-size:12.5px;color:var(--ink-2)}
 p{margin:13px 0 0}
 a{color:var(--navy)}
-.crumb{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+.crumb{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;
   font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin:0}
 .crumb a{color:inherit;text-decoration:none}
 .crumb a:hover{text-decoration:underline}
@@ -723,7 +739,10 @@ th,td{padding:9px 13px;text-align:right;white-space:nowrap}
 @media (max-width:560px){ th,td{padding:7px 8px;font-size:12.5px}
   .tbl table{font-size:12.5px} }
 th:first-child,td:first-child{text-align:left}
-thead th{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10px;
+/* 12px, NOT 10px. Lighthouse counts anything under 12px as illegible, and
+   a table header is the label that tells a reader what the column IS --
+   the last thing that should be the smallest text on the page. */
+thead th{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;
   font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
   border-bottom:1px solid var(--rule)}
 tbody tr{border-bottom:1px solid var(--rule-2)}
@@ -869,7 +888,7 @@ tr.pjr td:first-child{box-shadow:inset 2px 0 0 var(--green)}
 .cta b{display:block;font-size:15.5px;font-weight:600}
 .cta span{display:block;font-size:13px;color:var(--ink-3);margin-top:2px}
 .meta{margin-top:24px;padding-top:15px;border-top:1px solid var(--rule);
-  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;
   color:var(--ink-3);line-height:1.8}
 .empty{margin-top:16px;background:var(--sunk);border:1px dashed var(--rule);
   border-radius:10px;padding:16px;font-size:14px;color:var(--ink-3)}
