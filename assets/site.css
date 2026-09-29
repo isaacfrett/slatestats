@@ -633,7 +633,13 @@ a{color:var(--navy)}
    grid of six thumbnails nobody can read is a worse dashboard than three
    charts somebody can. */
 .widgrid{display:grid;gap:16px;margin-top:14px;
-  grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+  grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+  /* EACH TILE KEEPS ITS OWN HEIGHT. A grid stretches its items to the
+     tallest in the row, and these charts have wildly different aspect
+     ratios -- a 15-row ranking beside a six-game line left the short one
+     sitting in a box half of which was empty, which reads as a broken
+     tile rather than as two charts of different shapes. */
+  align-items:start}
 .widgrid .wid{margin:0;padding:14px 14px 10px;background:var(--surface);
   border:1px solid var(--rule);border-radius:12px;overflow:hidden}
 .widgrid .wid svg{display:block;width:100%;height:auto}
