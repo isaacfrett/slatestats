@@ -215,6 +215,13 @@ body{margin:0;background:var(--ground);color:var(--ink);
 }
 </style><div class="chat is-empty" id="main"><div class="thread" id="thread"><div class="inner" id="inner"><h1 class="hello">What do you want to know?</h1><div id="popular" hidden></div></div></div><div class="composer"><div class="cwrap"><div class="cbox"><textarea id="ask" rows="1" placeholder="Ask about a player, matchup or injury" aria-label="Ask a question"></textarea><button id="send" aria-label="Send">↑</button></div><div class="eg"><button data-q="Who benefits if Puka Nacua sits?">If Nacua sits</button><button data-q="Should I start Bijan Robinson or Kenneth Walker?">Bijan or Walker</button><button data-q="Is any defense actually weak against tight ends?">Weak vs tight ends?</button><button data-q="Who has the best matchup at running back?">Best RB matchup</button><button data-q="Who are the top waiver adds this week?">Top waiver adds</button></div><div id="fresh" hidden></div><p class="chat-legal">Research and projections &mdash; not betting advice. <a href="/legal/responsible-gambling/">Responsible gambling</a> &middot; <a href="/legal/privacy/">Privacy</a> &middot; <a href="/legal/terms/">Terms</a> &middot; <a href="/legal/sources/">Where the data comes from</a> &middot; <a href="/legal/contact/">Contact</a></p></div></div></div><script>
 (function(){
+ // THE API IS A DIFFERENT ORIGIN. A bare '/api/widget' resolves against
+ // slatestats.com, which serves static files and knows nothing about it --
+ // so the pin posted into the void and reported "Could not keep" to a
+ // reader who was simply not signed in. Every other fetch on this site
+ // already goes through SLATE_API; this one is no different, and the local
+ // test could never see it because there the API IS same-origin.
+ var API=(window.SLATE_API||'').replace(/\/$/,'');
  function esc(t){ return String(t==null?'':t)
    .replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;',
      '>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
@@ -373,7 +380,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
      : {tool:b.getAttribute('data-tool'), args:args,
         chart:b.getAttribute('data-chart'),
         title:b.getAttribute('data-title')};
-   fetch('/api/widget', {method:'POST', credentials:'include',
+   fetch(API+'/api/widget', {method:'POST', credentials:'include',
      headers:{'content-type':'application/json'}, body:JSON.stringify(body)})
    .then(function(r){ return r.json().then(function(j){ return [r.status,j]; }); })
    .then(function(p){
@@ -783,7 +790,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
  // DATA AGE, SHOWN WITHOUT BEING ASKED. Someone deciding whether to ask
  // about a line needs to know the line is two days old, and they will not
  // think to ask. Loaded separately so it costs nothing and never blocks.
- fetch('/api/freshness').then(function(x){return x.json();}).then(function(j){
+ fetch(API+'/api/freshness').then(function(x){return x.json();}).then(function(j){
    if(!j || !j.ok) return;
    var s=(j.data.sources||[]).map(function(r){
      return esc(r.source)+' '+esc(r.updated); }).join(' \u00b7 ');
