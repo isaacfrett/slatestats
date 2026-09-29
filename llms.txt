@@ -25,6 +25,7 @@ Every projection is conditional on the player appearing. A player whose game has
 
 ## Measured studies
 
+- https://slatestats.com/nfl/studies/attacking-rookie-cornerbacks/
 - https://slatestats.com/nfl/studies/coaching-change-fantasy/
 - https://slatestats.com/nfl/studies/coming-off-a-bye/
 - https://slatestats.com/nfl/studies/defense-vs-tight-ends/
