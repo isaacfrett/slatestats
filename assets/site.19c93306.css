@@ -701,6 +701,22 @@ a{color:var(--navy)}
   margin-top:2px;color:var(--ink-3);font-size:13.5px}
 .acct-foot{margin-top:26px;padding-top:16px;
   border-top:1px solid var(--rule-2)}
+/* SIGN OUT IS A BUTTON HERE, NOT A WORD.
+   `.out` is a reset -- background:0, border:0, padding:0 -- written for the
+   SIDEBAR, where sign out is a menu item and text is the right treatment.
+   The account page reuses the class for a standalone action at the foot of
+   the page, so it inherited the reset and rendered as a bare grey word
+   floating under a rule, indistinguishable from a caption. One class, two
+   contexts; the context that needs a control says so.
+   Matches the secondary button used by Remove and Ask again. */
+.acct-foot .out{display:inline-block;background:0;
+  border:1px solid var(--rule);border-radius:8px;padding:8px 14px;
+  font:inherit;font-size:13.5px;color:var(--ink-2);cursor:pointer}
+.acct-foot .out:hover{color:var(--ink);border-color:var(--ink-3);
+  background:var(--sunk)}
+.acct-foot .out:active{background:var(--rule-2)}
+.acct-foot .out:focus-visible{outline:2px solid var(--navy);
+  outline-offset:2px}
 .flag{margin-top:15px;background:var(--surface);border:1px solid var(--rule);
   border-left:3px solid var(--warn);border-radius:8px;padding:12px 15px;
   font-size:14px;color:var(--ink-2)}
