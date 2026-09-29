@@ -9,58 +9,59 @@ Projections are our own, built from play-by-play back to 1999 and as-of-week wit
 - Every number on a page traces to a query. Where a figure is provisional -- a two-game sample, say -- the page says so beside it, and that caveat should travel with the number.
 - We publish what did NOT work as readily as what did. Several studies here are negative results.
 - We do not publish odds, take bets, or give betting advice. A posted line may appear as a reference number; a price never does.
-- Sources and how we use them: https://slatestats.com/legal/sources/
+- [Where the data comes from](https://slatestats.com/legal/sources/): every source, and how we use it
 
 ## Machine-readable data
 
 These are the files the site itself renders from. They are plain JSON, served from the same origin, and refreshed on every build -- prefer them to scraping a page.
 
-- https://slatestats.com/data/manifest.json -- season, week, when it was generated, and what the other files contain. Read this first: it carries the as-of week every other number is relative to.
-- https://slatestats.com/data/roster.json -- every projected player for the current week (424 have a page), with position, team, role and projections by market.
-- https://slatestats.com/data/cascade.json -- who gains, and by how much, if a given player does not play. This is the measurement this site is built on and the one hardest to find elsewhere.
-- https://slatestats.com/data/compare.json -- the same players arranged for side-by-side comparison.
-- https://slatestats.com/data/search.json -- names to URLs.
+- [Manifest](https://slatestats.com/data/manifest.json): season, week, when it was generated, and what the other files contain. Read this first: it carries the as-of week every other number is relative to.
+- [Projected players](https://slatestats.com/data/roster.json): every projected player for the current week (424 have a page), with position, team, role and projections by market.
+- [Injury cascades](https://slatestats.com/data/cascade.json): who gains, and by how much, if a given player does not play. This is the measurement this site is built on and the one hardest to find elsewhere.
+- [Player comparison](https://slatestats.com/data/compare.json): the same players arranged for side-by-side comparison.
+- [Search index](https://slatestats.com/data/search.json): names to URLs.
 
 Every projection is conditional on the player appearing. A player whose game has already kicked off carries no forward projection at all, deliberately, rather than a stale one.
 
 ## Measured studies
 
-- https://slatestats.com/nfl/studies/attacking-rookie-cornerbacks/
-- https://slatestats.com/nfl/studies/coaching-change-fantasy/
-- https://slatestats.com/nfl/studies/coming-off-a-bye/
-- https://slatestats.com/nfl/studies/defense-vs-tight-ends/
-- https://slatestats.com/nfl/studies/do-defenses-shut-down-the-top-receiver/
-- https://slatestats.com/nfl/studies/do-touchdowns-repeat/
-- https://slatestats.com/nfl/studies/do-underdogs-throw-more/
-- https://slatestats.com/nfl/studies/does-a-hot-streak-continue/
-- https://slatestats.com/nfl/studies/does-weather-hurt-fantasy-production/
-- https://slatestats.com/nfl/studies/forty-time-fantasy/
-- https://slatestats.com/nfl/studies/indoors-receiving-production/
-- https://slatestats.com/nfl/studies/receiver-first-season-new-team/
-- https://slatestats.com/nfl/studies/receivers-who-beat-man-coverage/
-- https://slatestats.com/nfl/studies/referee-fantasy-impact/
-- https://slatestats.com/nfl/studies/rookie-quarterback-receivers/
-- https://slatestats.com/nfl/studies/what-draft-capital-buys/
-- https://slatestats.com/nfl/studies/what-predicts-fantasy-production/
-- https://slatestats.com/nfl/studies/who-benefits-when-a-starter-sits/
-- https://slatestats.com/nfl/studies/year-3-breakout/
+- [Do offenses attack rookie cornerbacks?](https://slatestats.com/nfl/studies/attacking-rookie-cornerbacks/)
+- [Does a new head coach change who gets the ball?](https://slatestats.com/nfl/studies/coaching-change-fantasy/)
+- [Are players better coming off a bye week?](https://slatestats.com/nfl/studies/coming-off-a-bye/)
+- [Is any defense actually “weak against tight ends”?](https://slatestats.com/nfl/studies/defense-vs-tight-ends/)
+- [Do defenses shut down the other team’s best receiver?](https://slatestats.com/nfl/studies/do-defenses-shut-down-the-top-receiver/)
+- [Do touchdowns repeat from year to year?](https://slatestats.com/nfl/studies/do-touchdowns-repeat/)
+- [Do underdogs really throw more?](https://slatestats.com/nfl/studies/do-underdogs-throw-more/)
+- [Does a hot streak keep going?](https://slatestats.com/nfl/studies/does-a-hot-streak-continue/)
+- [Does bad weather hurt fantasy production?](https://slatestats.com/nfl/studies/does-weather-hurt-fantasy-production/)
+- [Does a fast 40-yard dash mean more fantasy production?](https://slatestats.com/nfl/studies/forty-time-fantasy/)
+- [Does playing indoors boost receiving production?](https://slatestats.com/nfl/studies/indoors-receiving-production/)
+- [Does a receiver struggle in his first season with a new team?](https://slatestats.com/nfl/studies/receiver-first-season-new-team/)
+- [Do some receivers genuinely beat man coverage?](https://slatestats.com/nfl/studies/receivers-who-beat-man-coverage/)
+- [Does the referee affect fantasy scoring?](https://slatestats.com/nfl/studies/referee-fantasy-impact/)
+- [Does a rookie quarterback hurt his receivers?](https://slatestats.com/nfl/studies/rookie-quarterback-receivers/)
+- [Does draft capital still matter after a rookie season?](https://slatestats.com/nfl/studies/what-draft-capital-buys/)
+- [What actually predicts fantasy production?](https://slatestats.com/nfl/studies/what-predicts-fantasy-production/)
+- [Who actually gets the work when a starter sits?](https://slatestats.com/nfl/studies/who-benefits-when-a-starter-sits/)
+- [Is the “year 3 breakout” for wide receivers real?](https://slatestats.com/nfl/studies/year-3-breakout/)
 
 ## Fantasy questions, answered from data
 
-- https://slatestats.com/nfl/faq/how-injured-reserve-works/
-- https://slatestats.com/nfl/faq/how-waiver-claims-work/
-- https://slatestats.com/nfl/faq/injury-designations-explained/
-- https://slatestats.com/nfl/faq/ppr-vs-standard-scoring/
-- https://slatestats.com/nfl/faq/should-i-start-a-player-in-a-tough-matchup/
-- https://slatestats.com/nfl/faq/what-is-snap-share/
+- [When does a player on IR change from Out to Questionable or Active?](https://slatestats.com/nfl/faq/how-injured-reserve-works/)
+- [How do fantasy waiver claims work?](https://slatestats.com/nfl/faq/how-waiver-claims-work/)
+- [What do Out, Doubtful and Questionable actually mean?](https://slatestats.com/nfl/faq/injury-designations-explained/)
+- [What is the difference between PPR, half PPR and standard scoring?](https://slatestats.com/nfl/faq/ppr-vs-standard-scoring/)
+- [Should I bench a good player against a tough defense?](https://slatestats.com/nfl/faq/should-i-start-a-player-in-a-tough-matchup/)
+- [What is snap share, and why does it matter more than last week's points?](https://slatestats.com/nfl/faq/what-is-snap-share/)
 
 ## Tools
 
-- Player pages, 424 of them: https://slatestats.com/nfl/players/
-- Who gains if a starter sits: https://slatestats.com/nfl/injury-impact/
-- Weekly rankings: https://slatestats.com/nfl/rankings/
-- Team pass-catching rooms: https://slatestats.com/nfl/teams/
+- [Player pages](https://slatestats.com/nfl/players/): 424 players, one page each
+- [Injury impact](https://slatestats.com/nfl/injury-impact/): who gains if a starter sits
+- [Weekly rankings](https://slatestats.com/nfl/rankings/): this week, by projected points
+- [Teams](https://slatestats.com/nfl/teams/): pass-catching rooms by team
+- [Saved charts](https://slatestats.com/nfl/charts/): charts a reader has kept, redrawn live
 
 ## Contact
 
-- hello@slatestats.com -- corrections welcome, and several of the fixes on this site came from readers noticing two figures disagreed.
+- [hello@slatestats.com](mailto:hello@slatestats.com): corrections welcome, and several of the fixes on this site came from readers noticing two figures disagreed.
