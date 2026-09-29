@@ -627,6 +627,33 @@ a{color:var(--navy)}
   padding:6px 11px;font:inherit;font-size:12.5px;color:var(--ink-3);
   cursor:pointer}
 .saved .drop:hover{color:var(--ink-2);border-color:var(--ink-3)}
+/* --- the chart dashboard ------------------------------------------------
+   TWO COLUMNS WHERE THERE IS ROOM, one where there is not. A chart is
+   read, not scanned, so the tiles are generous rather than dense -- a
+   grid of six thumbnails nobody can read is a worse dashboard than three
+   charts somebody can. */
+.widgrid{display:grid;gap:16px;margin-top:14px;
+  grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.widgrid .wid{margin:0;padding:14px 14px 10px;background:var(--surface);
+  border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+.widgrid .wid svg{display:block;width:100%;height:auto}
+/* `.widgrid .wid` RATHER THAN `.wid`, because `figure:first-child` -- which
+   gives a lone figure in the thread its top margin -- scores (0,1,1) and
+   would beat a bare `.wid` (0,1,0). The first tile in the grid would sit
+   16px lower than the one beside it, on the first row only. */
+.widgrid .wid figcaption{display:flex;align-items:center;gap:10px;margin-top:10px;
+  padding-top:9px;border-top:1px solid var(--rule-2);font-size:12.5px;
+  color:var(--ink-3)}
+.widgrid .wid figcaption>span{min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap}
+.widgrid .wid .drop{margin-left:auto;flex:0 0 auto;background:0;
+  border:1px solid var(--rule);border-radius:8px;color:var(--ink-3);
+  font:inherit;font-size:12px;cursor:pointer;padding:5px 9px}
+.widgrid .wid .drop:hover{color:var(--ink-2);border-color:var(--ink-3)}
+/* A TILE THAT CANNOT BE DRAWN SAYS SO. An empty box would read as a
+   rendering fault; the reason is a fact about the data, not about us. */
+.widoff{margin:0;padding:26px 8px;text-align:center;font-size:13px;
+  line-height:1.6;color:var(--ink-3)}
 .emptysave{margin-top:14px;background:var(--sunk);border:1px solid var(--rule-2);
   border-radius:11px;padding:18px 18px;color:var(--ink-2);font-size:14px;
   line-height:1.6}
@@ -750,6 +777,27 @@ tr.hi td{background:var(--sunk);font-weight:600}
   border:5px solid transparent;background-clip:content-box}
 .gal-dot.on{background:var(--navy);background-clip:content-box}
 .gal-dot:hover{background:var(--ink-3);background-clip:content-box}
+/* THE DOTS CARRY THE AUTO MARGIN and the pin rides after them, so the two
+   move right as one group. A second `margin-left:auto` in the same flex
+   row does not right-align a second time -- it splits the free space, and
+   the bar ends up with a gap in the middle. */
+.gal-pin{display:flex;align-items:center;margin-left:8px}
+.fig-bar{display:flex;justify-content:flex-end;margin-top:11px}
+.fig-pin{display:inline-flex;align-items:center;gap:6px;background:0;
+  border:1px solid var(--rule);border-radius:8px;color:var(--ink-3);
+  font:inherit;font-size:12.5px;line-height:1;cursor:pointer;padding:6px 9px}
+.fig-pin:hover:not(:disabled){color:var(--ink);border-color:var(--navy)}
+.fig-pin:disabled{opacity:.5;cursor:default}
+/* THE MARK IS THE STATE. A bookmark outline that fills when kept says
+   "this is held" without spending a palette color that already means
+   something else -- green is a gain and the warn hue is a loss, and a
+   saved chart is neither. */
+.fig-pin-i{width:9px;height:12px;border:1.5px solid currentColor;
+  border-bottom:0;clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%)}
+.fig-pin[aria-pressed=true]{color:var(--navy);border-color:var(--navy)}
+.fig-pin[aria-pressed=true] .fig-pin-i{background:currentColor}
+.fig-pin.needs{color:var(--ink-2);border-color:var(--ink-3)}
+@media (max-width:620px){ .fig-pin-t{display:none} .fig-pin{padding:7px} }
 figure,.fig{margin:24px 0 0;padding:16px 0 0;background:0;border:0;
   border-top:1px solid var(--rule-2);border-radius:0;overflow-x:auto}
 figure:first-child,.fig:first-child{margin-top:16px}

@@ -225,10 +225,47 @@ body{margin:0;background:var(--ground);color:var(--ink);
    var m = /aria-label="([^"]*)"/.exec(svg);
    return m && m[1] ? m[1] : ('Chart ' + (i+1));
  }
- window.slateFigs = function(figs, chatId){
-   figs = figs || [];
+ // THE PIN IS PART OF THE FIGURE, not of one of the two callers. Both
+ // renderers ask this function for markup, which is the whole reason it
+ // exists -- the last time a chart feature was added to one of them the
+ // other silently kept the old behavior.
+ function pin(q, cid, title, keptId){
+   if(!q || !q.tool || !cid) return '';
+   // THE KEPT STATE IS PASSED IN, because `mark()` REDRAWS THIS BUTTON on
+   // every scroll and every press. Rendering it as "Keep" unconditionally
+   // meant keeping chart 2, moving to 3 and coming back showed "Keep" on a
+   // chart that is kept -- a control reporting a state the page is not in,
+   // which is the exact fault the counter and the arrows already had here.
+   var on = keptId != null;
+   return '<button class="fig-pin" data-tool="'+esc(q.tool)
+     +'" data-args="'+esc(JSON.stringify(q.args||{}))
+     +'" data-chart="'+esc(cid)+'" data-title="'+esc(title)+'" '
+     +(on ? 'data-id="'+esc(keptId)+'" ' : '')
+     +'aria-pressed="'+(on?'true':'false')+'" '
+     +'aria-label="'+(on?'Remove this chart from your dashboard'
+                        :'Keep this chart on your dashboard')+'">'
+     +'<span class="fig-pin-i" aria-hidden="true"></span>'
+     +'<span class="fig-pin-t">'+(on?'Kept':'Keep')+'</span></button>';
+ }
+ // WHICH CHARTS THIS GALLERY HAS KEPT, on the element rather than in a
+ // closure: the gallery is built as a string, so there is no object to
+ // hold it, and a page can carry several galleries at once.
+ function keptMap(g){
+   try { return JSON.parse(g.getAttribute('data-kept') || '{}'); }
+   catch(e){ return {}; }
+ }
+ function setKept(g, cid, id){
+   var m = keptMap(g);
+   if(id == null) delete m[cid]; else m[cid] = id;
+   g.setAttribute('data-kept', JSON.stringify(m));
+ }
+ window.slateFigs = function(figs, chatId, ids, query){
+   figs = figs || []; ids = ids || [];
    if(!figs.length) return '';
-   if(figs.length === 1) return '<div class="fig">'+figs[0]+'</div>';
+   if(figs.length === 1)
+     return '<div class="fig">'+figs[0]
+       +'<div class="fig-bar">'+pin(query, ids[0], labelOf(figs[0],0), null)
+       +'</div></div>';
    var slides = figs.map(function(f, i){
      return '<div class="gal-slide" role="group" aria-roledescription="slide" '
        +'aria-label="'+esc(labelOf(f, i))+'">'+f+'</div>'; }).join('');
@@ -236,13 +273,21 @@ body{margin:0;background:var(--ground);color:var(--ink);
      return '<button class="gal-dot'+(i===0?' on':'')+'" data-go="'+i+'" '
        +'aria-label="'+esc(labelOf(f, i))+'"></button>'; }).join('');
    return '<div class="gal" data-n="'+figs.length+'"'
-     + (chatId ? ' data-chat="'+chatId+'"' : '') + '>'
+     + (chatId ? ' data-chat="'+chatId+'"' : '')
+     // ON THE ELEMENT, NOT ON A JS PROPERTY. The gallery is returned as a
+     // STRING and parsed by whoever inserts it, so there is no object to
+     // hang a property on -- `g._q` would be undefined on every gallery
+     // ever drawn and the pin would silently never appear.
+     + ' data-ids="'+esc(JSON.stringify(ids))+'"'
+     + (query && query.tool ? ' data-q="'+esc(JSON.stringify(query))+'"' : '')
+     + '>'
      +'<div class="gal-view">'+slides+'</div>'
      +'<div class="gal-bar">'
        +'<button class="gal-prev" aria-label="Previous chart">&larr;</button>'
        +'<button class="gal-next" aria-label="Next chart">&rarr;</button>'
        +'<span class="gal-at"><b>1</b> of '+figs.length+'</span>'
        +'<span class="gal-dots">'+dots+'</span>'
+       +(query && query.tool ? '<span class="gal-pin"></span>' : '')
      +'</div></div>';
  };
  function view(g){ return g.querySelector('.gal-view'); }
@@ -284,6 +329,22 @@ body{margin:0;background:var(--ground);color:var(--ink);
    var p = g.querySelector('.gal-prev'), x = g.querySelector('.gal-next');
    if(p) p.disabled = i <= 0;
    if(x) x.disabled = i >= n-1;
+   // THE PIN FOLLOWS THE CHART ON SCREEN. One button that keeps whichever
+   // figure is visible, rather than a button per slide: a reader pins what
+   // they are looking at, and a row of five identical Keep buttons in a
+   // bar under one visible chart is ambiguous about which it means.
+   var slot = g.querySelector('.gal-pin');
+   if(slot){
+     var q = null, ids = [];
+     try { q = JSON.parse(g.getAttribute('data-q') || 'null'); } catch(e){}
+     try { ids = JSON.parse(g.getAttribute('data-ids') || '[]'); } catch(e){}
+     var sl = g.querySelectorAll('.gal-slide')[i];
+     var kept = keptMap(g);
+     var cid = ids[i];
+     slot.innerHTML = pin(q, cid,
+       sl ? (sl.getAttribute('aria-label')||'') : '',
+       Object.prototype.hasOwnProperty.call(kept, cid) ? kept[cid] : null);
+   }
  }
  // ONE DELEGATED LISTENER for every gallery on the page, present or
  // future -- answers arrive after this runs.
@@ -291,9 +352,54 @@ body{margin:0;background:var(--ground);color:var(--ink);
    var t = e.target.closest && e.target.closest('.gal button');
    if(!t) return;
    var g = t.closest('.gal'); if(!g) return;
+   if(t.classList.contains('fig-pin')) return;
    if(t.classList.contains('gal-prev')) go(g, at(g)-1);
    else if(t.classList.contains('gal-next')) go(g, at(g)+1);
    else if(t.hasAttribute('data-go')) go(g, +t.getAttribute('data-go'));
+ });
+ // KEEPING A CHART. One delegated listener, so it reaches a gallery and a
+ // lone figure alike and works on answers that have not arrived yet.
+ document.addEventListener('click', function(e){
+   var b = e.target.closest && e.target.closest('.fig-pin');
+   if(!b || b.disabled) return;
+   e.preventDefault();
+   var on = b.getAttribute('aria-pressed') === 'true';
+   var lab = b.querySelector('.fig-pin-t');
+   var args = {};
+   try { args = JSON.parse(b.getAttribute('data-args')||'{}'); } catch(err){}
+   b.disabled = true;
+   var body = on
+     ? {drop:true, id:+b.getAttribute('data-id')}
+     : {tool:b.getAttribute('data-tool'), args:args,
+        chart:b.getAttribute('data-chart'),
+        title:b.getAttribute('data-title')};
+   fetch('/api/widget', {method:'POST', credentials:'include',
+     headers:{'content-type':'application/json'}, body:JSON.stringify(body)})
+   .then(function(r){ return r.json().then(function(j){ return [r.status,j]; }); })
+   .then(function(p){
+     var st = p[0], j = p[1];
+     b.disabled = false;
+     // A DEAD END IS WORSE THAN NO BUTTON. Say what it needs, in place.
+     if(st === 401){ b.classList.add('needs');
+       if(lab) lab.textContent = 'Sign in to keep'; return; }
+     if(st === 409){ b.classList.add('needs');
+       if(lab) lab.textContent = 'Dashboard full'; return; }
+     if(st !== 200){ if(lab) lab.textContent = 'Could not keep'; return; }
+     var gal = b.closest('.gal');
+     var cid = b.getAttribute('data-chart');
+     if(j.saved){ b.setAttribute('aria-pressed','true');
+       b.setAttribute('data-id', j.id);
+       b.setAttribute('aria-label','Remove this chart from your dashboard');
+       if(lab) lab.textContent = 'Kept';
+       if(gal) setKept(gal, cid, j.id); }
+     else { b.setAttribute('aria-pressed','false');
+       b.removeAttribute('data-id');
+       b.setAttribute('aria-label','Keep this chart on your dashboard');
+       if(lab) lab.textContent = 'Keep';
+       if(gal) setKept(gal, cid, null); }
+   })
+   .catch(function(){ b.disabled = false;
+     if(lab) lab.textContent = 'Could not keep'; });
  });
  document.addEventListener('scroll', function(e){
    var v = e.target;
@@ -622,7 +728,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
      // GALLERY_JS -- the last time these two drew charts separately, a
      // multi-chart change reached one of them.
      html += window.slateFigs(j.visuals || (j.visual ? [j.visual] : []),
-                              j.chat_id);
+                              j.chat_id, j.visual_ids, j.chart_query);
      if(j.unverified && j.unverified.length)
        html += '<div class="warn">Some figures here could not be traced to a '
          +'measurement: '+esc(j.unverified.join(', '))+'.</div>';

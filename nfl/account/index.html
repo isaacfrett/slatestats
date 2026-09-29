@@ -83,10 +83,13 @@
      +' of '+(j.daily_allowance||0).toLocaleString()+' questions left</div></div>'
      +'<div><div class="k">Saved</div><div class="v" id="nsaved">&mdash;</div>'
      +'<div class="c">questions you kept</div></div>'
+     +'<div><div class="k">Charts</div><div class="v" id="nwid">&mdash;</div>'
+     +'<div class="c">on your dashboard</div></div>'
      +'<div><div class="k">Plan</div><div class="v" style="font-size:19px">'
      +esc(j.tier_label)+'</div><div class="c">'
      +(j.tier_label==='Free'?'<a href="/">ask more</a>':'thank you')+'</div></div>'
      +'</div>'
+     +'<h2>Your charts</h2><div id="wid"><p class="say">Loading&hellip;</p></div>'
      +'<h2>Saved</h2><div id="hist"><p class="say">Loading&hellip;</p></div>'
      +'<p class="acct-foot">'
      +'<button class="out" type="button" id="signout2">Sign out</button>'
@@ -155,6 +158,53 @@
        });
      });
    }
+   // THE DASHBOARD. Every tile was re-run on the server just now, so
+   // these are today's numbers -- the reason a widget stores a question
+   // and not a picture.
+   function drawWidgets(list, max){
+     var el=document.getElementById('wid');
+     var n=document.getElementById('nwid');
+     if(n) n.textContent=list.length;
+     if(!el) return;
+     if(!list.length){
+       el.innerHTML='<div class="emptysave"><b>No charts kept yet.</b> '
+         +'Ask about a player on the <a href="/">front page</a> and press '
+         +'<b>Keep</b> under a chart. Kept charts are redrawn from the '
+         +'latest data every time you open this page, so they never go '
+         +'stale.</div>'; return; }
+     el.innerHTML='<div class="widgrid">'+list.map(function(w){
+       var body = w.ok && w.svg
+         ? w.svg
+         : '<p class="widoff">'+esc(w.reason||'This chart cannot be drawn '
+           +'right now.')+'</p>';
+       return '<figure class="wid" data-id="'+w.id+'">'+body
+         +'<figcaption><span>'+esc(w.title||w.chart)+'</span>'
+         +'<button class="drop" type="button" '
+         +'aria-label="Remove this chart">Remove</button></figcaption>'
+         +'</figure>';
+     }).join('')+'</div>'
+      +'<p class="say">Redrawn from the latest data each time you open '
+      +'this page. '+list.length+' of '+max+' kept.</p>';
+     el.querySelectorAll('.wid .drop').forEach(function(b){
+       b.addEventListener('click',function(){
+         var f=b.closest('.wid'); b.disabled=true;
+         fetch(API+'/api/widget',{method:'POST',credentials:'include',
+           headers:{'content-type':'application/json'},
+           body:JSON.stringify({drop:true,id:Number(f.dataset.id)})})
+          .then(function(){ f.remove();
+            var rest=document.querySelectorAll('.wid').length;
+            var n=document.getElementById('nwid');
+            if(n) n.textContent=rest;
+            if(!rest) drawWidgets([],max); })
+          .catch(function(){ b.disabled=false; });
+       });
+     });
+   }
+   fetch(API+'/api/widgets',{credentials:'include'})
+    .then(function(x){return x.json();})
+    .then(function(h){ drawWidgets(h.widgets||[], h.max||0); })
+    .catch(function(){ var el=document.getElementById('wid');
+      if(el) el.innerHTML='<p class="say">Could not load your charts.</p>'; });
    return fetch(API+'/api/saved',{credentials:'include'})
     .then(function(x){return x.json();})
     .then(function(h){ draw(h.chats||[]); });
