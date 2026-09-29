@@ -177,11 +177,16 @@
          ? w.svg
          : '<p class="widoff">'+esc(w.reason||'This chart cannot be drawn '
            +'right now.')+'</p>';
+       // THE CAPTION SAYS WHAT THE CHART CANNOT. Printing the title here
+       // repeated the chart's own heading two lines below it, which reads
+       // as a template nobody filled in -- the same fault the cascade
+       // card had. When it was kept is a fact the picture does not carry.
+       var cap = w.ok ? ('kept '+esc(when(w.saved_at))) : esc(w.chart);
        return '<figure class="wid" data-id="'+w.id+'">'+body
-         +'<figcaption><span>'+esc(w.title||w.chart)+'</span>'
+         +'<figcaption><span>'+cap+'</span>'
          +'<button class="drop" type="button" '
-         +'aria-label="Remove this chart">Remove</button></figcaption>'
-         +'</figure>';
+         +'aria-label="Remove '+esc(w.title||w.chart)+'">Remove</button>'
+         +'</figcaption></figure>';
      }).join('')+'</div>'
       +'<p class="say">Redrawn from the latest data each time you open '
       +'this page. '+list.length+' of '+max+' kept.</p>';
