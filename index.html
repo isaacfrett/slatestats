@@ -133,7 +133,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
    lands in a box that is already there. `min-height` rather than a
    fixed height, so a third line on a narrow screen still fits. */
 #fresh{margin-top:10px;font-size:12px;color:var(--ink-3);text-align:center;
-  min-height:2.9em;
+  min-height:3em;
  line-height:1.5}
 /* ONE LIST OF PROMPTS, NOT TWO. The middle list is what people actually
    asked; the row under the ask box was a static copy of the same idea, and
@@ -802,10 +802,31 @@ body{margin:0;background:var(--ground);color:var(--ink);
  // DATA AGE, SHOWN WITHOUT BEING ASKED. Someone deciding whether to ask
  // about a line needs to know the line is two days old, and they will not
  // think to ask. Loaded separately so it costs nothing and never blocks.
+ // SHORT ENOUGH TO FIT THE SPACE HELD FOR IT. The full phrasing --
+ // "sportsbook lines 13 hours ago - news 0 minutes ago - injury report
+ // 2026 week 3 - player stats and snap counts through 2026 week 3" -- is
+ // 135 characters and wrapped to THREE lines at every phone width
+ // measured (360, 390 and 412px), so no reasonable reservation could hold
+ // it and the box grew on arrival every time. It also said "2026 week 3"
+ // twice and "0 minutes ago", which is not how anyone says "just now".
+ function ago(t){
+   t = String(t||'');
+   return t.replace(/^0 minutes ago$/, 'just now')
+           .replace(/(\d+) minutes? ago/, '$1m ago')
+           .replace(/(\d+) hours? ago/, '$1h ago')
+           .replace(/(\d+) days? ago/, '$1d ago')
+           .replace(/through \d{4} week/, 'week')
+           .replace(/^\d{4} week/, 'week');
+ }
+ function src(t){
+   return String(t||'').replace('sportsbook lines','lines')
+                       .replace('injury report','injuries')
+                       .replace('player stats and snap counts','stats');
+ }
  fetch(API+'/api/freshness').then(function(x){return x.json();}).then(function(j){
    if(!j || !j.ok) return;
    var s=(j.data.sources||[]).map(function(r){
-     return esc(r.source)+' '+esc(r.updated); }).join(' \u00b7 ');
+     return esc(src(r.source))+' '+esc(ago(r.updated)); }).join(' \u00b7 ');
    var el=document.getElementById('fresh');
    // NO `hidden` TOGGLE. The element already holds its space, so filling
    // it changes text and not layout -- which is the whole point.
