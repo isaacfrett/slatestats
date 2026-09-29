@@ -105,7 +105,12 @@
    // immediately rephrased. That is a log, and a log is something you
    // scroll past. What earns a page of its own is the handful somebody
    // chose to keep.
-   var when = window.slateWhen;
+   // Late-bound for the same reason as on the charts page: this script is
+   // emitted before the one that publishes the helper.
+   function when(t){
+     return window.slateWhen ? window.slateWhen(t)
+                             : String(t||'').slice(0,10);
+   }
    function draw(list){
      var el=document.getElementById('hist');
      var n=document.getElementById('nsaved');

@@ -59,7 +59,16 @@
  function esc(t){ return String(t==null?'':t)
    .replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;',
      '>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
- var when = window.slateWhen || function(t){ return String(t||'').slice(0,10); };
+ // RESOLVED WHEN CALLED, NOT WHEN DEFINED. `window.slateWhen` is published
+ // by the script that draws the sidebar, and that script is emitted AFTER
+ // this one -- so capturing it into a var here caught `undefined` every
+ // time and silently fell through to the raw-date fallback: every caption
+ // read "kept 2026-09-29" instead of "kept today". A late-bound global has
+ // to be looked up late.
+ function when(t){
+   return window.slateWhen ? window.slateWhen(t)
+                           : String(t||'').slice(0,10);
+ }
 
  function signedOut(){
    box.innerHTML='<div class="emptysave"><b>Sign in to keep charts.</b> '
