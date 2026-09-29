@@ -711,6 +711,45 @@ tr.hi td{background:var(--sunk);font-weight:600}
    Anything that LEAVES the site keeps its own background -- the share
    cards bake one deliberately, because a transparent PNG on somebody
    else's timeline is unreadable. */
+/* --- the chart gallery --------------------------------------------------
+   One chart visible, the rest a swipe or a button away. Five stacked
+   charts is a page you scroll past; a set you can step through is one you
+   compare. The track is a scroll-snap row, so touch and trackpad work
+   with no code and the buttons drive the same scroll rather than a second
+   mechanism that could disagree with it. */
+.gal{margin:24px 0 0;padding:16px 0 0;border-top:1px solid var(--rule-2)}
+/* NO `scroll-behavior:smooth`, AND IT IS NOT AN OVERSIGHT.
+   Measured in the browser: with `scroll-snap-type: x mandatory`, a smooth
+   scroll is silently CANCELED -- assigning scrollLeft=720 left it at 0,
+   and the identical assignment under `scroll-behavior:auto` moved it. The
+   same happened through scrollTo({behavior:'smooth'}), so it is the snap
+   and not the API. Nothing logs; the buttons just do nothing, which is
+   how this reached a screenshot twice.
+   A finger-driven swipe still animates, because the finger is the
+   animation. A button press jumps, which for stepping through a set of
+   charts is the honest behavior anyway. */
+.gal-view{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+  scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain}
+.gal-view::-webkit-scrollbar{display:none}
+.gal-slide{flex:0 0 100%;min-width:0;scroll-snap-align:start}
+.gal-slide svg{display:block;width:100%;height:auto}
+.gal-bar{display:flex;align-items:center;gap:7px;margin-top:11px}
+.gal-bar>button{background:0;border:1px solid var(--rule);border-radius:8px;
+  color:var(--ink-3);font:inherit;font-size:13px;line-height:1;cursor:pointer;
+  padding:6px 10px}
+.gal-bar>button:hover:not(:disabled){color:var(--ink);border-color:var(--navy)}
+.gal-bar>button:disabled{opacity:.35;cursor:default}
+.gal-at{font-size:12px;color:var(--ink-3);margin-left:4px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace}
+.gal-at b{color:var(--ink-2);font-weight:600}
+.gal-dots{display:flex;gap:6px;margin-left:auto;align-items:center}
+/* THE DOTS ARE BUTTONS, so they need a real hit area even though the mark
+   is 7px. Padding gives the target without growing the dot. */
+.gal-dot{width:7px;height:7px;padding:0;border:0;border-radius:50%;
+  background:var(--rule);cursor:pointer;box-sizing:content-box;
+  border:5px solid transparent;background-clip:content-box}
+.gal-dot.on{background:var(--navy);background-clip:content-box}
+.gal-dot:hover{background:var(--ink-3);background-clip:content-box}
 figure,.fig{margin:24px 0 0;padding:16px 0 0;background:0;border:0;
   border-top:1px solid var(--rule-2);border-radius:0;overflow-x:auto}
 figure:first-child,.fig:first-child{margin-top:16px}

@@ -215,6 +215,115 @@ body{margin:0;background:var(--ground);color:var(--ink);
 }
 </style><div class="chat is-empty" id="main"><div class="thread" id="thread"><div class="inner" id="inner"><h1 class="hello">What do you want to know?</h1><div id="popular" hidden></div></div></div><div class="composer"><div class="cwrap"><div class="cbox"><textarea id="ask" rows="1" placeholder="Ask about a player, matchup or injury" aria-label="Ask a question"></textarea><button id="send" aria-label="Send">↑</button></div><div class="eg"><button data-q="Who benefits if Puka Nacua sits?">If Nacua sits</button><button data-q="Should I start Bijan Robinson or Kenneth Walker?">Bijan or Walker</button><button data-q="Is any defense actually weak against tight ends?">Weak vs tight ends?</button><button data-q="Who has the best matchup at running back?">Best RB matchup</button><button data-q="Who are the top waiver adds this week?">Top waiver adds</button></div><div id="fresh" hidden></div><p class="chat-legal">Research and projections &mdash; not betting advice. <a href="/legal/responsible-gambling/">Responsible gambling</a> &middot; <a href="/legal/privacy/">Privacy</a> &middot; <a href="/legal/terms/">Terms</a> &middot; <a href="/legal/sources/">Where the data comes from</a> &middot; <a href="/legal/contact/">Contact</a></p></div></div></div><script>
 (function(){
+ function esc(t){ return String(t==null?'':t)
+   .replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;',
+     '>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+ // A CHART'S NAME COMES FROM THE CHART. `aria-label` is what the SVG
+ // already tells a screen reader, so the gallery cannot caption a figure
+ // differently from how it announces itself.
+ function labelOf(svg, i){
+   var m = /aria-label="([^"]*)"/.exec(svg);
+   return m && m[1] ? m[1] : ('Chart ' + (i+1));
+ }
+ window.slateFigs = function(figs, chatId){
+   figs = figs || [];
+   if(!figs.length) return '';
+   if(figs.length === 1) return '<div class="fig">'+figs[0]+'</div>';
+   var slides = figs.map(function(f, i){
+     return '<div class="gal-slide" role="group" aria-roledescription="slide" '
+       +'aria-label="'+esc(labelOf(f, i))+'">'+f+'</div>'; }).join('');
+   var dots = figs.map(function(f, i){
+     return '<button class="gal-dot'+(i===0?' on':'')+'" data-go="'+i+'" '
+       +'aria-label="'+esc(labelOf(f, i))+'"></button>'; }).join('');
+   return '<div class="gal" data-n="'+figs.length+'"'
+     + (chatId ? ' data-chat="'+chatId+'"' : '') + '>'
+     +'<div class="gal-view">'+slides+'</div>'
+     +'<div class="gal-bar">'
+       +'<button class="gal-prev" aria-label="Previous chart">&larr;</button>'
+       +'<button class="gal-next" aria-label="Next chart">&rarr;</button>'
+       +'<span class="gal-at"><b>1</b> of '+figs.length+'</span>'
+       +'<span class="gal-dots">'+dots+'</span>'
+     +'</div></div>';
+ };
+ function view(g){ return g.querySelector('.gal-view'); }
+ function at(g){
+   var v = view(g), w = v.clientWidth || 1;
+   return Math.round(v.scrollLeft / w);
+ }
+ function go(g, i){
+   var v = view(g), n = +g.getAttribute('data-n');
+   i = Math.max(0, Math.min(n-1, i));
+   // SETTING scrollLeft, NOT scrollTo({behavior:'smooth'}).
+   //
+   // Measured in the browser: on a track with `scroll-snap-type: x
+   // mandatory`, a programmatic SMOOTH scroll does nothing at all --
+   // scrollLeft stayed 0 while the identical call with `behavior:'auto'`
+   // moved it to 720. The snap and the smooth animation fight, and the
+   // snap wins by canceling it. Nothing is logged; the buttons simply do
+   // not work, which is exactly how this shipped to a screenshot.
+   //
+   // And CSS cannot own the animation either: `scroll-behavior:smooth`
+   // on the track is canceled by the same snap. There is no animation;
+   // there is a jump, and a swipe animates itself.
+   v.scrollLeft = i * v.clientWidth;
+   // MARK IMMEDIATELY RATHER THAN WAIT FOR THE SCROLL EVENT. The counter
+   // and the arrows stayed on "1 of 4" through every button press while
+   // the track moved correctly underneath them -- a control reporting a
+   // state the page is not in. The scroll listener stays for the swipe,
+   // where there is no button press to hang this off.
+   mark(g);
+ }
+ function mark(g){
+   var i = at(g);
+   var b = g.querySelector('.gal-at b'); if(b) b.textContent = i+1;
+   g.querySelectorAll('.gal-dot').forEach(function(d, k){
+     d.classList.toggle('on', k === i); });
+   // AT THE ENDS THE ARROWS SAY SO. A control that does nothing when
+   // pressed is worse than one that is visibly unavailable.
+   var n = +g.getAttribute('data-n');
+   var p = g.querySelector('.gal-prev'), x = g.querySelector('.gal-next');
+   if(p) p.disabled = i <= 0;
+   if(x) x.disabled = i >= n-1;
+ }
+ // ONE DELEGATED LISTENER for every gallery on the page, present or
+ // future -- answers arrive after this runs.
+ document.addEventListener('click', function(e){
+   var t = e.target.closest && e.target.closest('.gal button');
+   if(!t) return;
+   var g = t.closest('.gal'); if(!g) return;
+   if(t.classList.contains('gal-prev')) go(g, at(g)-1);
+   else if(t.classList.contains('gal-next')) go(g, at(g)+1);
+   else if(t.hasAttribute('data-go')) go(g, +t.getAttribute('data-go'));
+ });
+ document.addEventListener('scroll', function(e){
+   var v = e.target;
+   if(v && v.classList && v.classList.contains('gal-view')) mark(v.closest('.gal'));
+ }, true);
+ // KEYBOARD, because a gallery you can only swipe is a gallery half the
+ // people reading this cannot use.
+ document.addEventListener('keydown', function(e){
+   if(e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+   var g = document.activeElement && document.activeElement.closest
+     && document.activeElement.closest('.gal');
+   if(!g) return;
+   e.preventDefault();
+   go(g, at(g) + (e.key === 'ArrowRight' ? 1 : -1));
+ });
+ // A gallery added to the DOM starts with its arrows in the right state.
+ new MutationObserver(function(muts){
+   muts.forEach(function(m){ m.addedNodes && m.addedNodes.forEach(function(n){
+     // THE NODE ITSELF, NOT ONLY ITS DESCENDANTS. `querySelectorAll` never
+     // matches the element it is called on, and the answer sets innerHTML
+     // on its container -- so `.gal` arrives as an added node rather than
+     // inside one, and the very first state went unmarked: the gallery
+     // opened with "prev" enabled on slide one, a control offering a move
+     // that does not exist.
+     if(n.matches && n.matches('.gal')) mark(n);
+     if(n.querySelectorAll) n.querySelectorAll('.gal').forEach(mark); }); });
+ }).observe(document.documentElement, {childList:true, subtree:true});
+})();
+</script><script>
+(function(){
  // WHERE THE ASSISTANT LIVES. On a laptop it is this same origin; in
  // production the pages are static files on a CDN and the assistant is a
  // process on a box with the warehouse, so it is a different host. Baked in
@@ -509,9 +618,11 @@ body{margin:0;background:var(--ground);color:var(--ink);
      // A LIST, because one chart was always the wrong number for a player:
      // the data carries a six-game log across six stats and four seasons,
      // and the answer used to draw a single distribution.
-     var figs = j.visuals || (j.visual ? [j.visual] : []);
-     for(var fi=0; fi<figs.length; fi++)
-       html += '<div class="fig">'+figs[fi]+'</div>';
+     // ONE IMPLEMENTATION, called from both /api/ask renderers. See
+     // GALLERY_JS -- the last time these two drew charts separately, a
+     // multi-chart change reached one of them.
+     html += window.slateFigs(j.visuals || (j.visual ? [j.visual] : []),
+                              j.chat_id);
      if(j.unverified && j.unverified.length)
        html += '<div class="warn">Some figures here could not be traced to a '
          +'measurement: '+esc(j.unverified.join(', '))+'.</div>';
