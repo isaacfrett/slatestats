@@ -313,7 +313,14 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
      makes one color say two things -- which this project already paid for
      once, when a reader read two adjacent charts as contradicting. These
      four carry no meaning at all and exist only to tell series apart. */
-  --c-cat1:#12405E;--c-cat2:#4E7C9B;--c-cat3:#8AA9BD;--c-cat4:#C2D2DD}
+  --c-cat1:#12405E;--c-cat2:#4E7C9B;--c-cat3:#8AA9BD;--c-cat4:#C2D2DD;
+  /* ONE SECOND HUE, AND IT MEANS NOTHING ON PURPOSE. Blue-on-blue was
+     the honest cost of keeping green semantic: on a two-line chart the
+     muted blue read as de-emphasized rather than as a different series.
+     A periwinkle is far from the blue, far from the green that means a
+     gain and far from the red that means a loss, so it can carry a
+     CATEGORY without carrying a verdict. */
+  --c-alt:#6155A6}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ground:#061320;--surface:#0D2132;--sunk:#0A1B29;
   --ink:#E6EEF4;--ink-2:#9FB3C2;--ink-3:#6E8598;
@@ -321,7 +328,8 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
   --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
     --c-grid:#263F54;--c-ref:#96695B;--on-navy:#07141F;
-    --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6}}
+    --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6;
+    --c-alt:#A79BEA}}
 .thm{display:flex;gap:6px;justify-content:center;margin-top:14px}
 .thm button{font:inherit;font-size:12px;padding:4px 10px;
  border:1px solid var(--rule);border-radius:999px;cursor:pointer;
@@ -334,7 +342,8 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
   --navy:#57A9D6;--green:#6ECB3F;--green-soft:#12301A;
   --warn:#D97A6C;--warn-soft:#2E1C19;--flat:#6E7987;--flat-soft:#16212C;
     --c-grid:#263F54;--c-ref:#96695B;--on-navy:#07141F;
-    --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6}
+    --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6;
+    --c-alt:#A79BEA}
 *{box-sizing:border-box}
 html,body{margin:0}
 /* ---- site header -------------------------------------------------------
@@ -675,15 +684,36 @@ tr.hi td{background:var(--sunk);font-weight:600}
 .mini{display:inline-block;width:46px;height:7px;border-radius:3px;
   background:var(--rule-2);vertical-align:middle;margin-right:7px;overflow:hidden}
 .mini i{display:block;height:100%;border-radius:3px;background:var(--navy)}
-.mini.g i{background:var(--green)}
+/* Target share is a CATEGORY beside snap share, not a gain. */
+.mini.g i{background:var(--c-alt)}
 /* deltas */
 .d{display:inline-block;min-width:52px;text-align:right;
   font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:600;
   padding:2px 8px;border-radius:5px;background:var(--flat-soft);color:var(--flat)}
 .d.up{background:var(--green-soft);color:var(--green)}
 .d.out{background:transparent;color:var(--warn)}
-figure{margin:16px 0 0;background:var(--surface);border:1px solid var(--rule);
-  border-radius:10px;padding:16px 16px 12px}
+/* --- ONE TREATMENT FOR EVERY FIGURE, AND IT IS NOT A CARD -----------------
+   There were three: `figure` on the pages with a --surface fill and a
+   --rule border, `.fig` in the chat CSS with a --sunk fill and a --rule-2
+   border, and `#answer .fig` with no fill at all. Same component, three
+   looks, which is the duplicated-renderer pattern in CSS.
+
+   TRANSPARENT, because a chart is evidence for the sentence above it and
+   not a separate object. A run of five charts in one answer became five
+   stacked cards -- the identical-rounded-box kit that reads as generated.
+   The SVGs already paint no background of their own, so this is the only
+   thing that was making them boxes.
+
+   A HAIRLINE ABOVE RATHER THAN A BOX AROUND. The line is doing real work:
+   it says where one reading stops and the next begins, which in a run of
+   five is the whole question. A border on four sides says it four times.
+
+   Anything that LEAVES the site keeps its own background -- the share
+   cards bake one deliberately, because a transparent PNG on somebody
+   else's timeline is unreadable. */
+figure,.fig{margin:24px 0 0;padding:16px 0 0;background:0;border:0;
+  border-top:1px solid var(--rule-2);border-radius:0;overflow-x:auto}
+figure:first-child,.fig:first-child{margin-top:16px}
 figcaption{margin-top:11px;font-size:12.5px;color:var(--ink-3);line-height:1.6}
 figcaption b{color:var(--ink-2)}
 svg{display:block;width:100%;height:auto}

@@ -161,9 +161,9 @@ body{margin:0;background:var(--ground);color:var(--ink);
    smear rather than as separate readings. The inset says "this is a
    figure" without the rounded-card-plus-shadow kit that every dashboard
    uses. No shadow, one hairline, generous inside padding. */
-.fig{margin:16px 0 0;overflow-x:auto;background:var(--sunk);
-  border:1px solid var(--rule-2);border-radius:10px;padding:14px 10px 6px}
-.fig + .fig{margin-top:12px}
+/* The shared stylesheet owns how a figure looks; this file used to set a
+   second, different one. See `figure,.fig` there. */
+.fig + .fig{margin-top:20px}
 .fig svg{display:block;width:100%;height:auto}
 .bot .fig svg{max-width:100%;height:auto;display:block}
 .bot /* The provenance line closes the turn, so it sits apart from the figures
