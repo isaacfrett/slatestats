@@ -728,11 +728,40 @@ table{border-collapse:collapse;width:100%;font-size:13.5px}
 th,td{padding:9px 13px;text-align:right;white-space:nowrap}
 /* TABLES MUST FIT, not scroll. A horizontal scrollbar on a data table means
    the columns on the right are effectively invisible -- nobody discovers
-   them. So the least important columns drop out as the viewport narrows,
-   and the header and cell both carry .opt so the two never misalign. */
+   them, and worse, the scroll starts mid-table so the PLAYER NAME runs off
+   the left. Nobody can read a row whose subject is off screen.
+
+   MEASURED AGAINST THE CONTAINER, NOT THE WINDOW. These were media
+   queries, and a media query asks how wide the WINDOW is while the table
+   lives in a column the sidebar has already taken ~190px out of. At a
+   1060px window the content is ~870px and a six-column table overflows,
+   but `max-width:1000px` has not fired -- so the rule designed to prevent
+   exactly this could not see the space the table actually had.
+
+   A container query asks the right question. `.tbl` declares itself the
+   container and the columns respond to ITS width. */
+.tbl{container-type:inline-size}
 @media (max-width:1150px){ th,td{padding:8px 10px} }
-@media (max-width:1000px){ .opt:nth-last-child(2){display:none} }
-@media (max-width:860px){ .opt{display:none} }
+@container (max-width:900px){ th,td{padding:8px 10px} }
+@container (max-width:800px){ .opt:nth-last-child(1){display:none} }
+@container (max-width:660px){ .opt{display:none} }
+/* A SECOND TIER, for a phone. At 366px the four surviving columns still
+   wanted more room than they had. What is left after this is the player
+   and the two most reliable signals we measure -- snap share reproduces at
+   0.96 and target share at 0.92, against 0.89 for receptions -- so the
+   column that drops is the least dependable of the three anyway.
+   Tighter metrics first; a column is only dropped when type alone cannot
+   buy the space. */
+@container (max-width:470px){ th,td{padding:7px 8px;font-size:12.5px} }
+@container (max-width:430px){ .opt2{display:none} }
+/* AND THE NAME COLUMN WRAPS, which is the fix that adapts continuously
+   rather than in steps. `white-space:nowrap` on every cell is right for a
+   number -- "11.5" must not break -- and wrong for the one column holding
+   prose. Measured: a six-column room table wanted 773px inside a 726px
+   container, so it overflowed by 47px and the first thing to scroll off
+   was the player's name.
+   A number still never wraps; only the column that can afford to. */
+thead th:first-child, tbody td:first-child{white-space:normal}
 /* iOS SAFARI ZOOMS THE WHOLE PAGE when a focused form control is under 16px,
    and the player search sits in the header of every page at 13.5px while the
    rankings selects were 13px. Tapping search therefore zoomed the layout and
