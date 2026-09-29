@@ -225,7 +225,7 @@ body{margin:0;background:var(--ground);color:var(--ink);
     everywhere else. Three lines above, this same file warns that chat-only
     CSS is the drift this repo keeps paying for. It was, again. */
 }
-</style><div class="chat is-empty" id="main"><div class="thread" id="thread"><div class="inner" id="inner"><h1 class="hello">What do you want to know?</h1><div id="popular" hidden></div></div></div><div class="composer"><div class="cwrap"><div class="cbox"><textarea id="ask" rows="1" placeholder="Ask about a player, matchup or injury" aria-label="Ask a question"></textarea><button id="send" aria-label="Send">↑</button></div><div class="eg"><button data-q="Who benefits if Puka Nacua sits?">If Nacua sits</button><button data-q="Should I start Bijan Robinson or Kenneth Walker?">Bijan or Walker</button><button data-q="Is any defense actually weak against tight ends?">Weak vs tight ends?</button><button data-q="Who has the best matchup at running back?">Best RB matchup</button><button data-q="Who are the top waiver adds this week?">Top waiver adds</button></div><div id="fresh"></div><p class="chat-legal">Research and projections &mdash; not betting advice. <a href="/legal/responsible-gambling/">Responsible gambling</a> &middot; <a href="/legal/privacy/">Privacy</a> &middot; <a href="/legal/terms/">Terms</a> &middot; <a href="/legal/sources/">Where the data comes from</a> &middot; <a href="/legal/contact/">Contact</a></p></div></div></div><script>
+</style><div class="chat is-empty" id="main"><div class="thread" id="thread"><div class="inner" id="inner"><h1 class="hello">What do you want to know?</h1><div id="popular"><div class="plab">Try one of these</div><button class="pq" data-q="Who benefits if Puka Nacua sits?">Who benefits if Puka Nacua sits?</button><button class="pq" data-q="Should I start Bijan Robinson or Kenneth Walker?">Should I start Bijan Robinson or Kenneth Walker?</button><button class="pq" data-q="Is any defense actually weak against tight ends?">Is any defense actually weak against tight ends?</button><button class="pq" data-q="Who has the best matchup at running back?">Who has the best matchup at running back?</button><button class="pq" data-q="Who are the top waiver adds this week?">Who are the top waiver adds this week?</button></div></div></div><div class="composer"><div class="cwrap"><div class="cbox"><textarea id="ask" rows="1" placeholder="Ask about a player, matchup or injury" aria-label="Ask a question"></textarea><button id="send" aria-label="Send">↑</button></div><div class="eg"><button data-q="Who benefits if Puka Nacua sits?">If Nacua sits</button><button data-q="Should I start Bijan Robinson or Kenneth Walker?">Bijan or Walker</button><button data-q="Is any defense actually weak against tight ends?">Weak vs tight ends?</button><button data-q="Who has the best matchup at running back?">Best RB matchup</button><button data-q="Who are the top waiver adds this week?">Top waiver adds</button></div><div id="fresh"></div><p class="chat-legal">Research and projections &mdash; not betting advice. <a href="/legal/responsible-gambling/">Responsible gambling</a> &middot; <a href="/legal/privacy/">Privacy</a> &middot; <a href="/legal/terms/">Terms</a> &middot; <a href="/legal/sources/">Where the data comes from</a> &middot; <a href="/legal/contact/">Contact</a></p></div></div></div><script>
 (function(){
  // THE API IS A DIFFERENT ORIGIN. A bare '/api/widget' resolves against
  // slatestats.com, which serves static files and knows nothing about it --
@@ -840,7 +840,11 @@ body{margin:0;background:var(--ground);color:var(--ink);
  // between identical things; ZERO prompt lists is worse than either, so
  // the fallback is a class on the chat rather than a second permanent row.
  function noPopular(){
-   var c=document.querySelector('.chat'); if(c) c.classList.add('no-popular');
+   // THE SERVER-RENDERED PROMPTS STAY. This used to mean "there is no
+   // list, show the static row instead"; now the list is already on the
+   // page, so an unreachable API changes nothing a reader can see and the
+   // second row must NOT also appear -- two prompt lists at once is the
+   // thing the class was invented to prevent.
  }
  fetch(API+'/api/popular').then(function(x){return x.json();})
   .then(function(j){
@@ -852,10 +856,12 @@ body{margin:0;background:var(--ground);color:var(--ink);
    // second one. `from_visitors` is only true when every question here
    // was asked by a browser at least twice.
    var lab = j.from_visitors ? 'What people are asking' : 'Try one of these';
+   // REPLACES TEXT IN A BOX THAT IS ALREADY THERE. It used to be
+   // `hidden` until this ran, and revealing it was the entire layout
+   // shift left on the page.
    el.innerHTML='<div class="plab">'+esc(lab)+'</div>'
      + j.questions.map(function(p){
          return '<button class="pq">'+esc(p.q)+'</button>'; }).join('');
-   el.hidden=false;
   }).catch(function(){ noPopular(); });
 
  // ARRIVED WITH A QUESTION. The account page links back here with ?q=,
