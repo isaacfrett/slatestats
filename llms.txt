@@ -43,7 +43,6 @@ Every projection is conditional on the player appearing. A player whose game has
 - https://slatestats.com/nfl/studies/what-predicts-fantasy-production/
 - https://slatestats.com/nfl/studies/who-benefits-when-a-starter-sits/
 - https://slatestats.com/nfl/studies/year-3-breakout/
-- https://slatestats.com/nfl/studies/year-three-breakout/
 
 ## Fantasy questions, answered from data
 
