@@ -5,3 +5,32 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), interest-cohort=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   Content-Security-Policy: default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.slatestats.com https://api.sleeper.app https://lm-api-reads.fantasy.espn.com; upgrade-insecure-requests
+
+# A YEAR AND IMMUTABLE, BUT ONLY FOR A URL THAT CHANGES WITH ITS BYTES.
+# The stylesheet carries a hash of its own contents, so a new stylesheet is
+# a new URL and there is nothing to revalidate. Without a rule Cloudflare
+# Pages serves everything as `max-age=0, must-revalidate`, which cost a
+# round trip per page view on a file that changes a few times a week.
+/assets/site.*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# FONTS ARE IMMUTABLE TOO: a woff2 is named for the family and weight it
+# contains, and we replace rather than edit them.
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# ICONS AND SOCIAL CARDS ARE STABLE NAMES WITH CHANGING BYTES -- a study's
+# card is redrawn whenever its numbers move -- so they get a day, not a
+# year. Long enough that a reader browsing the site fetches each once,
+# short enough that a corrected card is not stuck in caches for a year.
+/assets/og/*
+  Cache-Control: public, max-age=86400
+/assets/icon*
+  Cache-Control: public, max-age=86400
+/favicon.ico
+  Cache-Control: public, max-age=86400
+
+# DATA THE PAGES READ AT RUNTIME changes every build, and a stale board is
+# worse than a slow one. Revalidate, which is what it was already doing.
+/data/*
+  Cache-Control: public, max-age=0, must-revalidate
