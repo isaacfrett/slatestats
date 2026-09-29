@@ -6,4 +6,11 @@ Sitemap: https://slatestats.com/sitemap.xml
 # An index written for assistants rather than crawlers: what is worth
 # quoting from this site and the conditions that travel with a number.
 # https://llmstxt.org
-LLM-Index: https://slatestats.com/llms.txt
+#
+# COMMENTED, NOT DELETED. `LLM-Index` is not a robots.txt directive --
+# no parser implements it -- so shipping it live meant every validator,
+# Lighthouse included, reported "robots.txt is not valid: unknown
+# directive" and docked the SEO score for a line nothing reads. The file
+# is still served at /llms.txt and still linked from the pages; a comment
+# keeps the pointer discoverable to a human without lying to a parser.
+# LLM-Index: https://slatestats.com/llms.txt
