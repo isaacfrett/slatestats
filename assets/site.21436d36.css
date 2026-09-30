@@ -38,8 +38,37 @@
 .side .brand .wm>span{color:var(--navy)}
 .side .mk{width:22px;height:22px;color:var(--navy)}
 .side nav{display:flex;flex-direction:column;gap:1px}
-.side nav a{padding:7px 10px;border-radius:7px;color:var(--ink-2);
+.side nav a{display:flex;align-items:center;gap:9px;
+ padding:7px 10px;border-radius:7px;color:var(--ink-2);
  text-decoration:none;font-size:14px}
+/* THE ICON DOES NOT SHRINK AND DOES NOT GROW. A global `svg{width:100%}`
+   lives in this stylesheet and beats a width attribute -- it is what once
+   blew the account icon up to the width of the rail -- so the size is set
+   here, and `flex:none` stops a long label squeezing it. */
+.side nav .ic{flex:none;width:17px;height:17px;opacity:.72}
+.side nav a:hover .ic,.side nav a[aria-current] .ic{opacity:1}
+/* A GROUP. `<details>` with no marker of its own -- the chevron is ours so
+   it can rotate, and a native triangle beside a custom one is two markers
+   saying the same thing. */
+.side .grp>summary{display:flex;align-items:center;gap:9px;cursor:pointer;
+ padding:7px 10px;border-radius:7px;color:var(--ink-2);font-size:14px;
+ list-style:none}
+.side .grp>summary::-webkit-details-marker{display:none}
+.side .grp>summary:hover{background:var(--ground);color:var(--ink)}
+.side .grp>summary .ic{flex:none;width:17px;height:17px;opacity:.72}
+.side .grp>summary .chev{margin-left:auto;opacity:.55;
+ transition:transform .15s ease}
+.side .grp[open]>summary .chev{transform:rotate(90deg)}
+.side .grp[open]>summary{color:var(--ink);font-weight:600}
+/* THE CHILDREN SIT UNDER A RULE RATHER THAN AN INDENT ALONE, so the group
+   reads as a group at a glance instead of as four slightly-moved rows. */
+.side .sub{margin:1px 0 4px 18px;padding-left:9px;
+ border-left:1px solid var(--rule)}
+.side .sub a{font-size:13.5px;padding:6px 9px}
+/* FOCUS IS VISIBLE ON THE SUMMARY TOO. It is a control, and a keyboard
+   user who cannot see where they are cannot use the menu at all. */
+.side .grp>summary:focus-visible{outline:2px solid var(--navy);
+ outline-offset:-2px}
 .side nav a:hover{background:var(--ground);color:var(--ink)}
 .side nav a[aria-current]{background:var(--ground);color:var(--ink);
  font-weight:600}
@@ -61,10 +90,18 @@
 .foot-legal{margin:14px auto 0;max-width:72ch;padding-top:12px;
   border-top:1px solid var(--rule-2);color:var(--ink-3);font-size:12px;
   line-height:1.6;text-align:center}
-/* THE TRADEMARK LINE IS QUIETER THAN THE GAMBLING ONE, because it is
-   a statement of fact rather than something a reader may need to act
-   on. Same footer, less weight, no top border of its own. */
-.foot-legal.tm{border:0;padding-top:4px;margin-top:4px;opacity:.72}
+/* THE TRADEMARK LINE IS QUIETER THAN THE GAMBLING ONE, because it is a
+   statement of fact rather than something a reader may need to act on.
+   Same footer, less weight, no top border of its own.
+
+   QUIETER BY SIZE, NOT BY OPACITY. The first version used `opacity:.72`
+   on text already at `--ink-3`, which measures 5.25:1 on white by itself
+   and fails 4.5:1 once the opacity is applied -- Lighthouse caught it on
+   the very next run at accessibility 95. Opacity on text is a contrast
+   change wearing a styling change's clothes: the token says one thing and
+   the rendered pixels say another, so nothing that checks the palette can
+   see it. Every other quiet thing here is quiet by size and weight. */
+.foot-legal.tm{border:0;padding-top:4px;margin-top:4px;font-size:11.5px}
 .foot-legal a{color:var(--ink-2)}
 /* "Ask again" on a saved row. A link, not a button: it navigates, and
    dressing a navigation as a button is a small lie about what happens. */
