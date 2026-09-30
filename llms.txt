@@ -62,6 +62,7 @@ Split-half reliability, odd weeks against even weeks within the same season, 201
 - [Does playing indoors boost receiving production?](https://slatestats.com/nfl/studies/indoors-receiving-production/)
 - [Does a receiver struggle in his first season with a new team?](https://slatestats.com/nfl/studies/receiver-first-season-new-team/)
 - [Do some receivers genuinely beat man coverage?](https://slatestats.com/nfl/studies/receivers-who-beat-man-coverage/)
+- [Is anybody actually “good in the red zone”?](https://slatestats.com/nfl/studies/red-zone-touchdown-rate/)
 - [Does the referee affect fantasy scoring?](https://slatestats.com/nfl/studies/referee-fantasy-impact/)
 - [Does a rookie quarterback hurt his receivers?](https://slatestats.com/nfl/studies/rookie-quarterback-receivers/)
 - [Does draft capital still matter after a rookie season?](https://slatestats.com/nfl/studies/what-draft-capital-buys/)
