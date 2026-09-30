@@ -448,6 +448,17 @@ html,body{margin:0}
 #hint{margin:9px 0 0;font-size:13px;color:var(--ink-3);line-height:1.5}
 #hint b{color:var(--ink-2)}
 /* The waiver score shows its weighting rather than asking for trust. */
+/* QUIET TEXT, AS CLASSES RATHER THAN AN INLINE STYLE ON EVERY CELL.
+   The rankings page carries 858 table rows and repeated
+   `style="color:var(--ink-3);font-size:12px"` on most of them -- 732 KB of
+   HTML, three times the next largest page, of which 704 KB is rows. The
+   bytes compress away over the wire but the browser still parses every one
+   of them, which is real work on the mid-range phone that produces our
+   slow tail. Four classes replace 14 inline-style call sites. */
+.q{color:var(--ink-3)}
+.q2{color:var(--ink-2)}
+.sm{font-size:12px}
+.xs{font-size:11px}
 td .sub{display:block;font-size:12px;color:var(--ink-3);line-height:1.45;
   margin-top:2px;max-width:66ch}
 td.wt{font-family:"IBM Plex Mono",monospace;font-weight:600;text-align:right;
