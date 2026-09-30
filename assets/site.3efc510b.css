@@ -56,8 +56,16 @@
 .side .grp>summary::-webkit-details-marker{display:none}
 .side .grp>summary:hover{background:var(--ground);color:var(--ink)}
 .side .grp>summary .ic{flex:none;width:17px;height:17px;opacity:.72}
-.side .grp>summary .chev{margin-left:auto;opacity:.55;
- transition:transform .15s ease}
+/* THE CHEVRON NEEDS THE SAME GUARD THE ICON GOT, and I wrote the comment
+   about this rule three lines above and then shipped an svg without it.
+   Measured live: 92x92px against the width="14" on the element, which
+   dragged the group rows to 106 and 117px against 36 for a normal one --
+   the "big arrows" and the "bad spacing" are one bug.
+   FOURTH TIME `svg{width:100%}` HAS WON: the account icon, the nav icons,
+   and now this. A global rule that beats a presentation attribute is not a
+   thing to remember per element. */
+.side .grp>summary .chev{flex:none;width:14px;height:14px;
+ margin-left:auto;opacity:.55;transition:transform .15s ease}
 .side .grp[open]>summary .chev{transform:rotate(90deg)}
 .side .grp[open]>summary{color:var(--ink);font-weight:600}
 /* THE CHILDREN SIT UNDER A RULE RATHER THAN AN INDENT ALONE, so the group
@@ -404,7 +412,10 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
     --c-grid:#263F54;--c-ref:#96695B;--on-navy:#07141F;
     --c-cat1:#57A9D6;--c-cat2:#8FC4E2;--c-cat3:#B9D9EC;--c-cat4:#6E8FA6;
     --c-alt:#A79BEA}}
-.thm{display:flex;gap:6px;justify-content:center;margin-top:14px}
+/* SPACED FOR ITS NEW PLACE. It used to be the last thing in the footer
+   with nothing under it; it now sits between the site's own note and the
+   legal block, so it needs room on both sides rather than only above. */
+.thm{display:flex;gap:6px;justify-content:center;margin:14px 0 4px}
 .thm button{font:inherit;font-size:12px;padding:4px 10px;
  border:1px solid var(--rule);border-radius:999px;cursor:pointer;
  background:transparent;color:var(--ink-3)}
@@ -717,17 +728,50 @@ a{color:var(--navy)}
    read, not scanned, so the tiles are generous rather than dense -- a
    grid of six thumbnails nobody can read is a worse dashboard than three
    charts somebody can. */
+/* A GRID THAT CAN HOLD A WIDE TILE, which is the whole difference.
+   It was `minmax(340px,1fr)`, so a 1300px page made two 340px columns and
+   every chart drawn at 640 wide rendered at half size -- axis labels at
+   6px, which is not a chart, it is a picture of one. `auto-fill` with a
+   narrow track and a per-tile SPAN lets one chart take the full width
+   while two small ones sit side by side. */
 .widgrid{display:grid;gap:16px;margin-top:14px;
-  grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
   /* EACH TILE KEEPS ITS OWN HEIGHT. A grid stretches its items to the
      tallest in the row, and these charts have wildly different aspect
      ratios -- a 15-row ranking beside a six-game line left the short one
      sitting in a box half of which was empty, which reads as a broken
      tile rather than as two charts of different shapes. */
   align-items:start}
-.widgrid .wid{margin:0;padding:14px 14px 10px;background:var(--surface);
-  border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+/* WIDE IS THE DEFAULT. A chart is drawn at 640 CSS pixels and is readable
+   at about that; anything narrower is a thumbnail. `span 2` on a 290px
+   track is ~600, so a laptop shows one readable chart per row and a wide
+   monitor shows two. */
+.widgrid .wid{grid-column:span 2}
+.widgrid .wid[data-w="1"]{grid-column:span 1}
+.widgrid .wid[data-w="3"]{grid-column:span 3}
+/* NEVER WIDER THAN THE GRID. On a narrow window `span 2` would overflow a
+   single-column grid, so the span collapses rather than scrolling. */
+@media(max-width:700px){.widgrid{grid-template-columns:1fr}
+  .widgrid .wid,.widgrid .wid[data-w]{grid-column:span 1}}
 .widgrid .wid svg{display:block;width:100%;height:auto}
+/* THE CONTROLS SIT IN THE CAPTION ROW, not floating over the chart. A
+   control on top of the drawing covers data, and this page exists to show
+   the drawing. */
+.widgrid .wid .wtools{display:flex;gap:4px;align-items:center}
+.widgrid .wid .wtools button{font:inherit;font-size:11.5px;line-height:1;
+  padding:5px 8px;border:1px solid var(--rule);border-radius:7px;
+  background:var(--surface);color:var(--ink-3);cursor:pointer}
+.widgrid .wid .wtools button:hover{border-color:var(--navy);
+  color:var(--ink)}
+.widgrid .wid .wtools button[aria-pressed=true]{background:var(--sunk);
+  color:var(--ink);border-color:var(--rule)}
+/* THE HANDLE SAYS THE TILE MOVES. Dragging something with no affordance is
+   a feature nobody finds. */
+.widgrid .wid .grip{cursor:grab;padding:5px 6px;color:var(--ink-3);
+  border:1px solid transparent;border-radius:7px;background:none}
+.widgrid .wid .grip:hover{color:var(--ink);border-color:var(--rule)}
+.widgrid .wid.dragging{opacity:.45}
+.widgrid .wid.over{outline:2px dashed var(--navy);outline-offset:3px}
 /* `.widgrid .wid` RATHER THAN `.wid`, because `figure:first-child` -- which
    gives a lone figure in the thread its top margin -- scores (0,1,1) and
    would beat a bare `.wid` (0,1,0). The first tile in the grid would sit
