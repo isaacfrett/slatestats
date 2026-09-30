@@ -23,6 +23,30 @@ These are the files the site itself renders from. They are plain JSON, served fr
 
 Every projection is conditional on the player appearing. A player whose game has already kicked off carries no forward projection at all, deliberately, rather than a stale one.
 
+## How much each measure is worth
+
+Split-half reliability, odd weeks against even weeks within the same season, 2018-2025. This is the ordering the rest of the site rests on: OPPORTUNITY repeats and EFFICIENCY does not, so a citation of catch rate or yards per carry should carry that.
+
+- [Snap Share Leaders](https://slatestats.com/nfl/leaders/snap-share/): repeats at 0.96, The most repeatable thing a player does
+- [Target Share Leaders](https://slatestats.com/nfl/leaders/target-share/): repeats at 0.93
+- [Carries Per Game Leaders](https://slatestats.com/nfl/leaders/carries-per-game/): repeats at 0.92
+- [Targets Per Game Leaders](https://slatestats.com/nfl/leaders/targets-per-game/): repeats at 0.92
+- [Catches Per Game Leaders](https://slatestats.com/nfl/leaders/catches-per-game/): repeats at 0.89
+- [Rushing Yards Per Game Leaders](https://slatestats.com/nfl/leaders/rushing-yards-per-game/): repeats at 0.87
+- [Receiving Yards Per Game Leaders](https://slatestats.com/nfl/leaders/receiving-yards-per-game/): repeats at 0.87
+- [Touchdown Leaders](https://slatestats.com/nfl/leaders/touchdowns-per-game/): repeats at 0.56, half of it is luck
+- [Yards Per Catch Leaders](https://slatestats.com/nfl/leaders/yards-per-catch/): repeats at 0.33
+- [Catch Rate Leaders](https://slatestats.com/nfl/leaders/catch-rate/): repeats at 0.19, close to a coin flip
+- [Yards Per Target Leaders](https://slatestats.com/nfl/leaders/yards-per-target/): repeats at 0.15
+- [Yards Per Carry Leaders](https://slatestats.com/nfl/leaders/yards-per-carry/): repeats at 0.14
+
+## How each position behaves
+
+- [Running backs](https://slatestats.com/nfl/positions/running-back/): The largest measured effect in this project is a running back one, and the most quoted running-back statistic is one of the least predictive numbers in the data.
+- [Tight ends](https://slatestats.com/nfl/positions/tight-end/): A tight-end room holds two or three players, so vacated work has nowhere else to go — and the matchup everyone cites is the least reproducible claim in the data.
+- [Wide receivers](https://slatestats.com/nfl/positions/wide-receiver/): When a lead receiver sits, the room's total gain is predictable and the split between the remaining receivers is not. Every candidate predictor correlates near zero.
+- [Quarterbacks](https://slatestats.com/nfl/positions/quarterback/): A starting-quarterback change is one of the most discussed events in fantasy and, measured against a control, it moves a receiver's receptions by 0.013.
+
 ## Measured studies
 
 - [Do offenses attack rookie cornerbacks?](https://slatestats.com/nfl/studies/attacking-rookie-cornerbacks/)
