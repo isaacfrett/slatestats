@@ -21,9 +21,14 @@
    searches is two navigations competing. Down the left it is out of the way
    and the content column gets the width. Under 860px it becomes a strip. */
 *{box-sizing:border-box}
-.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+/* ONE RAIL WIDTH. It was written as a literal in the grid and again in
+   the open-drawer override, and the flyout needs a third copy of it --
+   which is how the leg label ended up with three renderers. Derive. */
+.app{--rail-w:232px;display:grid;
+ grid-template-columns:var(--rail-w) 1fr;min-height:100vh}
 .side{border-right:1px solid var(--rule);background:var(--sunk);
- padding:20px 16px;display:flex;flex-direction:column;gap:18px;
+ padding:20px 16px;
+ display:flex;flex-direction:column;gap:18px;
  position:sticky;top:0;height:100vh;overflow-y:auto}
 .side .brand{display:flex;align-items:center;gap:8px;font:800 18px Archivo,
  sans-serif;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
@@ -47,36 +52,95 @@
    here, and `flex:none` stops a long label squeezing it. */
 .side nav .ic{flex:none;width:17px;height:17px;opacity:.72}
 .side nav a:hover .ic,.side nav a[aria-current] .ic{opacity:1}
-/* A GROUP. `<details>` with no marker of its own -- the chevron is ours so
-   it can rotate, and a native triangle beside a custom one is two markers
-   saying the same thing. */
-.side .grp>summary{display:flex;align-items:center;gap:9px;cursor:pointer;
- padding:7px 10px;border-radius:7px;color:var(--ink-2);font-size:14px;
- list-style:none}
-.side .grp>summary::-webkit-details-marker{display:none}
-.side .grp>summary:hover{background:var(--ground);color:var(--ink)}
-.side .grp>summary .ic{flex:none;width:17px;height:17px;opacity:.72}
-/* THE CHEVRON NEEDS THE SAME GUARD THE ICON GOT, and I wrote the comment
-   about this rule three lines above and then shipped an svg without it.
-   Measured live: 92x92px against the width="14" on the element, which
-   dragged the group rows to 106 and 117px against 36 for a normal one --
-   the "big arrows" and the "bad spacing" are one bug.
+/* A GROUP IS A LINK PLUS A FLYOUT, and it holds no state at all.
+   It was a `<details>`: the label toggled instead of going anywhere, the
+   first child was an "All ..." row duplicating the label, and the open
+   state had to be remembered per page -- which is what made the rail
+   flicker on every navigation, because one group closed as another
+   opened. A hover flyout has nothing to remember, so there is nothing to
+   restore and nothing to flash. */
+.side .grp{position:relative}
+.side .grp>.hub{display:flex;align-items:center;gap:9px;
+ padding:7px 10px;border-radius:7px;color:var(--ink-2);
+ text-decoration:none;font-size:14px}
+.side .grp>.hub .ic{flex:none;width:17px;height:17px;opacity:.72}
+/* THE CHEVRON NEEDS THE SAME GUARD THE ICON GOT, and I wrote that comment
+   three lines above the rule and then shipped an svg without it. Measured
+   live: 92x92px against the width="14" on the element, which dragged the
+   group rows to 106 and 117px against 36 for a normal one -- the "big
+   arrows" and the "bad spacing" were one bug.
    FOURTH TIME `svg{width:100%}` HAS WON: the account icon, the nav icons,
-   and now this. A global rule that beats a presentation attribute is not a
-   thing to remember per element. */
-.side .grp>summary .chev{flex:none;width:14px;height:14px;
- margin-left:auto;opacity:.55;transition:transform .15s ease}
-.side .grp[open]>summary .chev{transform:rotate(90deg)}
-.side .grp[open]>summary{color:var(--ink);font-weight:600}
-/* THE CHILDREN SIT UNDER A RULE RATHER THAN AN INDENT ALONE, so the group
-   reads as a group at a glance instead of as four slightly-moved rows. */
-.side .sub{margin:1px 0 4px 18px;padding-left:9px;
- border-left:1px solid var(--rule)}
-.side .sub a{font-size:13.5px;padding:6px 9px}
-/* FOCUS IS VISIBLE ON THE SUMMARY TOO. It is a control, and a keyboard
-   user who cannot see where they are cannot use the menu at all. */
-.side .grp>summary:focus-visible{outline:2px solid var(--navy);
- outline-offset:-2px}
+   and now this. A global rule that beats a presentation attribute is not
+   a thing to remember per element. */
+.side .grp>.hub .chev{flex:none;width:14px;height:14px;
+ margin-left:auto;opacity:.45}
+.side .grp:hover>.hub,.side .grp:focus-within>.hub{
+ background:var(--ground);color:var(--ink)}
+.side .grp:hover>.hub .ic{opacity:1}
+/* MARKED, NOT FORCED OPEN. Saying where you are costs nothing and moves
+   nothing; opening a panel on arrival would cover the rail you just used. */
+.side .grp.on>.hub{color:var(--ink);font-weight:600}
+/* THE PANEL. Absolute, so it cannot push the rows below it down -- the
+   rail is the one piece of furniture on every page and it may not move
+   because a pointer passed over it. */
+/* `fixed`, AND THAT IS WHAT LETS THE RAIL SCROLL. An element can only
+   scroll one axis -- `overflow-y:auto` makes x `auto` too -- so an
+   ABSOLUTE panel was clipped at the rail's own edge, and the only way
+   round it was to stop the rail scrolling, which strands the footer
+   links on a short viewport. A FIXED box is positioned against the
+   viewport, so no ancestor's overflow can clip it.
+   `top` IS LEFT AUTO ON PURPOSE: a fixed box with `top:auto` keeps its
+   static position, which is the row it belongs to, so each group's panel
+   still lands beside its own row with nothing to compute.
+   `left` is the rail's width plus a gap. The rail is the first grid
+   column at a declared 232px and sits at x=0, so this is a measurement
+   of the layout rather than a guess at it. */
+.side .sub{position:fixed;left:calc(var(--rail-w) + 8px);top:auto;
+ margin-top:-40px;z-index:40;min-width:198px;padding:6px;
+ background:var(--surface);border:1px solid var(--rule);
+ border-radius:10px;box-shadow:0 10px 28px rgba(3,18,32,.16);
+ display:flex;flex-direction:column;gap:1px;
+ opacity:0;visibility:hidden;transform:translateX(-4px);
+ transition:opacity .12s ease,transform .12s ease,visibility .12s}
+/* THE GAP IS BRIDGED. 7px of clear air between the rail and the panel is
+   7px in which the pointer is over neither, so the panel closes under a
+   diagonal mouse move. This covers it without drawing anything. */
+.side .sub::before{content:"";position:absolute;top:0;bottom:0;
+ left:-14px;width:14px}
+/* `:focus-within` IS WHAT MAKES THIS KEYBOARD-OPERABLE, and the order
+   matters: focusing the hub link opens the panel, which un-hides the
+   children, which makes them focusable, so the next Tab lands inside.
+   Were it hover-only the submenu would be unreachable without a mouse. */
+.side .grp:hover>.sub,.side .grp:focus-within>.sub{
+ opacity:1;visibility:visible;transform:none}
+.side .sub a{font-size:13.5px;padding:7px 9px;white-space:nowrap}
+.side .grp>.hub:focus-visible,.side .sub a:focus-visible{
+ outline:2px solid var(--navy);outline-offset:-2px}
+/* THE FLYOUT IS A DESKTOP-RAIL SHAPE, dropped in two cases.
+     - A PHONE, where the nav is a full-width list opened by a button:
+       "out to the right" is off the screen, and there is no hover anyway.
+     - A SHORT VIEWPORT. The rail is 641px of content signed out, so below
+       that it scrolls INSIDE itself -- and a fixed panel keeps its static
+       position from the last layout, so it does not follow that scroll.
+       Measured: rail scrolled 81px, the row moved to y=33 and the panel
+       stayed at y=111. 780 is comfortably above the rail's own height
+       with the account block on it, so the two never coincide.
+   In both the children go back inline under a rule. Nothing is lost and
+   nothing is unreachable in EITHER presentation -- the threshold picks a
+   style, not whether the menu works, which is the only reason a round
+   number is acceptable here. */
+@media (max-width:860px),(max-height:780px){
+ .side .sub{position:static;opacity:1;visibility:visible;transform:none;
+  min-width:0;margin:1px 0 4px 18px;padding:0 0 0 9px;
+  background:none;border:0;border-left:1px solid var(--rule);
+  border-radius:0;box-shadow:none}
+ .side .sub::before{display:none}
+ .side .grp>.hub .chev{display:none}
+ /* 44px BECAUSE THAT IS A THUMB, and `.side .grp>.hub` outranks the
+    `.side nav a` rule that gives every other row its touch target -- so
+    without this the two group rows were the only 34px rows in the list. */
+ .side .grp>.hub{padding:11px 10px;min-height:44px}
+}
 .side nav a:hover{background:var(--ground);color:var(--ink)}
 .side nav a[aria-current]{background:var(--ground);color:var(--ink);
  font-weight:600}
@@ -195,7 +259,7 @@ th .when{display:block;margin-top:3px;font-weight:400;text-transform:none;
 .app.min .menu{display:block;position:fixed;left:13px;top:13px;z-index:60;
  width:34px;height:34px;padding:0;display:grid;place-items:center;
  border-radius:9px}
-.app.min.open,.app.min.peek{grid-template-columns:232px 1fr}
+.app.min.open,.app.min.peek{grid-template-columns:var(--rail-w) 1fr}
 .app.min.open .side,.app.min.peek .side{width:auto;padding:16px 16px 20px;
  gap:18px;overflow-y:auto;border-right:1px solid var(--rule)}
 /* THE OPEN RAIL SITS OVER THE PAGE RATHER THAN REPLACING IT. Solid, it
