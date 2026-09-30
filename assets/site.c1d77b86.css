@@ -816,6 +816,15 @@ a{color:var(--navy)}
   width:44px;height:20px;border:0;background:none;color:var(--ink-3);
   pointer-events:none}
 .widgrid .wid:hover{cursor:grab}
+/* A LONG PRESS ON TEXT STARTS A SELECTION, and the selection gesture then
+   owns the pointer -- which is why holding on a chart full of axis labels
+   did nothing. The tile is a control surface, so nothing in it is
+   selectable; `touch-action:none` stops a touch device scrolling out from
+   under the same gesture. A pinned tile is a document again and gets both
+   back. */
+.widgrid .wid{user-select:none;-webkit-user-select:none;touch-action:none}
+.widgrid .wid.pinned{user-select:auto;-webkit-user-select:auto;
+  touch-action:auto}
 .widgrid .wid.held,.widgrid .wid.held:hover{cursor:grabbing}
 /* PINNED IS QUIET. No shadow, no affordance, no resize -- the tile is
    exactly a chart again. THE PIN ITSELF STAYS, because it is the only way
@@ -831,18 +840,18 @@ a{color:var(--navy)}
    is a grid you have to guess at, and the guess is what makes a drag feel
    arbitrary. Drawn on the SAME track definition as the tiles, so the
    outlines are the real cells rather than a picture of them. */
-/* THE SLOTS ARE ALWAYS DRAWN, faintly, and come forward while moving. A
-   grid you can only see once you are already dragging is a grid you had to
-   guess at to START the drag. `inset` matches the board's own padding so
-   the outlines land on the real tracks rather than beside them. */
-.widgrid .cells{position:absolute;inset:14px;z-index:0;display:grid;
-  pointer-events:none;gap:14px;
+/* THE SLOTS APPEAR ONLY WHILE MOVING. Drawn at rest they are wallpaper on
+   a page whose job is to show charts.
+   TIGHT, NOT SPACED. Drawn on the tile gap they read as a scatter of
+   separate boxes; drawn edge to edge with a hairline between them they
+   read as graph paper, which is what a grid is. So no gap here, and the
+   cell size is the TRACK size -- the tiles keep their own gap on top. */
+.widgrid .cells{position:absolute;inset:14px;z-index:0;display:none;
+  pointer-events:none;gap:1px;
   grid-template-columns:repeat(10,1fr);grid-auto-rows:42px}
-.widgrid .cells i{border:1px dashed var(--rule-2);border-radius:8px;
-  background:transparent;transition:border-color .14s ease,
-  background-color .14s ease}
-.widgrid.moving .cells i{border-color:var(--rule);
-  background:color-mix(in srgb,var(--navy) 6%,transparent)}
+.widgrid.moving .cells{display:grid}
+.widgrid .cells i{border:0;border-radius:2px;
+  background:color-mix(in srgb,var(--navy) 7%,transparent)}
 /* WHERE IT WILL LAND. The placeholder occupies the dragged tile's slot so
    the rest of the board reflows around a real shape rather than closing
    up and springing back. */
