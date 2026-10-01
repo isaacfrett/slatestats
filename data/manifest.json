@@ -1,8 +1,8 @@
 {
- "generated": "2026-10-01T01:12:22.358946+00:00",
+ "generated": "2026-10-01T10:28:33.905561+00:00",
  "season": 2026,
  "week": 4,
- "scenarios": 173,
+ "scenarios": 174,
  "markets": [
   "receptions",
   "reception_yds",
@@ -108,6 +108,7 @@
    "/nfl/players/john-bates/",
    "/nfl/players/jonah-coleman/",
    "/nfl/players/jonathan-taylor/",
+   "/nfl/players/jonathon-brooks/",
    "/nfl/players/jonnu-smith/",
    "/nfl/players/jordan-addison/",
    "/nfl/players/josh-downs/",
@@ -283,6 +284,7 @@
    "/nfl/injury-impact/john-bates/",
    "/nfl/injury-impact/jonah-coleman/",
    "/nfl/injury-impact/jonathan-taylor/",
+   "/nfl/injury-impact/jonathon-brooks/",
    "/nfl/injury-impact/jonnu-smith/",
    "/nfl/injury-impact/jordan-addison/",
    "/nfl/injury-impact/josh-downs/",
