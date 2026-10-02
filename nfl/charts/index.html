@@ -742,15 +742,30 @@
  // failed save leaves the reader looking at what they asked for rather
  // than at a tile that ignored them. The next load would show the old one
  // again, which is the honest consequence of a save that did not happen.
+ // THE PICKER IS RE-ENABLED ON EVERY PATH, which it was not.
+ //
+ // It disabled itself here and was switched back on inside `refit`, in the
+ // branch that redraws successfully -- so any of `refit`'s three early
+ // returns, or a failed fetch, left the select disabled for good. Reported
+ // as exactly that: "switching chart type freezes the chart and does not
+ // change it or allow for reselect of chart type". Both halves are these
+ // two lines: the freeze is the disable that never came back, and the chart
+ // not changing is `fitting[id]` DROPPING the redraw when one was already
+ // in flight -- which is the common case, because resizing a tile starts one.
  function setForm(f, form){
    var id=f&&f.dataset&&f.dataset.id; if(!id) return;
+   function enable(){
+     var s=f.querySelector('.widform'); if(s) s.disabled=false;
+   }
    var sel=f.querySelector('.widform');
    if(sel) sel.disabled=true;
    fetch(API+'/api/widget-form',{method:'POST',credentials:'include',
      headers:{'content-type':'application/json'},
      body:JSON.stringify({id:Number(id), form:form||null})})
     .catch(function(){})
-    .then(function(){ refit(f, form); });
+    .then(function(){ return refit(f, form); })
+    .catch(function(){})
+    .then(enable, enable);
  }
  // ---- REDRAW ONE TILE AT ITS REAL SIZE ------------------------------
  //
@@ -758,14 +773,35 @@
  // id, so a resize costs one tool call instead of re-running the whole
  // dashboard -- and there is no second implementation to drift from the
  // first.
+ // SERIALISED PER TILE, NOT DROPPED. `fitting[id]` used to make a second
+ // redraw return immediately, which is right for a resize -- the next
+ // pointermove will ask again -- and wrong for a chart-type change, which
+ // has no next event and simply never happened. Each tile now queues on its
+ // own promise, so a form change always lands and two of them land in order.
+ // EVERY PATH RETURNS A PROMISE, so `setForm` can re-enable its picker after
+ // the redraw rather than hoping the redraw reaches the line that does it.
  var fitting={};
  function refit(f, form){
-   var id=f&&f.dataset&&f.dataset.id; if(!id || fitting[id]) return;
-   var sv=f.querySelector('svg'); if(!sv) return;
+   var id=f&&f.dataset&&f.dataset.id;
+   if(!id) return Promise.resolve();
+   var prev=fitting[id] || Promise.resolve();
+   var run=prev.then(function(){ return refitOnce(f, form); },
+                     function(){ return refitOnce(f, form); });
+   fitting[id]=run.then(function(){ if(fitting[id]===run) delete fitting[id]; },
+                        function(){ if(fitting[id]===run) delete fitting[id]; });
+   return run;
+ }
+ function refitOnce(f, form){
+   var id=f&&f.dataset&&f.dataset.id;
+   if(!id) return Promise.resolve();
+   var sv=f.querySelector('svg');
+   if(!sv) return Promise.resolve();
    var r=sv.getBoundingClientRect();
    var w=Math.round(r.width), hh=Math.round(r.height);
-   if(w<120 || hh<80) return;
-   fitting[id]=1;
+   // TOO SMALL TO DRAW IS NOT A REASON TO ABANDON THE REQUEST. A form
+   // change still has to be recorded and the picker still has to come back,
+   // so this resolves rather than leaving the caller waiting on nothing.
+   if(w<120 || hh<80) return Promise.resolve();
    fetch(API+'/api/widget?id='+encodeURIComponent(id)
          +'&w='+w+'&h='+hh
          +(form?'&form='+encodeURIComponent(form):''),
@@ -787,8 +823,7 @@
         if(sel){ sel.disabled=false; if(d.form) sel.value=d.form; }
       }
     })
-    .catch(function(){})
-    .then(function(){ delete fitting[id]; });
+    .catch(function(){});
  }
  // THE ESTIMATE CHECKS ITSELF. `chartBox` subtracts a constant for the
  // tile's padding and caption, and a constant is a guess about another
