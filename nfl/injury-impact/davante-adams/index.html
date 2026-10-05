@@ -302,6 +302,24 @@
  // things a reader kept, and this script is on EVERY page -- so it is
  // published once here rather than pasted into each. A second copy of a
  // formatter is how the leg label ended up with three.
+ // RETURNING OR NEW, AND NOTHING MORE (2026-10-05). The browser keeps the
+ // date of its first visit here, in its own storage only -- not a cookie,
+ // so it never rides along with a page load -- and a question it chooses to
+ // ask carries one fact: whether that first visit was on an EARLIER day.
+ // No identifier, no date, nothing that joins two questions to one person.
+ // Global Privacy Control or Do Not Track: nothing is stored or sent. A
+ // browser that blocks storage simply reports nothing. Disclosed in the
+ // privacy policy; check_compliance fails if this exists without that text.
+ window.slateReturning = (function(){
+   try {
+     if (navigator.globalPrivacyControl === true || navigator.doNotTrack === '1'
+         || window.doNotTrack === '1') return undefined;
+     var today = new Date().toISOString().slice(0, 10);
+     var first = localStorage.getItem('ss_first_visit');
+     if (!first) { localStorage.setItem('ss_first_visit', today); return false; }
+     return first < today;
+   } catch (e) { return undefined; }
+ })();
  window.slateWhen = function(t){
    if(!t) return '';
    var d=new Date(String(t).replace(' ','T')+(/[Zz+]/.test(t)?'':'Z'));
