@@ -265,6 +265,8 @@
        +'Sign in</a></p>';
      return;
    }
+   // used_today is null when the count could not be read: a dash, never 0.
+   var known=(j.used_today!==null&&j.used_today!==undefined);
    var left=Math.max(0,(j.daily_allowance||0)-(j.used_today||0));
    // THE ADDRESS GOES IN THE HEADING, not in a stat tile. It is the one
    // fact on this page that answers "whose account is this", and it was
@@ -280,8 +282,9 @@
      // boxes. Padding the label to match would have been decorating the
      // wrap; the caption underneath already says what the number counts.
      +'<div><div class="k">Today</div><div class="v">'
-     +(j.used_today||0)+'</div><div class="c">'+left.toLocaleString()
-     +' of '+(j.daily_allowance||0).toLocaleString()+' questions left</div></div>'
+     +(known?j.used_today:'&mdash;')+'</div><div class="c">'
+     +(known?left.toLocaleString()+' of '+(j.daily_allowance||0).toLocaleString()
+       +' questions left':'could not read today\'s count')+'</div></div>'
      +'<div><div class="k">Saved</div><div class="v" id="nsaved">&mdash;</div>'
      +'<div class="c">questions you kept</div></div>'
      +'<div><div class="k">Charts</div><div class="v" id="nwid">&mdash;</div>'
