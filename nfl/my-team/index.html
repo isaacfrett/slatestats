@@ -360,6 +360,22 @@ tr.lx-mine td{background:var(--green-soft)}
  // a rankings or study page never learned who was reading and showed no way
  // to sign in at all.
  var API=(window.SLATE_API||'').replace(/\/$/,'');
+ // ARRIVED FROM A LINK WE POSTED (nfl_edge.arrivals). A link on X carries
+ // ?ref=x; this sends the channel and the page ONCE -- no identifier,
+ // nothing stored -- then takes the tag off the address so a shared copy
+ // is clean. GPC / DNT: nothing is sent. Disclosed in the privacy policy.
+ try{
+   var rm=/[?&]ref=([a-z]{1,12})(?:&|$)/.exec(location.search);
+   if(rm){
+     var quiet=navigator.globalPrivacyControl===true||navigator.doNotTrack==='1';
+     if(!quiet&&navigator.sendBeacon)
+       navigator.sendBeacon(API+'/api/arrival', new Blob([JSON.stringify(
+         {ref:rm[1], path:location.pathname})], {type:'text/plain'}));
+     var rest=location.search.replace(/([?&])ref=[a-z]{1,12}(&|$)/,'$1')
+                             .replace(/[?&]$/,'');
+     history.replaceState(null,'',location.pathname+rest+location.hash);
+   }
+ }catch(e){}
  // HOW LONG AGO, SHARED. The account page and the charts page both date
  // things a reader kept, and this script is on EVERY page -- so it is
  // published once here rather than pasted into each. A second copy of a
