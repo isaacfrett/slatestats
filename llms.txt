@@ -2,7 +2,7 @@
 
 > NFL fantasy football research. Every figure is published with its sample size and the window it was measured over, because a rate without a denominator is not a measurement.
 
-Projections are our own, built from play-by-play back to 1999 and as-of-week with no lookahead. Currently week 4.
+Projections are our own, built from play-by-play back to 1999 and as-of-week with no lookahead. Currently week 5.
 
 ## How to quote this site
 
@@ -16,7 +16,7 @@ Projections are our own, built from play-by-play back to 1999 and as-of-week wit
 These are the files the site itself renders from. They are plain JSON, served from the same origin, and refreshed on every build -- prefer them to scraping a page.
 
 - [Manifest](https://slatestats.com/data/manifest.json): season, week, when it was generated, and what the other files contain. Read this first: it carries the as-of week every other number is relative to.
-- [Projected players](https://slatestats.com/data/roster.json): every projected player for the current week (425 have a page), with position, team, role and projections by market.
+- [Projected players](https://slatestats.com/data/roster.json): every projected player for the current week (409 have a page), with position, team, role and projections by market.
 - [Injury cascades](https://slatestats.com/data/cascade.json): who gains, and by how much, if a given player does not play. This is the measurement this site is built on and the one hardest to find elsewhere.
 - [Player comparison](https://slatestats.com/data/compare.json): the same players arranged for side-by-side comparison.
 - [Search index](https://slatestats.com/data/search.json): names to URLs.
@@ -81,7 +81,7 @@ Split-half reliability, odd weeks against even weeks within the same season, 201
 
 ## Tools
 
-- [Player pages](https://slatestats.com/nfl/players/): 425 players, one page each
+- [Player pages](https://slatestats.com/nfl/players/): 409 players, one page each
 - [Injury impact](https://slatestats.com/nfl/injury-impact/): who gains if a starter sits
 - [Weekly rankings](https://slatestats.com/nfl/rankings/): this week, by projected points
 - [Teams](https://slatestats.com/nfl/teams/): pass-catching rooms by team
