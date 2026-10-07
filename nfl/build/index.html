@@ -496,6 +496,21 @@
      history.replaceState(null,'',location.pathname+rest+location.hash);
    }
  }catch(e){}
+ // HOW OFTEN THE TOOLS ARE USED (nfl_edge.events). An event NAME and a
+ // DETAIL from a closed list, and the page -- no identifier, no username, no
+ // league, nothing stored in the browser -- at most once per event per page
+ // view. GPC / DNT: nothing is sent. Disclosed in the privacy policy.
+ var sentEv={};
+ window.slateEvent=function(e,d){
+  try{
+   var k=e+':'+d;
+   if(sentEv[k]) return; sentEv[k]=1;
+   if(navigator.globalPrivacyControl===true||navigator.doNotTrack==='1') return;
+   if(navigator.sendBeacon)
+     navigator.sendBeacon(API+'/api/event', new Blob([JSON.stringify(
+       {e:e, d:d, path:location.pathname})], {type:'text/plain'}));
+  }catch(x){}
+ };
  // HOW LONG AGO, SHARED. The account page and the charts page both date
  // things a reader kept, and this script is on EVERY page -- so it is
  // published once here rather than pasted into each. A second copy of a
@@ -735,6 +750,7 @@
                                 S.keys[k].flipped = true; }
   else S.keys.splice(k, 1);
   apply(t);
+  if(window.slateEvent) window.slateEvent('table_sort', add ? 'multi' : 'single');
  }
  function scan(root){
   (root.querySelectorAll ? root : document).querySelectorAll('table')

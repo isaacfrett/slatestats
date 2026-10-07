@@ -376,6 +376,21 @@ tr.lx-mine td{background:var(--green-soft)}
      history.replaceState(null,'',location.pathname+rest+location.hash);
    }
  }catch(e){}
+ // HOW OFTEN THE TOOLS ARE USED (nfl_edge.events). An event NAME and a
+ // DETAIL from a closed list, and the page -- no identifier, no username, no
+ // league, nothing stored in the browser -- at most once per event per page
+ // view. GPC / DNT: nothing is sent. Disclosed in the privacy policy.
+ var sentEv={};
+ window.slateEvent=function(e,d){
+  try{
+   var k=e+':'+d;
+   if(sentEv[k]) return; sentEv[k]=1;
+   if(navigator.globalPrivacyControl===true||navigator.doNotTrack==='1') return;
+   if(navigator.sendBeacon)
+     navigator.sendBeacon(API+'/api/event', new Blob([JSON.stringify(
+       {e:e, d:d, path:location.pathname})], {type:'text/plain'}));
+  }catch(x){}
+ };
  // HOW LONG AGO, SHARED. The account page and the charts page both date
  // things a reader kept, and this script is on EVERY page -- so it is
  // published once here rather than pasted into each. A second copy of a
@@ -615,6 +630,7 @@ tr.lx-mine td{background:var(--green-soft)}
                                 S.keys[k].flipped = true; }
   else S.keys.splice(k, 1);
   apply(t);
+  if(window.slateEvent) window.slateEvent('table_sort', add ? 'multi' : 'single');
  }
  function scan(root){
   (root.querySelectorAll ? root : document).querySelectorAll('table')
@@ -1312,10 +1328,13 @@ tr.lx-mine td{background:var(--green-soft)}
   if(!name) return;
   GO.disabled=true; msg('leagues','Looking up '+esc(name)+'\u2026');
   clear();
+  var ev=function(d){ if(window.slateEvent) window.slateEvent('league_connect', d); };
+  ev(auto ? 'remembered' : 'typed');
   try{
    var u=await fetch('https://api.sleeper.app/v1/user/'+encodeURIComponent(name))
           .then(function(r){ return r.ok ? r.json() : null; });
    if(!u || !u.user_id){
+     ev('user_not_found');
      msg('leagues','No Sleeper user called <b>'+esc(name)+'</b>. It is the '
        +'username you log in with, not your team name.', true);
      return;
@@ -1326,11 +1345,13 @@ tr.lx-mine td{background:var(--green-soft)}
      +'/leagues/nfl/'+d.season).then(function(r){return r.json();});
    leagues = ls || [];
    if(!leagues.length){
+     ev('no_leagues');
      msg('leagues','<b>'+esc(u.display_name||name)+'</b> has no '+d.season
        +' NFL leagues on Sleeper. If your league is on another platform this '
        +'cannot reach it yet.', true);
      return;
    }
+   ev('leagues_found');
    var h='<div class="slot"><h3>Your leagues</h3><div class="lg">';
    leagues.forEach(function(l,i){
     h+='<button data-i="'+i+'">'+esc(l.name)+'<i>'+(l.total_rosters||'?')
@@ -1339,8 +1360,9 @@ tr.lx-mine td{background:var(--green-soft)}
       +'</i></button>';
    });
    h+='</div><p class="meta">Kept in this browser so it is ready next time '
-     +'&mdash; <a href="#" id="forget">forget my league</a>. Nothing is sent '
-     +'anywhere; there is no account here to attach it to.</p></div>';
+     +'&mdash; <a href="#" id="forget">forget my league</a>. Your username '
+     +'and league are never sent to us; there is no account here to attach '
+     +'them to.</p></div>';
    document.getElementById('leagues').innerHTML=h;
    document.querySelectorAll('.lg button').forEach(function(b){
      b.addEventListener('click',function(){
@@ -1369,6 +1391,7 @@ tr.lx-mine td{background:var(--green-soft)}
    // confidently pointed at somebody else. A fetch that never left the
    // browser is indistinguishable here from one Sleeper refused, so the
    // message stops asserting which.
+   ev('error');
    msg('leagues','Could not reach Sleeper just now \u2014 try again in a '
      +'moment. If it keeps failing, it may be us rather than them; '
      +'<a href="/legal/contact/">tell us</a> and we will look.', true);
@@ -1401,6 +1424,7 @@ tr.lx-mine td{background:var(--green-soft)}
         || (r.co_owners||[]).indexOf(user.user_id)>=0) mineId=r.roster_id;
    });
    if(mineId===null){
+     if(window.slateEvent) window.slateEvent('team_view','no_team');
      msg('team','Found the league but not a team owned by <b>'
        +esc(user.display_name)+'</b> in it.', true);
      return;
@@ -1436,7 +1460,9 @@ tr.lx-mine td{background:var(--green-soft)}
    // rather than be told.
    window.slateFree({map:d.players, taken:taken, fmt:fmtKey, into:'free',
                      league:lg.name, week:d.week});
+   if(window.slateEvent) window.slateEvent('team_view','shown');
   }catch(e){
+   if(window.slateEvent) window.slateEvent('team_view','error');
    msg('team','Could not load that roster from Sleeper.', true);
    clear();
   }
