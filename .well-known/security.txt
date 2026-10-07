@@ -1,5 +1,5 @@
 Contact: mailto:hello@slatestats.com
-Expires: 2027-04-04T00:00:00Z
+Expires: 2027-04-05T00:00:00Z
 Preferred-Languages: en
 Canonical: https://slatestats.com/.well-known/security.txt
 Policy: https://slatestats.com/legal/contact/
