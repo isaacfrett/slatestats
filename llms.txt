@@ -21,6 +21,11 @@ These are the files the site itself renders from. They are plain JSON, served fr
 - [Player comparison](https://slatestats.com/data/compare.json): the same players arranged for side-by-side comparison.
 - [Search index](https://slatestats.com/data/search.json): names to URLs.
 
+## Call the tools directly (MCP)
+
+An MCP endpoint at https://api.slatestats.com/mcp serves the research tools -- injury cascades, projections, rankings, injuries, measured studies -- read-only, no auth, every result with its sample and window. No odds or betting tools.
+- [Use Slate Stats in Claude and ChatGPT](https://slatestats.com/nfl/use-in-ai/): how to connect it from Claude, ChatGPT or Claude Code
+
 Every projection is conditional on the player appearing. A player whose game has already kicked off carries no forward projection at all, deliberately, rather than a stale one.
 
 ## How much each measure is worth
