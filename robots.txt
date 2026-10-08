@@ -1,4 +1,5 @@
 User-agent: *
+Disallow: /data/
 Allow: /
 
 Sitemap: https://slatestats.com/sitemap.xml
