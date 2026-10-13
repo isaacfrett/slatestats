@@ -2,7 +2,7 @@
 
 > NFL fantasy football research. Every figure is published with its sample size and the window it was measured over, because a rate without a denominator is not a measurement.
 
-Projections are our own, built from play-by-play back to 1999 and as-of-week with no lookahead. Currently week 5.
+Projections are our own, built from play-by-play back to 1999 and as-of-week with no lookahead. Currently week 6.
 
 ## How to quote this site
 
@@ -71,7 +71,7 @@ Split-half reliability, odd weeks against even weeks within the same season, 201
 
 ## Tools
 
-- [Player pages](https://slatestats.com/nfl/players/): 437 players, one page each
+- [Player pages](https://slatestats.com/nfl/players/): 457 players, one page each
 - [Injury impact](https://slatestats.com/nfl/injury-impact/): who gains if a starter sits
 - [Weekly rankings](https://slatestats.com/nfl/rankings/): this week, by projected points
 - [Teams](https://slatestats.com/nfl/teams/): pass-catching rooms by team
